@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 enum AttributeTitleCase: String, CaseIterable {
     case deadline = "마감일"
@@ -16,7 +17,9 @@ enum AttributeTitleCase: String, CaseIterable {
 
 final class AddViewController: BaseViewController {
     
+    private let realm = try! Realm()
     private let tableView = UITableView()
+    private var todoTitle: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +56,13 @@ final class AddViewController: BaseViewController {
     }
     
     @objc func saveBtnTapped(_ sender: UIButton) {
-        print(#function)
+        // 저장할 데이터 생성
+        let data = Todo(title: todoTitle, savedate: Date())
+        // 데이터 저장
+        try! realm.write {
+            realm.add(data)
+        }
+        dismiss(animated: true)
     }
     
     @objc func cancelBtnTapped(_ sender: UIButton) {
@@ -62,6 +71,7 @@ final class AddViewController: BaseViewController {
     
     @objc func textFieldDidChange(_ sender: UITextField) {
         guard let text = sender.text else { return }
+        todoTitle = text
         if text.isEmpty {
             navigationItem.rightBarButtonItem?.isEnabled = false
         } else {

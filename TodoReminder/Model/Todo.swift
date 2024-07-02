@@ -20,7 +20,7 @@ class Todo: Object {
     @Persisted var isComplete: Bool
     @Persisted var savedate: Date
     
-    convenience init(id: ObjectId, title: String, content: String? = nil, deadline: Date? = nil, tag: String? = nil, priority: String? = nil, imageName: String? = nil, savedate: Date) {
+    convenience init(title: String, content: String? = nil, deadline: Date? = nil, tag: String? = nil, priority: String? = nil, imageName: String? = nil, savedate: Date) {
         self.init()
         self.title = title
         self.content = content
