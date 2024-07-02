@@ -24,6 +24,11 @@ final class MainViewController: BaseViewControllerLargeTitle {
         setupCollectionView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        list = configureList()
+    }
+    
     override func setupHierarchy() {
         view.addSubview(collectionView)
     }
@@ -40,14 +45,9 @@ final class MainViewController: BaseViewControllerLargeTitle {
     }
     
     override func setupNavigation(_ title: String, rightItemTitle: String? = nil, rightItemImage: String? = nil, action: Selector?) {
-        super.setupNavigation("전체", rightItemTitle: nil, rightItemImage: "plus", action: #selector(addBtnTapped))
+        super.setupNavigation("전체", rightItemTitle: nil, rightItemImage: nil, action: nil)
     }
     
-    @objc func addBtnTapped(_ sender: UIButton) {
-        let vc = AddViewController()
-        let navi = UINavigationController(rootViewController: vc)
-        transition(navi, type: .present)
-    }
     
     private func layout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
@@ -61,7 +61,7 @@ final class MainViewController: BaseViewControllerLargeTitle {
         return layout
     }
     
-    private func setupCollectionView() {
+    override func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: MainCollectionViewCell.identifier)
@@ -81,9 +81,16 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return ReminderCase.allCases.count
     }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCollectionViewCell.identifier, for: indexPath) as! MainCollectionViewCell
         cell.configureCell(ReminderCase.allCases[indexPath.row], list[indexPath.row])
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vc = ListViewController()
+        vc.navigationTitle = ReminderCase.allCases[indexPath.row].title
+        transition(vc, type: .push)
     }
 }
