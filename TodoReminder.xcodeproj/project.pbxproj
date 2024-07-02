@@ -28,6 +28,8 @@
 		E0ECED452C3429C600A67525 /* ContentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED442C3429C600A67525 /* ContentTableViewCell.swift */; };
 		E0ECED472C3429D900A67525 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED462C3429D900A67525 /* BaseTableViewCell.swift */; };
 		E0ECED4A2C34367000A67525 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = E0ECED492C34367000A67525 /* Toast */; };
+		E0ECED4C2C343B2D00A67525 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED4B2C343B2D00A67525 /* ListViewController.swift */; };
+		E0ECED4E2C343D8700A67525 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED4D2C343D8700A67525 /* ListTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +53,8 @@
 		E0ECED3E2C3422E400A67525 /* AttributeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributeTableViewCell.swift; sourceTree = "<group>"; };
 		E0ECED442C3429C600A67525 /* ContentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentTableViewCell.swift; sourceTree = "<group>"; };
 		E0ECED462C3429D900A67525 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
+		E0ECED4B2C343B2D00A67525 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		E0ECED4D2C343D8700A67525 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +122,7 @@
 			children = (
 				E0ECED192C33FB6400A67525 /* AddViewController.swift */,
 				E0ECED1B2C33FBD200A67525 /* MainViewController.swift */,
+				E0ECED4B2C343B2D00A67525 /* ListViewController.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -128,6 +133,7 @@
 				E0ECED2F2C34052500A67525 /* MainCollectionViewCell.swift */,
 				E0ECED3E2C3422E400A67525 /* AttributeTableViewCell.swift */,
 				E0ECED442C3429C600A67525 /* ContentTableViewCell.swift */,
+				E0ECED4D2C343D8700A67525 /* ListTableViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -251,6 +257,7 @@
 				E0ECED1E2C33FC4F00A67525 /* BaseViewControllerLargeTitle.swift in Sources */,
 				E0ECECFE2C33F9B300A67525 /* AppDelegate.swift in Sources */,
 				E0ECED2E2C34037500A67525 /* Resource.swift in Sources */,
+				E0ECED4E2C343D8700A67525 /* ListTableViewCell.swift in Sources */,
 				E0ECED252C34018D00A67525 /* ReminderCase.swift in Sources */,
 				E0ECED002C33F9B300A67525 /* SceneDelegate.swift in Sources */,
 				E0ECED1A2C33FB6400A67525 /* AddViewController.swift in Sources */,
@@ -260,6 +267,7 @@
 				E0ECED452C3429C600A67525 /* ContentTableViewCell.swift in Sources */,
 				E0ECED3D2C341CCF00A67525 /* UIViewController + Extension.swift in Sources */,
 				E0ECED472C3429D900A67525 /* BaseTableViewCell.swift in Sources */,
+				E0ECED4C2C343B2D00A67525 /* ListViewController.swift in Sources */,
 				E0ECED2C2C3402D300A67525 /* ReusableIdentifier.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
