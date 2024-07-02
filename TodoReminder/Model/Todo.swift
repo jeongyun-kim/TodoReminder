@@ -11,7 +11,7 @@ import RealmSwift
 class Todo: Object {
     @Persisted(primaryKey: true) var id: ObjectId
     @Persisted var title: String
-    @Persisted var content: String?
+    @Persisted var memo: String?
     @Persisted var deadline: Date?
     @Persisted var tag: String?
     @Persisted var priority: String?
@@ -20,10 +20,10 @@ class Todo: Object {
     @Persisted var isComplete: Bool
     @Persisted var savedate: Date
     
-    convenience init(title: String, content: String? = nil, deadline: Date? = nil, tag: String? = nil, priority: String? = nil, imageName: String? = nil, savedate: Date) {
+    convenience init(title: String, memo: String? = nil, deadline: Date? = nil, tag: String? = nil, priority: String? = nil, imageName: String? = nil, savedate: Date) {
         self.init()
         self.title = title
-        self.content = content
+        self.memo = memo
         self.deadline = deadline
         self.tag = tag
         self.priority = priority
