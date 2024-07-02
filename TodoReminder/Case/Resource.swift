@@ -11,6 +11,7 @@ enum Resource {
     enum FontCase {
         static let bold16 = UIFont.boldSystemFont(ofSize: 26)
         static let bold15 = UIFont.boldSystemFont(ofSize: 15)
+        static let regular16 = UIFont.systemFont(ofSize: 16)
         static let regular15 = UIFont.systemFont(ofSize: 15)
         static let regular14 = UIFont.systemFont(ofSize: 14)
     }
@@ -33,6 +34,8 @@ enum Resource {
     
     enum ImageCase: String {
         case go = "chevron.right"
+        case inProgress = "circle"
+        case complete = "checkmark.circle.fill"
     }
     
     enum transitionCase {
