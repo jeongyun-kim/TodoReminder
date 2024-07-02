@@ -9,23 +9,28 @@
 /* Begin PBXBuildFile section */
 		E0ECECFE2C33F9B300A67525 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECECFD2C33F9B300A67525 /* AppDelegate.swift */; };
 		E0ECED002C33F9B300A67525 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECECFF2C33F9B300A67525 /* SceneDelegate.swift */; };
-		E0ECED022C33F9B300A67525 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED012C33F9B300A67525 /* ViewController.swift */; };
-		E0ECED052C33F9B300A67525 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = E0ECED042C33F9B300A67525 /* Base */; };
 		E0ECED072C33F9B400A67525 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E0ECED062C33F9B400A67525 /* Assets.xcassets */; };
 		E0ECED0A2C33F9B400A67525 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = E0ECED092C33F9B400A67525 /* Base */; };
 		E0ECED122C33F9FA00A67525 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = E0ECED112C33F9FA00A67525 /* .gitignore */; };
+		E0ECED172C33FB0300A67525 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED162C33FB0300A67525 /* BaseViewController.swift */; };
+		E0ECED1A2C33FB6400A67525 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED192C33FB6400A67525 /* AddViewController.swift */; };
+		E0ECED1C2C33FBD200A67525 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED1B2C33FBD200A67525 /* MainViewController.swift */; };
+		E0ECED1E2C33FC4F00A67525 /* BaseViewControllerLargeTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED1D2C33FC4F00A67525 /* BaseViewControllerLargeTitle.swift */; };
+		E0ECED212C33FCFE00A67525 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E0ECED202C33FCFE00A67525 /* SnapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E0ECECFA2C33F9B300A67525 /* TodoReminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoReminder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0ECECFD2C33F9B300A67525 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E0ECECFF2C33F9B300A67525 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		E0ECED012C33F9B300A67525 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		E0ECED042C33F9B300A67525 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E0ECED062C33F9B400A67525 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E0ECED092C33F9B400A67525 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E0ECED0B2C33F9B400A67525 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E0ECED112C33F9FA00A67525 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		E0ECED162C33FB0300A67525 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		E0ECED192C33FB6400A67525 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
+		E0ECED1B2C33FBD200A67525 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		E0ECED1D2C33FC4F00A67525 /* BaseViewControllerLargeTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewControllerLargeTitle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0ECED212C33FCFE00A67525 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,15 +65,33 @@
 		E0ECECFC2C33F9B300A67525 /* TodoReminder */ = {
 			isa = PBXGroup;
 			children = (
+				E0ECED182C33FB4700A67525 /* VC */,
+				E0ECED132C33FA7000A67525 /* Base */,
 				E0ECECFD2C33F9B300A67525 /* AppDelegate.swift */,
 				E0ECECFF2C33F9B300A67525 /* SceneDelegate.swift */,
-				E0ECED012C33F9B300A67525 /* ViewController.swift */,
-				E0ECED032C33F9B300A67525 /* Main.storyboard */,
 				E0ECED062C33F9B400A67525 /* Assets.xcassets */,
 				E0ECED082C33F9B400A67525 /* LaunchScreen.storyboard */,
 				E0ECED0B2C33F9B400A67525 /* Info.plist */,
 			);
 			path = TodoReminder;
+			sourceTree = "<group>";
+		};
+		E0ECED132C33FA7000A67525 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				E0ECED162C33FB0300A67525 /* BaseViewController.swift */,
+				E0ECED1D2C33FC4F00A67525 /* BaseViewControllerLargeTitle.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		E0ECED182C33FB4700A67525 /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				E0ECED192C33FB6400A67525 /* AddViewController.swift */,
+				E0ECED1B2C33FBD200A67525 /* MainViewController.swift */,
+			);
+			path = VC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -86,6 +110,9 @@
 			dependencies = (
 			);
 			name = TodoReminder;
+			packageProductDependencies = (
+				E0ECED202C33FCFE00A67525 /* SnapKit */,
+			);
 			productName = TodoReminder;
 			productReference = E0ECECFA2C33F9B300A67525 /* TodoReminder.app */;
 			productType = "com.apple.product-type.application";
@@ -114,6 +141,9 @@
 				Base,
 			);
 			mainGroup = E0ECECF12C33F9B300A67525;
+			packageReferences = (
+				E0ECED1F2C33FCFE00A67525 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = E0ECECFB2C33F9B300A67525 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -131,7 +161,6 @@
 				E0ECED122C33F9FA00A67525 /* .gitignore in Resources */,
 				E0ECED072C33F9B400A67525 /* Assets.xcassets in Resources */,
 				E0ECED0A2C33F9B400A67525 /* Base in Resources */,
-				E0ECED052C33F9B300A67525 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,23 +171,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E0ECED022C33F9B300A67525 /* ViewController.swift in Sources */,
+				E0ECED1E2C33FC4F00A67525 /* BaseViewControllerLargeTitle.swift in Sources */,
 				E0ECECFE2C33F9B300A67525 /* AppDelegate.swift in Sources */,
 				E0ECED002C33F9B300A67525 /* SceneDelegate.swift in Sources */,
+				E0ECED1A2C33FB6400A67525 /* AddViewController.swift in Sources */,
+				E0ECED172C33FB0300A67525 /* BaseViewController.swift in Sources */,
+				E0ECED1C2C33FBD200A67525 /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		E0ECED032C33F9B300A67525 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E0ECED042C33F9B300A67525 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		E0ECED082C33F9B400A67525 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -373,6 +397,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E0ECED1F2C33FCFE00A67525 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E0ECED202C33FCFE00A67525 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E0ECED1F2C33FCFE00A67525 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E0ECECF22C33F9B300A67525 /* Project object */;
 }
