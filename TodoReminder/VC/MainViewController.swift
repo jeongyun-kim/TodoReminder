@@ -39,12 +39,14 @@ final class MainViewController: BaseViewControllerLargeTitle {
         
     }
     
-    override func setupNavigation(_ title: String, rightItemImage: String, action: Selector?) {
-        super.setupNavigation("전체", rightItemImage: "plus", action: #selector(addBtnTapped))
+    override func setupNavigation(_ title: String, rightItemTitle: String? = nil, rightItemImage: String? = nil, action: Selector?) {
+        super.setupNavigation("전체", rightItemTitle: nil, rightItemImage: "plus", action: #selector(addBtnTapped))
     }
     
     @objc func addBtnTapped(_ sender: UIButton) {
-        print(#function)
+        let vc = AddViewController()
+        let navi = UINavigationController(rootViewController: vc)
+        transition(navi, type: .present)
     }
     
     private func layout() -> UICollectionViewLayout {
