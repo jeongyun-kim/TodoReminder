@@ -39,6 +39,7 @@ class BaseViewController: UIViewController {
             rightItem = UIBarButtonItem(image: UIImage(systemName: rightItemImage), style: .plain, target: self, action: action)
         }
         navigationItem.rightBarButtonItem = rightItem
+        navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.prefersLargeTitles = false
     }
 }

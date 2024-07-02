@@ -24,7 +24,6 @@ class BaseViewControllerLargeTitle: BaseViewController {
     override func setupNavigation(_ title: String, rightItemTitle: String? = nil, rightItemImage: String? = nil, action: Selector?) {
         super.setupNavigation(title, rightItemTitle: rightItemTitle, rightItemImage: rightItemImage, action: action)
         navigationItem.backButtonDisplayMode = .minimal
-        navigationController?.navigationBar.tintColor = .white
     }
     
     func setupTableView() {
