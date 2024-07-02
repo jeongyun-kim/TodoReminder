@@ -12,11 +12,7 @@ import SnapKit
 class ListViewController: BaseViewControllerLargeTitle {
     private let realm = try! Realm()
     private let tableView = UITableView()
-    private var list: Results<Todo>! { // IUO
-        didSet {
-            tableView.reloadData()
-        }
-    }
+    private var list: Results<Todo>! // IUO
     var navigationTitle: String = "전체"
     
     override func viewDidLoad() {
@@ -42,9 +38,13 @@ class ListViewController: BaseViewControllerLargeTitle {
         super.setupUI()
     }
     
+    override func setupNavigation(_ title: String) {
+        super.setupNavigation(navigationTitle)
+        
+    }
     
-    override func setupNavigation(_ title: String, rightItemTitle: String?, rightItemImage: String?, action: Selector?) {
-        super.setupNavigation(navigationTitle, rightItemTitle: nil, rightItemImage: "plus", action: #selector(addBtnTapped))
+    override func configureRightBarButton(title: String?, image: String?, action: Selector?) {
+        super.configureRightBarButton(title: nil, image: Resource.ImageCase.more.rawValue, action: nil)
     }
     
     override func setupTableView() {
@@ -53,12 +53,6 @@ class ListViewController: BaseViewControllerLargeTitle {
         tableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = UITableView.automaticDimension
-    }
-    
-    @objc func addBtnTapped(_ sender: UIButton) {
-        let vc = AddViewController()
-        //let navi = UINavigationController(rootViewController: vc)
-        transition(vc, type: .push)
     }
 }
 

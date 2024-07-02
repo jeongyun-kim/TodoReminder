@@ -28,6 +28,12 @@ final class AddViewController: BaseViewController {
         setupTableView()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // modal이 내려갈 때 NotificationCenter에 알림보내기 
+        NotificationCenter.default.post(name: NSNotification.Name(Resource.NotificationCenterName.dismiss), object: nil, userInfo: nil)
+    }
+    
     override func setupHierarchy() {
         view.addSubview(tableView)
     }
@@ -43,10 +49,14 @@ final class AddViewController: BaseViewController {
         tableView.separatorStyle = .none
     }
     
-    override func setupNavigation(_ title: String, rightItemTitle: String?, rightItemImage: String?, action: Selector?) {
-        super.setupNavigation("새로운 할 일", rightItemTitle: "추가", rightItemImage: nil, action: #selector(saveBtnTapped))
+    override func setupNavigation(_ title: String) {
+        super.setupNavigation("새로운 할 일")
         let leftBarItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(cancelBtnTapped))
         navigationItem.leftBarButtonItem = leftBarItem
+    }
+    
+    override func configureRightBarButton(title: String?, image: String?, action: Selector?) {
+        super.configureRightBarButton(title: "추가", image: nil, action: #selector(saveBtnTapped))
     }
     
     private func setupTableView() {
@@ -63,11 +73,11 @@ final class AddViewController: BaseViewController {
         try! realm.write {
             realm.add(data)
         }
-        navigationController?.popViewController(animated: true)
+        dismiss(animated: true)
     }
     
     @objc func cancelBtnTapped(_ sender: UIButton) {
-        navigationController?.popViewController(animated: true)
+        dismiss(animated: true)
     }
     
     @objc func textFieldDidChange(_ sender: UITextField) {

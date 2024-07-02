@@ -36,10 +36,16 @@ enum Resource {
         case go = "chevron.right"
         case inProgress = "circle"
         case complete = "checkmark.circle.fill"
+        case add = "plus.circle.fill"
+        case more = "ellipsis.circle"
     }
     
     enum transitionCase {
         case push
         case present
+    }
+    
+    enum NotificationCenterName {
+        static let dismiss = "DismissAddVC"
     }
 }
