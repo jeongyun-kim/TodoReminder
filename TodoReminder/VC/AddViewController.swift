@@ -58,7 +58,7 @@ final class AddViewController: BaseViewController {
     
     @objc func saveBtnTapped(_ sender: UIButton) {
         // 저장할 데이터 생성
-        let data = Todo(title: todoTitle, content: todoMemo, savedate: Date())
+        let data = Todo(title: todoTitle, memo: todoMemo, savedate: Date())
         // 데이터 저장
         try! realm.write {
             realm.add(data)
@@ -127,8 +127,11 @@ extension AddViewController: UITextViewDelegate {
         if text.isEmpty {
             textView.text = "메모"
             textView.textColor = .systemGray2
-        } else {
-            todoMemo = text
         }
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        guard let text = textView.text else { return }
+        todoMemo = text
     }
 }
