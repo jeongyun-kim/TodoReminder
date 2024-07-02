@@ -72,4 +72,17 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         cell.configureCell(list[indexPath.row])
         return cell
     }
+    
+    // 오른쪽에서 왼쪽으로 밀었을 때 액션 나오게 
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = UIContextualAction(style: .destructive, title: "삭제") { [unowned self] _, _, _ in
+            let data = self.list[indexPath.row]
+            try! self.realm.write {
+                self.realm.delete(data)
+            }
+            tableView.reloadData()
+        }
+
+       return UISwipeActionsConfiguration(actions: [delete])
+    }
 }
