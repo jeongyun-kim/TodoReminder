@@ -11,11 +11,11 @@ class BaseViewControllerLargeTitle: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigation("")
+        setupNavigation("", rightItemImage: "", action: nil)
     }
     
-    override func setupNavigation(_ title: String) {
-        super.setupNavigation(title)
+    override func setupNavigation(_ title: String, rightItemImage: String, action: Selector?) {
+        super.setupNavigation(title, rightItemImage: rightItemImage, action: action)
         navigationController?.navigationBar.prefersLargeTitles = true
     }
 }

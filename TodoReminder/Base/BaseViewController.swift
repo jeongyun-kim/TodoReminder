@@ -14,7 +14,7 @@ class BaseViewController: UIViewController {
         setupHierarchy()
         setupConstraints()
         setupUI()
-        setupNavigation("")
+        setupNavigation("", rightItemImage: "", action: nil)
     }
     
     func setupHierarchy() {
@@ -29,7 +29,9 @@ class BaseViewController: UIViewController {
         view.backgroundColor = .systemBackground
     }
     
-    func setupNavigation(_ title: String) {
+    func setupNavigation(_ title: String, rightItemImage: String, action: Selector?) {
         navigationItem.title = title
+        let rightItem = UIBarButtonItem(image: UIImage(systemName: rightItemImage), style: .plain, target: self, action: action)
+        navigationItem.rightBarButtonItem = rightItem
     }
 }
