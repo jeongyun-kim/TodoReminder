@@ -20,6 +20,7 @@ final class AddViewController: BaseViewController {
     private let realm = try! Realm()
     private let tableView = UITableView()
     private var todoTitle: String = ""
+    private var todoMemo: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,16 +58,16 @@ final class AddViewController: BaseViewController {
     
     @objc func saveBtnTapped(_ sender: UIButton) {
         // 저장할 데이터 생성
-        let data = Todo(title: todoTitle, savedate: Date())
+        let data = Todo(title: todoTitle, content: todoMemo, savedate: Date())
         // 데이터 저장
         try! realm.write {
             realm.add(data)
         }
-        dismiss(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     @objc func cancelBtnTapped(_ sender: UIButton) {
-        dismiss(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     @objc func textFieldDidChange(_ sender: UITextField) {
@@ -126,6 +127,8 @@ extension AddViewController: UITextViewDelegate {
         if text.isEmpty {
             textView.text = "메모"
             textView.textColor = .systemGray2
+        } else {
+            todoMemo = text
         }
     }
 }
