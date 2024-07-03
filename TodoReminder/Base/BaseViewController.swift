@@ -14,7 +14,8 @@ class BaseViewController: UIViewController {
         setupHierarchy()
         setupConstraints()
         setupUI()
-        setupNavigation("", rightItemTitle: nil, rightItemImage: nil, action: nil)
+        setupNavigation("")
+        configureRightBarButton(title: "", image: "", action: nil)
     }
     
     func setupHierarchy() {
@@ -29,17 +30,21 @@ class BaseViewController: UIViewController {
         view.backgroundColor = .systemBackground
     }
     
-    func setupNavigation(_ title: String, rightItemTitle: String?, rightItemImage: String?, action: Selector?) {
+    func setupNavigation(_ title: String) {
         navigationItem.title = title
-        var rightItem: UIBarButtonItem
-        if let rightItemTitle = rightItemTitle {
-            rightItem = UIBarButtonItem(title: rightItemTitle, style: .plain, target: self, action: action)
-        } else {
-            guard let rightItemImage = rightItemImage else { return }
-            rightItem = UIBarButtonItem(image: UIImage(systemName: rightItemImage), style: .plain, target: self, action: action)
-        }
-        navigationItem.rightBarButtonItem = rightItem
+        navigationItem.backButtonDisplayMode = .minimal
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
+    func configureRightBarButton(title: String?, image: String?, action: Selector?) {
+        var rightItem: UIBarButtonItem
+        if let title = title {
+            rightItem = UIBarButtonItem(title: title, style: .plain, target: self, action: action)
+        } else {
+            guard let image = image else { return }
+            rightItem = UIBarButtonItem(image: UIImage(systemName: image), style: .plain, target: self, action: action)
+        }
+        navigationItem.rightBarButtonItem = rightItem
     }
 }

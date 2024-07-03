@@ -30,7 +30,25 @@
 		E0ECED4A2C34367000A67525 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = E0ECED492C34367000A67525 /* Toast */; };
 		E0ECED4C2C343B2D00A67525 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED4B2C343B2D00A67525 /* ListViewController.swift */; };
 		E0ECED4E2C343D8700A67525 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED4D2C343D8700A67525 /* ListTableViewCell.swift */; };
+		E0ECED502C34D10900A67525 /* TodoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED4F2C34D10900A67525 /* TodoList.swift */; };
+		E0ECED552C34DBF000A67525 /* Date + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED542C34DBF000A67525 /* Date + Extension.swift */; };
+		E0ECED562C34E07E00A67525 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = E0ECED352C3405E000A67525 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		E0ECED5C2C34F1F200A67525 /* UITableViewCell + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED5B2C34F1F200A67525 /* UITableViewCell + Extension.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E0ECED572C34E07E00A67525 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E0ECED562C34E07E00A67525 /* RealmSwift in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		E0ECECFA2C33F9B300A67525 /* TodoReminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoReminder.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -55,6 +73,9 @@
 		E0ECED462C3429D900A67525 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		E0ECED4B2C343B2D00A67525 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		E0ECED4D2C343D8700A67525 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
+		E0ECED4F2C34D10900A67525 /* TodoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoList.swift; sourceTree = "<group>"; };
+		E0ECED542C34DBF000A67525 /* Date + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + Extension.swift"; sourceTree = "<group>"; };
+		E0ECED5B2C34F1F200A67525 /* UITableViewCell + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell + Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,9 +151,8 @@
 		E0ECED222C33FFD600A67525 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				E0ECED5A2C34E60900A67525 /* Add */,
 				E0ECED2F2C34052500A67525 /* MainCollectionViewCell.swift */,
-				E0ECED3E2C3422E400A67525 /* AttributeTableViewCell.swift */,
-				E0ECED442C3429C600A67525 /* ContentTableViewCell.swift */,
 				E0ECED4D2C343D8700A67525 /* ListTableViewCell.swift */,
 			);
 			path = Cell;
@@ -159,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				E0ECED322C3405BC00A67525 /* Todo.swift */,
+				E0ECED4F2C34D10900A67525 /* TodoList.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -167,8 +188,19 @@
 			isa = PBXGroup;
 			children = (
 				E0ECED3C2C341CCF00A67525 /* UIViewController + Extension.swift */,
+				E0ECED542C34DBF000A67525 /* Date + Extension.swift */,
+				E0ECED5B2C34F1F200A67525 /* UITableViewCell + Extension.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		E0ECED5A2C34E60900A67525 /* Add */ = {
+			isa = PBXGroup;
+			children = (
+				E0ECED442C3429C600A67525 /* ContentTableViewCell.swift */,
+				E0ECED3E2C3422E400A67525 /* AttributeTableViewCell.swift */,
+			);
+			path = Add;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -181,6 +213,7 @@
 				E0ECECF62C33F9B300A67525 /* Sources */,
 				E0ECECF72C33F9B300A67525 /* Frameworks */,
 				E0ECECF82C33F9B300A67525 /* Resources */,
+				E0ECED572C34E07E00A67525 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -252,6 +285,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0ECED552C34DBF000A67525 /* Date + Extension.swift in Sources */,
 				E0ECED332C3405BC00A67525 /* Todo.swift in Sources */,
 				E0ECED3F2C3422E400A67525 /* AttributeTableViewCell.swift in Sources */,
 				E0ECED1E2C33FC4F00A67525 /* BaseViewControllerLargeTitle.swift in Sources */,
@@ -261,6 +295,8 @@
 				E0ECED252C34018D00A67525 /* ReminderCase.swift in Sources */,
 				E0ECED002C33F9B300A67525 /* SceneDelegate.swift in Sources */,
 				E0ECED1A2C33FB6400A67525 /* AddViewController.swift in Sources */,
+				E0ECED502C34D10900A67525 /* TodoList.swift in Sources */,
+				E0ECED5C2C34F1F200A67525 /* UITableViewCell + Extension.swift in Sources */,
 				E0ECED302C34052500A67525 /* MainCollectionViewCell.swift in Sources */,
 				E0ECED172C33FB0300A67525 /* BaseViewController.swift in Sources */,
 				E0ECED1C2C33FBD200A67525 /* MainViewController.swift in Sources */,
@@ -412,6 +448,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L348QC8MG7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TodoReminder/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -443,6 +480,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L348QC8MG7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TodoReminder/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
