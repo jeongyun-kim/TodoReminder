@@ -9,26 +9,26 @@ import UIKit
 import SnapKit
 
 class ListTableViewCell: BaseTableViewCell {
-    private let checkBox: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: Resource.ImageCase.inProgress.rawValue)
-        imageView.tintColor = .lightGray
-        return imageView
+    let checkBox: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: Resource.ImageCase.inProgress.rawValue), for: .normal)
+        button.tintColor = .lightGray
+        return button
     }()
+    private let titleStackView = CustomHorizontalStackView()
+    private let priorityLabel = UILabel()
     private let titleLabel = UILabel()
     private let memoLabel = UILabel()
-    private let descStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 4
-        return stackView
-    }()
+    private let descStackView = CustomHorizontalStackView()
     private let deadlineLabel = UILabel()
     private let tagLabel = UILabel()
     
     override func setupHierarchy() {
         contentView.addSubview(checkBox)
-        contentView.addSubview(titleLabel)
+        contentView.addSubview(titleStackView)
+        [priorityLabel, titleLabel].forEach {
+            titleStackView.addArrangedSubview($0)
+        }
         contentView.addSubview(memoLabel)
         contentView.addSubview(descStackView)
         [deadlineLabel, tagLabel].forEach {
@@ -43,20 +43,21 @@ class ListTableViewCell: BaseTableViewCell {
             make.leading.equalTo(contentView.safeAreaLayoutGuide).offset(16)
         }
         
-        titleLabel.snp.makeConstraints { make in
+        titleStackView.snp.makeConstraints { make in
             make.centerY.equalTo(checkBox.snp.centerY)
             make.leading.equalTo(checkBox.snp.trailing).offset(8)
             make.height.equalTo(20)
-            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(16)
+            make.trailing.lessThanOrEqualTo(contentView.safeAreaLayoutGuide).inset(16)
         }
         
         memoLabel.snp.makeConstraints { make in
-            make.horizontalEdges.equalTo(titleLabel)
-            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.horizontalEdges.equalTo(titleStackView)
+            make.top.equalTo(titleStackView.snp.bottom).offset(4)
         }
         
         descStackView.snp.makeConstraints { make in
             make.leading.equalTo(memoLabel.snp.leading)
+            make.trailing.lessThanOrEqualTo(contentView.safeAreaLayoutGuide).inset(16)
             make.top.equalTo(memoLabel.snp.bottom).offset(4)
             make.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(8)
         }
@@ -65,15 +66,24 @@ class ListTableViewCell: BaseTableViewCell {
     override func configureLayout() {
         super.configureLayout()
         titleLabel.font = Resource.FontCase.regular16
-        memoLabel.font = Resource.FontCase.regular15
-        memoLabel.textColor = .lightGray
-        deadlineLabel.textColor = .lightGray
+        priorityLabel.textColor = .systemPink
         tagLabel.textColor = .systemBlue
-        deadlineLabel.backgroundColor = .white
+        [priorityLabel, deadlineLabel, tagLabel, memoLabel].forEach {
+            $0.font = Resource.FontCase.regular14
+        }
+        [memoLabel, deadlineLabel].forEach {
+            $0.textColor = .lightGray
+        }
     }
     
     func configureCell(_ data: Todo) {
+        let checkImageName = data.isComplete ? Resource.ImageCase.complete.rawValue : Resource.ImageCase.inProgress.rawValue
+        checkBox.setImage(UIImage(systemName: checkImageName), for: .normal)
         titleLabel.text = data.title
         memoLabel.text = data.memo
+        priorityLabel.text = data.priority
+        if let tag = data.tag { tagLabel.text = "#\(tag)" }
+        if let date = data.deadline { deadlineLabel.text = formattedDateString(date: date) }
+      
     }
 }

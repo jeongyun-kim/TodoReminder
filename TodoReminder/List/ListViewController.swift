@@ -51,6 +51,16 @@ class ListViewController: BaseViewControllerLargeTitle {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = UITableView.automaticDimension
     }
+    
+    @objc func checkBtnTapped(_ sender: UIButton) {
+        print(todoList.listCase.dbData[sender.tag].isComplete)
+        try! realm.write {
+            todoList.listCase.dbData[sender.tag].isComplete.toggle()
+            
+        }
+        tableView.reloadRows(at: [IndexPath(row: sender.tag, section: 0)], with: .none)
+        print(todoList.listCase.dbData[sender.tag].isComplete)
+    }
 }
 
 extension ListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -61,6 +71,8 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.identifier, for: indexPath) as! ListTableViewCell
         cell.configureCell(todoList.listCase.dbData[indexPath.row])
+        cell.checkBox.tag = indexPath.row
+        cell.checkBox.addTarget(self, action: #selector(checkBtnTapped), for: .touchUpInside)
         return cell
     }
     

@@ -55,6 +55,11 @@ final class MainCollectionViewCell: UICollectionViewCell {
         iconImageView.image = UIImage(systemName: data.listCase.imageName)
         iconImageView.tintColor = data.listCase.imageColor
         countLabel.text = "\(data.listCase.dbData.count)"
+        if data.listCase == ReminderCase.complete {
+            countLabel.isHidden = true
+        } else {
+            countLabel.isHidden = false
+        }
     }
     
     required init?(coder: NSCoder) {

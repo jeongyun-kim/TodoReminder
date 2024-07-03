@@ -38,6 +38,7 @@
 		E0ECED612C35745800A67525 /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED602C35745800A67525 /* TagViewController.swift */; };
 		E0ECED652C357CEB00A67525 /* CustomBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED642C357CEB00A67525 /* CustomBorder.swift */; };
 		E0ECED672C357E2C00A67525 /* PriorityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED662C357E2C00A67525 /* PriorityViewController.swift */; };
+		E0ECED6C2C35866B00A67525 /* CustomHorizontalStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED6B2C35866B00A67525 /* CustomHorizontalStackView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -84,6 +85,7 @@
 		E0ECED602C35745800A67525 /* TagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
 		E0ECED642C357CEB00A67525 /* CustomBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBorder.swift; sourceTree = "<group>"; };
 		E0ECED662C357E2C00A67525 /* PriorityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityViewController.swift; sourceTree = "<group>"; };
+		E0ECED6B2C35866B00A67525 /* CustomHorizontalStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHorizontalStackView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				E0ECED642C357CEB00A67525 /* CustomBorder.swift */,
+				E0ECED6B2C35866B00A67525 /* CustomHorizontalStackView.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -344,6 +347,7 @@
 				E0ECED5C2C34F1F200A67525 /* UITableViewCell + Extension.swift in Sources */,
 				E0ECED302C34052500A67525 /* MainCollectionViewCell.swift in Sources */,
 				E0ECED172C33FB0300A67525 /* BaseViewController.swift in Sources */,
+				E0ECED6C2C35866B00A67525 /* CustomHorizontalStackView.swift in Sources */,
 				E0ECED1C2C33FBD200A67525 /* MainViewController.swift in Sources */,
 				E0ECED452C3429C600A67525 /* ContentTableViewCell.swift in Sources */,
 				E0ECED5F2C3558BB00A67525 /* DateViewController.swift in Sources */,
