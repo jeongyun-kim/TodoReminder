@@ -146,10 +146,14 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
         case 3:
             let vc = PriorityViewController(selectedIdx: priorityIdx)
             transition(vc, type: .push)
-            vc.getPriority = { idx, title in
+            vc.getPriority = { idx, priorityCase in
                 self.priorityIdx = idx
-                self.priority = title
-                self.addAttributeAndReloadRow(title, indexPath: indexPath)
+                switch priorityCase {
+                case.high: self.priority = "!!!"
+                case .mid: self.priority = "!!"
+                case .low: self.priority = "!"
+                }
+                self.addAttributeAndReloadRow(priorityCase.rawValue, indexPath: indexPath)
             }
 //        case 4:
         default: break
