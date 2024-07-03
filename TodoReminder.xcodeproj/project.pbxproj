@@ -34,6 +34,8 @@
 		E0ECED552C34DBF000A67525 /* Date + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED542C34DBF000A67525 /* Date + Extension.swift */; };
 		E0ECED562C34E07E00A67525 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = E0ECED352C3405E000A67525 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E0ECED5C2C34F1F200A67525 /* UITableViewCell + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED5B2C34F1F200A67525 /* UITableViewCell + Extension.swift */; };
+		E0ECED5F2C3558BB00A67525 /* DateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED5E2C3558BB00A67525 /* DateViewController.swift */; };
+		E0ECED612C35745800A67525 /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED602C35745800A67525 /* TagViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -76,6 +78,8 @@
 		E0ECED4F2C34D10900A67525 /* TodoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoList.swift; sourceTree = "<group>"; };
 		E0ECED542C34DBF000A67525 /* Date + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + Extension.swift"; sourceTree = "<group>"; };
 		E0ECED5B2C34F1F200A67525 /* UITableViewCell + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell + Extension.swift"; sourceTree = "<group>"; };
+		E0ECED5E2C3558BB00A67525 /* DateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewController.swift; sourceTree = "<group>"; };
+		E0ECED602C35745800A67525 /* TagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +121,7 @@
 				E0ECED2A2C3402CA00A67525 /* Protocol */,
 				E0ECED232C34018200A67525 /* Case */,
 				E0ECED222C33FFD600A67525 /* Cell */,
+				E0ECED5D2C35589500A67525 /* Add */,
 				E0ECED182C33FB4700A67525 /* VC */,
 				E0ECED132C33FA7000A67525 /* Base */,
 				E0ECECFD2C33F9B300A67525 /* AppDelegate.swift */,
@@ -141,7 +146,6 @@
 		E0ECED182C33FB4700A67525 /* VC */ = {
 			isa = PBXGroup;
 			children = (
-				E0ECED192C33FB6400A67525 /* AddViewController.swift */,
 				E0ECED1B2C33FBD200A67525 /* MainViewController.swift */,
 				E0ECED4B2C343B2D00A67525 /* ListViewController.swift */,
 			);
@@ -151,7 +155,6 @@
 		E0ECED222C33FFD600A67525 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				E0ECED5A2C34E60900A67525 /* Add */,
 				E0ECED2F2C34052500A67525 /* MainCollectionViewCell.swift */,
 				E0ECED4D2C343D8700A67525 /* ListTableViewCell.swift */,
 			);
@@ -199,6 +202,17 @@
 			children = (
 				E0ECED442C3429C600A67525 /* ContentTableViewCell.swift */,
 				E0ECED3E2C3422E400A67525 /* AttributeTableViewCell.swift */,
+			);
+			path = Add;
+			sourceTree = "<group>";
+		};
+		E0ECED5D2C35589500A67525 /* Add */ = {
+			isa = PBXGroup;
+			children = (
+				E0ECED5A2C34E60900A67525 /* Add */,
+				E0ECED192C33FB6400A67525 /* AddViewController.swift */,
+				E0ECED602C35745800A67525 /* TagViewController.swift */,
+				E0ECED5E2C3558BB00A67525 /* DateViewController.swift */,
 			);
 			path = Add;
 			sourceTree = "<group>";
@@ -301,6 +315,8 @@
 				E0ECED172C33FB0300A67525 /* BaseViewController.swift in Sources */,
 				E0ECED1C2C33FBD200A67525 /* MainViewController.swift in Sources */,
 				E0ECED452C3429C600A67525 /* ContentTableViewCell.swift in Sources */,
+				E0ECED5F2C3558BB00A67525 /* DateViewController.swift in Sources */,
+				E0ECED612C35745800A67525 /* TagViewController.swift in Sources */,
 				E0ECED3D2C341CCF00A67525 /* UIViewController + Extension.swift in Sources */,
 				E0ECED472C3429D900A67525 /* BaseTableViewCell.swift in Sources */,
 				E0ECED4C2C343B2D00A67525 /* ListViewController.swift in Sources */,

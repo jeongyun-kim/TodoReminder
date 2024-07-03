@@ -16,4 +16,11 @@ extension UIViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
     }
+    
+    func getDatePickerSelectedDate(date: Date) -> String {
+        var formatter = DateFormatter()
+        formatter.dateFormat = "yyyy.MM.dd (EEEEE)"
+        formatter.locale = Locale(identifier: "ko_KR")
+        return formatter.string(from: date)
+    }
 }

@@ -14,6 +14,10 @@ final class AddViewController: BaseViewController {
     private let tableView = UITableView()
     private var todoTitle: String = ""
     private var todoMemo: String = ""
+    private var deadline: Date?
+    private var tag: String?
+    private var priority: String?
+    private var attributeList: [String] = ["", "", "", "", ""]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +65,7 @@ final class AddViewController: BaseViewController {
     
     @objc func saveBtnTapped(_ sender: UIButton) {
         // 저장할 데이터 생성
-        let data = Todo(title: todoTitle, memo: todoMemo, savedate: Date(timeIntervalSinceNow: 32400))
+        let data = Todo(title: todoTitle, memo: todoMemo, deadline: deadline, tag: tag, priority: priority, savedate: Date(timeIntervalSinceNow: 32400))
         // 데이터 저장
         try! realm.write {
             realm.add(data)
@@ -99,7 +103,7 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return AddContentCase.allCases.count
+        return AddAttributeCase.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -110,8 +114,25 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: AttributeTableViewCell.identifier, for: indexPath) as! AttributeTableViewCell
-            cell.configureCell(AddContentCase.allCases[indexPath.row].rawValue)
+            cell.configureCell(AddAttributeCase.allCases[indexPath.row].rawValue, attribute: attributeList[indexPath.row])
             return cell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.row {
+        case 1:
+            let vc = DateViewController(selectedDate: deadline)
+            transition(vc, type: .push)
+            vc.getDate = { date, dateString in
+                self.deadline = date
+                self.attributeList[indexPath.row] = dateString
+                self.tableView.reloadRows(at: [IndexPath(row: indexPath.row, section: indexPath.section)], with: .none)
+            }
+//        case 2:
+//        case 3:
+//        case 4:
+        default: break
         }
     }
 }

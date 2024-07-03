@@ -19,6 +19,7 @@ enum Resource {
     enum placeholder: String {
         case title = "제목"
         case memo = "메모"
+        case tag = "태그를 입력해보세요"
     }
     
     enum addTodo: String {
@@ -50,7 +51,7 @@ enum Resource {
     }
 }
 
-enum AddContentCase: String, CaseIterable {
+enum AddAttributeCase: String, CaseIterable {
     case content
     case deadline = "마감일"
     case tag  = "태그"
