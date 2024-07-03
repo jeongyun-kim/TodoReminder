@@ -81,9 +81,14 @@ class ListTableViewCell: BaseTableViewCell {
         checkBox.setImage(UIImage(systemName: checkImageName), for: .normal)
         titleLabel.text = data.title
         memoLabel.text = data.memo
-        priorityLabel.text = data.priority
-        if let tag = data.tag { tagLabel.text = "#\(tag)" }
-        if let date = data.deadline { deadlineLabel.text = formattedDateString(date: date) }
+        if let idx = data.priorityIdx {
+            priorityLabel.text = Resource.PrioritySegmentTitleCase.allCases[idx].cellString
+        }
+        // data내 tag가 있는지, 있으면 공백으로 되어있진 않은지 확인
+        if let tag = data.tag, tag.components(separatedBy: " ").joined().count > 0 {
+            tagLabel.text = "#\(tag)"
+        }
+        if let date = data.deadline { deadlineLabel.text = date.components(separatedBy: " ")[0] }
       
     }
 }

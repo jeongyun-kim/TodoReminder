@@ -65,9 +65,9 @@ enum ReminderCase: String, CaseIterable {
         let allData = realm.objects(Todo.self)
         switch self {
         case .today:
-            return allData.where({ $0.deadline == Date() })
+            return allData.where({ $0.deadline == Resource.getFormattedDateString(date: Date().formatted(date: .numeric, time: .omitted))})
         case .schedule:
-            return allData.where({ $0.deadline != nil && $0.deadline != Date() })
+            return allData.where({ $0.deadline != Resource.getFormattedDateString(date: Date().formatted(date: .numeric, time: .omitted)) })
         case .all:
             return allData
         case .flag:

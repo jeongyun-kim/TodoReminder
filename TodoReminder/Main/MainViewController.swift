@@ -84,7 +84,7 @@ final class MainViewController: BaseViewControllerLargeTitle {
     }
     
     @objc func addBtnTapped(_ sender: UIButton) {
-        let vc = AddViewController()
+        let vc = AddViewController(todoData: nil, viewType: .add)
         let navi = UINavigationController(rootViewController: vc)
         transition(navi, type: .present)
     }

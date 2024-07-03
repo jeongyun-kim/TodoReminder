@@ -54,6 +54,40 @@ enum Resource {
         case low = "낮음"
         case mid = "중간"
         case high = "높음"
+        
+        var cellString: String {
+            switch self {
+            case .low:
+                return "!"
+            case .mid:
+                return "!!"
+            case .high:
+                return "!!!"
+            }
+        }
+    }
+    
+    enum ViewType: String {
+        case add = "새로운 할 일"
+        case edit = "할 일 편집"
+        
+        var rightBarTitle: String {
+            switch self {
+            case .add:
+                return "추가"
+            case .edit:
+                return "저장"
+            }
+        }
+    }
+    
+    static func getFormattedDateString(date: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY/MM/dd"
+        guard let newDate = formatter.date(from: date) else { return "" }
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "YYYY.MM.dd"
+        return formatter.string(from: newDate)
     }
 }
 

@@ -56,4 +56,9 @@ class ContentTableViewCell: BaseTableViewCell {
         memoTextView.font = Resource.FontCase.regular15
         memoTextView.textColor = .systemGray2
     }
+    
+    func configureCell(_ data: Todo) {
+        titleTextField.text = data.title
+        memoTextView.text = data.memo
+    }
 }

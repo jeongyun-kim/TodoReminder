@@ -9,9 +9,9 @@ import UIKit
 import SnapKit
 
 final class DateViewController: BaseViewController {
-    init(selectedDate: Date?) {
+    init(dateString: String?) {
         super.init(nibName: nil, bundle: nil)
-        self.selectedDate = selectedDate
+        self.dateString = dateString
     }
     
     required init?(coder: NSCoder) {
@@ -20,23 +20,30 @@ final class DateViewController: BaseViewController {
     
     private var navigationTitle: String = ""
     private let datePicker = UIDatePicker()
-    var getDate: ((Date, String) -> Void)?
-    var selectedDate: Date?
-    private var dateString: String?
+    var getDate: ((String) -> Void)?
+    var dateString: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // 만약 마감일이 이미 설정되어있으면 해당 날짜로 선택된 상태 보여주기 
-        if let selectedDate = selectedDate {
-            datePicker.date = selectedDate
+        // 만약 마감일이 이미 설정되어있으면 해당 날짜로 선택된 상태 보여주기
+        if let dateString = dateString {
+            guard let formattedDate = formattedDate(dateString) else { return }
+            datePicker.date = formattedDate
         }
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard let selectedDate = selectedDate else { return }
         guard let dateString = dateString else { return }
-        getDate?(selectedDate, dateString)
+        getDate?(dateString)
+    }
+    
+    private func formattedDate(_ date: String) -> Date? {
+        let dateString = date.components(separatedBy: " ")[0]
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YYYY.MM.dd"
+        guard let result = dateFormatter.date(from: dateString) else { return nil }
+        return result
     }
     
     override func setupHierarchy() {
@@ -63,8 +70,7 @@ final class DateViewController: BaseViewController {
     }
     
     @objc func datePickerDidChanged(_ sender: UIDatePicker) {
-        dateString = getDatePickerSelectedDate(date: sender.date)
-        selectedDate = sender.date
+        dateString = getDeadlineCellDateString(date: sender.date)
     }
 }
 

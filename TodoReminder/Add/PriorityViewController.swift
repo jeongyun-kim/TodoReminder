@@ -19,7 +19,7 @@ final class PriorityViewController: BaseViewController {
     }
     
     private let prioritySegment = UISegmentedControl()
-    var getPriority: ((Int, Resource.PrioritySegmentTitleCase) -> Void)?
+    var getPriority: ((Int) -> Void)?
     var selectedIdx: Int?
     
     override func viewDidLoad() {
@@ -31,9 +31,9 @@ final class PriorityViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        let idx = prioritySegment.selectedSegmentIndex
-        let priorityCase = Resource.PrioritySegmentTitleCase.allCases[idx]
-        getPriority?(idx, priorityCase)
+        selectedIdx = prioritySegment.selectedSegmentIndex
+        let idx = prioritySegment.selectedSegmentIndex 
+        getPriority?(idx)
     }
     
     override func setupHierarchy() {

@@ -12,7 +12,7 @@ import SnapKit
 class ListViewController: BaseViewControllerLargeTitle {
     private let realm = try! Realm()
     private let tableView = UITableView()
-    var todoList: TodoList = TodoList(listCase: .all)
+    var todoList: TodoList = TodoList(filter: .all)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +37,7 @@ class ListViewController: BaseViewControllerLargeTitle {
     }
     
     override func setupNavigation(_ title: String) {
-        super.setupNavigation(todoList.listCase.title)
+        super.setupNavigation(todoList.filter.title)
     }
     
     override func configureRightBarButton(title: String?, image: String?, action: Selector?) {
@@ -53,24 +53,24 @@ class ListViewController: BaseViewControllerLargeTitle {
     }
     
     @objc func checkBtnTapped(_ sender: UIButton) {
-        print(todoList.listCase.dbData[sender.tag].isComplete)
+        print(todoList.filter.dbData[sender.tag].isComplete)
         try! realm.write {
-            todoList.listCase.dbData[sender.tag].isComplete.toggle()
+            todoList.filter.dbData[sender.tag].isComplete.toggle()
             
         }
         tableView.reloadRows(at: [IndexPath(row: sender.tag, section: 0)], with: .none)
-        print(todoList.listCase.dbData[sender.tag].isComplete)
+        print(todoList.filter.dbData[sender.tag].isComplete)
     }
 }
 
 extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todoList.listCase.dbData.count
+        return todoList.filter.dbData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.identifier, for: indexPath) as! ListTableViewCell
-        cell.configureCell(todoList.listCase.dbData[indexPath.row])
+        cell.configureCell(todoList.filter.dbData[indexPath.row])
         cell.checkBox.tag = indexPath.row
         cell.checkBox.addTarget(self, action: #selector(checkBtnTapped), for: .touchUpInside)
         return cell
@@ -79,7 +79,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     // 오른쪽에서 왼쪽으로 밀었을 때 액션 나오게 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .destructive, title: "삭제") { [unowned self] _, _, _ in
-            let data = self.todoList.listCase.dbData[indexPath.row]
+            let data = self.todoList.filter.dbData[indexPath.row]
             try! self.realm.write {
                 self.realm.delete(data)
             }
@@ -87,5 +87,12 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         }
 
        return UISwipeActionsConfiguration(actions: [delete])
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let todoData = todoList.filter.dbData[indexPath.row]
+        let vc = AddViewController(todoData: todoData, viewType: .edit)
+        let navi = UINavigationController(rootViewController: vc)
+        transition(navi, type: .present)
     }
 }

@@ -9,21 +9,54 @@ import UIKit
 import RealmSwift
 
 final class AddViewController: BaseViewController {
+    init(todoData: Todo?, viewType: Resource.ViewType) {
+        super.init(nibName: nil, bundle: nil)
+        self.todoData = todoData
+        self.viewType = viewType
+    }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    var todoData: Todo?
     private let realm = try! Realm()
+    var viewType: Resource.ViewType = .add
+    
     private let tableView = UITableView()
     private var todoTitle: String = ""
     private var todoMemo: String = ""
-    private var deadline: Date?
+    private var deadline: String?
+    private var cellDeadline: String?
     private var tag: String?
     private var priority: String?
     private var priorityIdx: Int?
+    // 1. 마감일 - 2. 태그 - 3. 우선순위 - 4. 이미지 추가
     private var attributeList: [String] = ["", "", "", "", ""]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.rightBarButtonItem?.isEnabled = false
         setupTableView()
+        if let todoData {
+            navigationItem.rightBarButtonItem?.isEnabled = true
+            todoTitle = todoData.title
+            if let memo = todoData.memo {
+                todoMemo = memo
+            }
+            if let tempDeadline = todoData.deadline {
+                deadline = tempDeadline
+                attributeList[1] = tempDeadline
+            }
+            if let tempTag = todoData.tag {
+                tag = tempTag
+                attributeList[2] = tempTag
+            }
+            if let tempPriorityIdx = todoData.priorityIdx {
+                priorityIdx = tempPriorityIdx
+                attributeList[3] = Resource.PrioritySegmentTitleCase.allCases[tempPriorityIdx].rawValue
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -48,13 +81,13 @@ final class AddViewController: BaseViewController {
     }
     
     override func setupNavigation(_ title: String) {
-        super.setupNavigation("새로운 할 일")
+        super.setupNavigation(viewType.rawValue)
         let leftBarItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(cancelBtnTapped))
         navigationItem.leftBarButtonItem = leftBarItem
     }
     
     override func configureRightBarButton(title: String?, image: String?, action: Selector?) {
-        super.configureRightBarButton(title: "추가", image: nil, action: #selector(saveBtnTapped))
+        super.configureRightBarButton(title: viewType.rightBarTitle, image: nil, action: #selector(saveBtnTapped))
     }
     
     private func setupTableView() {
@@ -65,8 +98,10 @@ final class AddViewController: BaseViewController {
     }
     
     @objc func saveBtnTapped(_ sender: UIButton) {
+        // 현재 저장시기 시차 +9 적용
+        let savedate = Date(timeIntervalSinceNow: 32400)
         // 저장할 데이터 생성
-        let data = Todo(title: todoTitle, memo: todoMemo, deadline: deadline, tag: tag, priority: priority, savedate: Date(timeIntervalSinceNow: 32400))
+        let data = Todo(title: todoTitle, memo: todoMemo, deadline: deadline, tag: tag, priorityIdx: priorityIdx, savedate: savedate)
         // 데이터 저장
         try! realm.write {
             realm.add(data)
@@ -86,10 +121,6 @@ final class AddViewController: BaseViewController {
         } else {
             navigationItem.rightBarButtonItem?.isEnabled = true
         }
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
     }
 
     private func addAttributeAndReloadRow(_ data: String, indexPath: IndexPath) {
@@ -119,6 +150,8 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: ContentTableViewCell.identifier, for: indexPath) as! ContentTableViewCell
             cell.memoTextView.delegate = self
             cell.titleTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+            guard let todoData else { return cell }
+            cell.configureCell(todoData)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: AttributeTableViewCell.identifier, for: indexPath) as! AttributeTableViewCell
@@ -130,11 +163,11 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 1:
-            let vc = DateViewController(selectedDate: deadline)
+            let vc = DateViewController(dateString: deadline)
             transition(vc, type: .push)
-            vc.getDate = { date, dateString in
-                self.deadline = date
-                self.addAttributeAndReloadRow(dateString, indexPath: indexPath)
+            vc.getDate = { deadlineString in
+                self.deadline = deadlineString
+                self.addAttributeAndReloadRow(deadlineString, indexPath: indexPath)
             }
        case 2:
             let vc = TagViewController(tag: tag)
@@ -146,14 +179,10 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
         case 3:
             let vc = PriorityViewController(selectedIdx: priorityIdx)
             transition(vc, type: .push)
-            vc.getPriority = { idx, priorityCase in
+            vc.getPriority = { idx in
                 self.priorityIdx = idx
-                switch priorityCase {
-                case.high: self.priority = "!!!"
-                case .mid: self.priority = "!!"
-                case .low: self.priority = "!"
-                }
-                self.addAttributeAndReloadRow(priorityCase.rawValue, indexPath: indexPath)
+                let cellString = Resource.PrioritySegmentTitleCase.allCases[idx].rawValue
+                self.addAttributeAndReloadRow(cellString, indexPath: indexPath)
             }
 //        case 4:
         default: break
