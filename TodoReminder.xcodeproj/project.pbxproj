@@ -36,6 +36,7 @@
 		E0ECED5C2C34F1F200A67525 /* UITableViewCell + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED5B2C34F1F200A67525 /* UITableViewCell + Extension.swift */; };
 		E0ECED5F2C3558BB00A67525 /* DateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED5E2C3558BB00A67525 /* DateViewController.swift */; };
 		E0ECED612C35745800A67525 /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED602C35745800A67525 /* TagViewController.swift */; };
+		E0ECED652C357CEB00A67525 /* CustomBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED642C357CEB00A67525 /* CustomBorder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -80,6 +81,7 @@
 		E0ECED5B2C34F1F200A67525 /* UITableViewCell + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell + Extension.swift"; sourceTree = "<group>"; };
 		E0ECED5E2C3558BB00A67525 /* DateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewController.swift; sourceTree = "<group>"; };
 		E0ECED602C35745800A67525 /* TagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
+		E0ECED642C357CEB00A67525 /* CustomBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBorder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 		E0ECECFC2C33F9B300A67525 /* TodoReminder */ = {
 			isa = PBXGroup;
 			children = (
+				E0ECED632C357CE500A67525 /* Custom */,
 				E0ECED3B2C341CC400A67525 /* Extension */,
 				E0ECED312C3405B700A67525 /* Model */,
 				E0ECED2A2C3402CA00A67525 /* Protocol */,
@@ -215,6 +218,14 @@
 				E0ECED5E2C3558BB00A67525 /* DateViewController.swift */,
 			);
 			path = Add;
+			sourceTree = "<group>";
+		};
+		E0ECED632C357CE500A67525 /* Custom */ = {
+			isa = PBXGroup;
+			children = (
+				E0ECED642C357CEB00A67525 /* CustomBorder.swift */,
+			);
+			path = Custom;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -320,6 +331,7 @@
 				E0ECED3D2C341CCF00A67525 /* UIViewController + Extension.swift in Sources */,
 				E0ECED472C3429D900A67525 /* BaseTableViewCell.swift in Sources */,
 				E0ECED4C2C343B2D00A67525 /* ListViewController.swift in Sources */,
+				E0ECED652C357CEB00A67525 /* CustomBorder.swift in Sources */,
 				E0ECED2C2C3402D300A67525 /* ReusableIdentifier.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

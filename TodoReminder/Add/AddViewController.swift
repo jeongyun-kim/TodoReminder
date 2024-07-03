@@ -90,6 +90,12 @@ final class AddViewController: BaseViewController {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
+
+    private func reloadRow(indexPath: IndexPath) {
+        DispatchQueue.main.async {
+            self.tableView.reloadRows(at: [IndexPath(row: indexPath.row, section: indexPath.section)], with: .none)
+        }
+    }
 }
 
 
@@ -127,9 +133,16 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
             vc.getDate = { date, dateString in
                 self.deadline = date
                 self.attributeList[indexPath.row] = dateString
-                self.tableView.reloadRows(at: [IndexPath(row: indexPath.row, section: indexPath.section)], with: .none)
+                self.reloadRow(indexPath: indexPath)
             }
-//        case 2:
+       case 2:
+            let vc = TagViewController(tag: tag)
+            transition(vc, type: .push)
+            vc.getTag = { tag in
+                self.tag = tag
+                self.attributeList[indexPath.row] = tag
+                self.reloadRow(indexPath: indexPath)
+            }
 //        case 3:
 //        case 4:
         default: break

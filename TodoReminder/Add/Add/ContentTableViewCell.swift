@@ -11,7 +11,7 @@ import SnapKit
 class ContentTableViewCell: BaseTableViewCell {
     private let bgView = UIView()
     let titleTextField = UITextField()
-    private let border = UIView()
+    private let border = CustomBorder()
     let memoTextView = UITextView()
     
     override func setupHierarchy() {
@@ -35,7 +35,6 @@ class ContentTableViewCell: BaseTableViewCell {
             make.top.equalTo(titleTextField.snp.bottom).offset(12)
             make.leading.equalTo(titleTextField.snp.leading)
             make.trailing.equalTo(bgView.snp.trailing)
-            make.height.equalTo(1)
         }
         
         memoTextView.snp.makeConstraints { make in
@@ -52,7 +51,6 @@ class ContentTableViewCell: BaseTableViewCell {
         bgView.layer.cornerRadius = Resource.corner.defaultCornerRadius
         titleTextField.placeholder = Resource.placeholder.title.rawValue
         titleTextField.font = Resource.FontCase.regular15
-        border.backgroundColor = .darkGray.withAlphaComponent(0.5)
         memoTextView.text = Resource.placeholder.memo.rawValue
         memoTextView.backgroundColor = .systemGray5
         memoTextView.font = Resource.FontCase.regular15
