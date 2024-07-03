@@ -12,8 +12,7 @@ import SnapKit
 class ListViewController: BaseViewControllerLargeTitle {
     private let realm = try! Realm()
     private let tableView = UITableView()
-    private var list: Results<Todo>! // IUO
-    var navigationTitle: String = "전체"
+    var todoList: TodoList = TodoList(listCase: .all)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +20,6 @@ class ListViewController: BaseViewControllerLargeTitle {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        list = realm.objects(Todo.self)
     }
     
     override func setupHierarchy() {
@@ -39,8 +37,7 @@ class ListViewController: BaseViewControllerLargeTitle {
     }
     
     override func setupNavigation(_ title: String) {
-        super.setupNavigation(navigationTitle)
-        
+        super.setupNavigation(todoList.listCase.title)
     }
     
     override func configureRightBarButton(title: String?, image: String?, action: Selector?) {
@@ -58,19 +55,19 @@ class ListViewController: BaseViewControllerLargeTitle {
 
 extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return list.count
+        return todoList.listCase.dbData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.identifier, for: indexPath) as! ListTableViewCell
-        cell.configureCell(list[indexPath.row])
+        cell.configureCell(todoList.listCase.dbData[indexPath.row])
         return cell
     }
     
     // 오른쪽에서 왼쪽으로 밀었을 때 액션 나오게 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .destructive, title: "삭제") { [unowned self] _, _, _ in
-            let data = self.list[indexPath.row]
+            let data = self.todoList.listCase.dbData[indexPath.row]
             try! self.realm.write {
                 self.realm.delete(data)
             }

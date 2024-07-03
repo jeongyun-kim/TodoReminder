@@ -50,11 +50,11 @@ final class MainCollectionViewCell: UICollectionViewCell {
         layer.cornerRadius = Resource.corner.defaultCornerRadius
     }
     
-    func configureCell(_ data: ReminderCase, _ cnt: String) {
-        titleLabel.text = data.title
-        iconImageView.image = UIImage(systemName: data.imageName)
-        iconImageView.tintColor = data.imageColor
-        countLabel.text = cnt
+    func configureCell(_ data: TodoList) {
+        titleLabel.text = data.listCase.title
+        iconImageView.image = UIImage(systemName: data.listCase.imageName)
+        iconImageView.tintColor = data.listCase.imageColor
+        countLabel.text = "\(data.listCase.dbData.count)"
     }
     
     required init?(coder: NSCoder) {

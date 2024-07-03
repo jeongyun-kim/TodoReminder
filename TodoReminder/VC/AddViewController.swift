@@ -8,13 +8,6 @@
 import UIKit
 import RealmSwift
 
-enum AttributeTitleCase: String, CaseIterable {
-    case deadline = "마감일"
-    case tag  = "태그"
-    case priority = "우선순위"
-    case addImage = "이미지 추가"
-}
-
 final class AddViewController: BaseViewController {
     
     private let realm = try! Realm()
@@ -68,7 +61,7 @@ final class AddViewController: BaseViewController {
     
     @objc func saveBtnTapped(_ sender: UIButton) {
         // 저장할 데이터 생성
-        let data = Todo(title: todoTitle, memo: todoMemo, savedate: Date())
+        let data = Todo(title: todoTitle, memo: todoMemo, savedate: Date(timeIntervalSinceNow: 32400))
         // 데이터 저장
         try! realm.write {
             realm.add(data)
@@ -83,7 +76,7 @@ final class AddViewController: BaseViewController {
     @objc func textFieldDidChange(_ sender: UITextField) {
         guard let text = sender.text else { return }
         todoTitle = text
-        if text.isEmpty {
+        if text.isEmpty || text.components(separatedBy: " ").joined().count == 0 {
             navigationItem.rightBarButtonItem?.isEnabled = false
         } else {
             navigationItem.rightBarButtonItem?.isEnabled = true
@@ -106,7 +99,7 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return AddContentCase.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -117,7 +110,7 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: AttributeTableViewCell.identifier, for: indexPath) as! AttributeTableViewCell
-            cell.configureCell(AttributeTitleCase.allCases[indexPath.row-1].rawValue)
+            cell.configureCell(AddContentCase.allCases[indexPath.row].rawValue)
             return cell
         }
     }
@@ -125,7 +118,6 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension AddViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
-        guard let text = textView.text else { return }
         if textView.textColor != .white {
             textView.text = ""
             textView.textColor = .white

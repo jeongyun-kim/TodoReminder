@@ -10,13 +10,12 @@ import SnapKit
 import RealmSwift
 
 final class MainViewController: BaseViewControllerLargeTitle {
-    
-    private let realm = try! Realm()
-    private lazy var list: [String] = configureList() {
+    private lazy var list = TodoList.list {
         didSet {
             collectionView.reloadData()
         }
     }
+    private let realm = try! Realm()
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
     private let addButton: UIButton = {
         let button = UIButton()
@@ -36,7 +35,7 @@ final class MainViewController: BaseViewControllerLargeTitle {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        list = configureList()
+        list = TodoList.list
     }
     
     override func setupHierarchy() {
@@ -80,15 +79,6 @@ final class MainViewController: BaseViewControllerLargeTitle {
         collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: MainCollectionViewCell.identifier)
     }
     
-    private func configureList() -> [String] {
-        let allData = realm.objects(Todo.self)
-        let todayData = allData.where { $0.deadline == Date() }
-        let scheduleData = allData.where { $0.deadline != nil && $0.deadline != Date() }
-        let flagData = allData.where { $0.isFlag }
-        let dataList = ["\(todayData.count)", "\(scheduleData.count)", "\(allData.count)", "\(flagData.count)", ""]
-        return dataList
-    }
-    
     private func addObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(didDismissAddViewController), name: NSNotification.Name(Resource.NotificationCenterName.dismiss), object: nil)
     }
@@ -101,8 +91,7 @@ final class MainViewController: BaseViewControllerLargeTitle {
     
     @objc func didDismissAddViewController(_ notification: Notification) {
         DispatchQueue.main.async {
-            self.list = self.configureList()
-            self.collectionView.reloadData()
+            self.list = TodoList.list
         }
     }
 }
@@ -114,13 +103,13 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCollectionViewCell.identifier, for: indexPath) as! MainCollectionViewCell
-        cell.configureCell(ReminderCase.allCases[indexPath.row], list[indexPath.row])
+        cell.configureCell(list[indexPath.row])
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let vc = ListViewController()
-        vc.navigationTitle = ReminderCase.allCases[indexPath.row].title
+        vc.todoList = list[indexPath.row]
         transition(vc, type: .push)
     }
 }

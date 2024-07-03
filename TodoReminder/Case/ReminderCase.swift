@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 enum ReminderCase: String, CaseIterable {
     case today
@@ -28,6 +29,7 @@ enum ReminderCase: String, CaseIterable {
             "완료됨"
         }
     }
+    
     var imageName: String {
         switch self {
         case .today:
@@ -55,6 +57,23 @@ enum ReminderCase: String, CaseIterable {
             return .systemYellow
         case .complete:
             return .systemGreen
+        }
+    }
+    
+    var dbData: Results<Todo> {
+        let realm = try! Realm()
+        let allData = realm.objects(Todo.self)
+        switch self {
+        case .today:
+            return allData.where({ $0.deadline == Date() })
+        case .schedule:
+            return allData.where({ $0.deadline != nil && $0.deadline != Date() })
+        case .all:
+            return allData
+        case .flag:
+            return allData.where({ $0.isFlag })
+        case .complete:
+            return allData.where({ $0.isComplete })
         }
     }
 }
