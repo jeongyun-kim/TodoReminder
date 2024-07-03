@@ -10,17 +10,17 @@ import RealmSwift
 
 
 struct TodoList {
-    let listCase: ReminderCase
+    let filter: ReminderCase
 }
 
 extension TodoList {
    static var list: [TodoList] {
        return [
-            TodoList(listCase: .today),
-            TodoList(listCase: .schedule),
-            TodoList(listCase: .all),
-            TodoList(listCase: .flag),
-            TodoList(listCase: .complete)
+            TodoList(filter: .today),
+            TodoList(filter: .schedule),
+            TodoList(filter: .all),
+            TodoList(filter: .flag),
+            TodoList(filter: .complete)
         ]
     }
 }

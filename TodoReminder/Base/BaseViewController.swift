@@ -47,4 +47,8 @@ class BaseViewController: UIViewController {
         }
         navigationItem.rightBarButtonItem = rightItem
     }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
 }
