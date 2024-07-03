@@ -120,15 +120,15 @@
 		E0ECECFC2C33F9B300A67525 /* TodoReminder */ = {
 			isa = PBXGroup;
 			children = (
-				E0ECED632C357CE500A67525 /* Custom */,
-				E0ECED3B2C341CC400A67525 /* Extension */,
-				E0ECED312C3405B700A67525 /* Model */,
 				E0ECED2A2C3402CA00A67525 /* Protocol */,
-				E0ECED232C34018200A67525 /* Resources */,
-				E0ECED222C33FFD600A67525 /* Cell */,
-				E0ECED5D2C35589500A67525 /* Add */,
-				E0ECED182C33FB4700A67525 /* VC */,
+				E0ECED3B2C341CC400A67525 /* Extension */,
 				E0ECED132C33FA7000A67525 /* Base */,
+				E0ECED632C357CE500A67525 /* Custom */,
+				E0ECED312C3405B700A67525 /* Model */,
+				E0ECED232C34018200A67525 /* Resources */,
+				E0ECED6A2C35838100A67525 /* Main */,
+				E0ECED5D2C35589500A67525 /* Add */,
+				E0ECED682C35837200A67525 /* List */,
 				E0ECECFD2C33F9B300A67525 /* AppDelegate.swift */,
 				E0ECECFF2C33F9B300A67525 /* SceneDelegate.swift */,
 				E0ECED062C33F9B400A67525 /* Assets.xcassets */,
@@ -148,20 +148,10 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
-		E0ECED182C33FB4700A67525 /* VC */ = {
-			isa = PBXGroup;
-			children = (
-				E0ECED1B2C33FBD200A67525 /* MainViewController.swift */,
-				E0ECED4B2C343B2D00A67525 /* ListViewController.swift */,
-			);
-			path = VC;
-			sourceTree = "<group>";
-		};
 		E0ECED222C33FFD600A67525 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
 				E0ECED2F2C34052500A67525 /* MainCollectionViewCell.swift */,
-				E0ECED4D2C343D8700A67525 /* ListTableViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -229,6 +219,32 @@
 				E0ECED642C357CEB00A67525 /* CustomBorder.swift */,
 			);
 			path = Custom;
+			sourceTree = "<group>";
+		};
+		E0ECED682C35837200A67525 /* List */ = {
+			isa = PBXGroup;
+			children = (
+				E0ECED692C35837800A67525 /* Cell */,
+				E0ECED4B2C343B2D00A67525 /* ListViewController.swift */,
+			);
+			path = List;
+			sourceTree = "<group>";
+		};
+		E0ECED692C35837800A67525 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				E0ECED4D2C343D8700A67525 /* ListTableViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		E0ECED6A2C35838100A67525 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				E0ECED222C33FFD600A67525 /* Cell */,
+				E0ECED1B2C33FBD200A67525 /* MainViewController.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
