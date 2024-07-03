@@ -32,8 +32,8 @@ final class DateViewController: BaseViewController {
         }
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         guard let selectedDate = selectedDate else { return }
         guard let dateString = dateString else { return }
         getDate?(selectedDate, dateString)
