@@ -49,6 +49,12 @@ enum Resource {
     enum NotificationCenterName {
         static let dismiss = "DismissAddVC"
     }
+    
+    enum PrioritySegmentTitleCase: String, CaseIterable {
+        case low = "낮음"
+        case mid = "중간"
+        case high = "높음"
+    }
 }
 
 enum AddAttributeCase: String, CaseIterable {

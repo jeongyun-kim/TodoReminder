@@ -37,6 +37,7 @@
 		E0ECED5F2C3558BB00A67525 /* DateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED5E2C3558BB00A67525 /* DateViewController.swift */; };
 		E0ECED612C35745800A67525 /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED602C35745800A67525 /* TagViewController.swift */; };
 		E0ECED652C357CEB00A67525 /* CustomBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED642C357CEB00A67525 /* CustomBorder.swift */; };
+		E0ECED672C357E2C00A67525 /* PriorityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED662C357E2C00A67525 /* PriorityViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -82,6 +83,7 @@
 		E0ECED5E2C3558BB00A67525 /* DateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewController.swift; sourceTree = "<group>"; };
 		E0ECED602C35745800A67525 /* TagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
 		E0ECED642C357CEB00A67525 /* CustomBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBorder.swift; sourceTree = "<group>"; };
+		E0ECED662C357E2C00A67525 /* PriorityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,7 +124,7 @@
 				E0ECED3B2C341CC400A67525 /* Extension */,
 				E0ECED312C3405B700A67525 /* Model */,
 				E0ECED2A2C3402CA00A67525 /* Protocol */,
-				E0ECED232C34018200A67525 /* Case */,
+				E0ECED232C34018200A67525 /* Resources */,
 				E0ECED222C33FFD600A67525 /* Cell */,
 				E0ECED5D2C35589500A67525 /* Add */,
 				E0ECED182C33FB4700A67525 /* VC */,
@@ -164,13 +166,13 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
-		E0ECED232C34018200A67525 /* Case */ = {
+		E0ECED232C34018200A67525 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				E0ECED242C34018D00A67525 /* ReminderCase.swift */,
 				E0ECED2D2C34037500A67525 /* Resource.swift */,
 			);
-			path = Case;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		E0ECED2A2C3402CA00A67525 /* Protocol */ = {
@@ -215,6 +217,7 @@
 				E0ECED5A2C34E60900A67525 /* Add */,
 				E0ECED192C33FB6400A67525 /* AddViewController.swift */,
 				E0ECED602C35745800A67525 /* TagViewController.swift */,
+				E0ECED662C357E2C00A67525 /* PriorityViewController.swift */,
 				E0ECED5E2C3558BB00A67525 /* DateViewController.swift */,
 			);
 			path = Add;
@@ -318,6 +321,7 @@
 				E0ECED2E2C34037500A67525 /* Resource.swift in Sources */,
 				E0ECED4E2C343D8700A67525 /* ListTableViewCell.swift in Sources */,
 				E0ECED252C34018D00A67525 /* ReminderCase.swift in Sources */,
+				E0ECED672C357E2C00A67525 /* PriorityViewController.swift in Sources */,
 				E0ECED002C33F9B300A67525 /* SceneDelegate.swift in Sources */,
 				E0ECED1A2C33FB6400A67525 /* AddViewController.swift in Sources */,
 				E0ECED502C34D10900A67525 /* TodoList.swift in Sources */,

@@ -17,6 +17,7 @@ final class AddViewController: BaseViewController {
     private var deadline: Date?
     private var tag: String?
     private var priority: String?
+    private var priorityIdx: Int?
     private var attributeList: [String] = ["", "", "", "", ""]
     
     override func viewDidLoad() {
@@ -91,7 +92,8 @@ final class AddViewController: BaseViewController {
         view.endEditing(true)
     }
 
-    private func reloadRow(indexPath: IndexPath) {
+    private func addAttributeAndReloadRow(_ data: String, indexPath: IndexPath) {
+        attributeList[indexPath.row] = data
         DispatchQueue.main.async {
             self.tableView.reloadRows(at: [IndexPath(row: indexPath.row, section: indexPath.section)], with: .none)
         }
@@ -132,18 +134,23 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
             transition(vc, type: .push)
             vc.getDate = { date, dateString in
                 self.deadline = date
-                self.attributeList[indexPath.row] = dateString
-                self.reloadRow(indexPath: indexPath)
+                self.addAttributeAndReloadRow(dateString, indexPath: indexPath)
             }
        case 2:
             let vc = TagViewController(tag: tag)
             transition(vc, type: .push)
             vc.getTag = { tag in
                 self.tag = tag
-                self.attributeList[indexPath.row] = tag
-                self.reloadRow(indexPath: indexPath)
+                self.addAttributeAndReloadRow(tag, indexPath: indexPath)
             }
-//        case 3:
+        case 3:
+            let vc = PriorityViewController(selectedIdx: priorityIdx)
+            transition(vc, type: .push)
+            vc.getPriority = { idx, title in
+                self.priorityIdx = idx
+                self.priority = title
+                self.addAttributeAndReloadRow(title, indexPath: indexPath)
+            }
 //        case 4:
         default: break
         }
