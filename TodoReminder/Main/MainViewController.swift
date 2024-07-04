@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import RealmSwift
 
 final class MainViewController: BaseViewControllerLargeTitle {
     private lazy var list = TodoList.list {
@@ -15,7 +14,6 @@ final class MainViewController: BaseViewControllerLargeTitle {
             collectionView.reloadData()
         }
     }
-    private let realm = try! Realm()
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
     private let addButton: UIButton = {
         let button = UIButton()
@@ -79,14 +77,15 @@ final class MainViewController: BaseViewControllerLargeTitle {
         collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: MainCollectionViewCell.identifier)
     }
     
-    private func addObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(didDismissAddViewController), name: NSNotification.Name(Resource.NotificationCenterName.dismiss), object: nil)
-    }
-    
     @objc func addBtnTapped(_ sender: UIButton) {
-        let vc = AddViewController(todoData: nil, viewType: .add)
+        let vc = AddViewController(todoFromListVC: nil, viewType: .add)
         let navi = UINavigationController(rootViewController: vc)
         transition(navi, type: .present)
+    }
+    
+    
+    func addObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(didDismissAddViewController), name: NSNotification.Name(Resource.NotificationCenterName.dismiss), object: nil)
     }
     
     @objc func didDismissAddViewController(_ notification: Notification) {
@@ -108,8 +107,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vc = ListViewController()
-        vc.todoList = list[indexPath.row]
+        let vc = ListViewController(filterType: list[indexPath.row].filter)
         transition(vc, type: .push)
     }
 }
