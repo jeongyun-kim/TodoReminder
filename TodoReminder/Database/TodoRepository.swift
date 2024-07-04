@@ -11,13 +11,13 @@ import RealmSwift
 final class TodoRepository {
     private let realm = try! Realm()
     
-    func createItem(_ data: Todo) throws {
+    func createItem(_ data: Todo)  {
         do {
             try realm.write {
                 realm.add(data)
             }
         } catch {
-            throw TodoErrorCase.createError
+            print("저장 실패!")
         }
     }
     
@@ -41,24 +41,25 @@ final class TodoRepository {
         }
     }
     
-    func updateItem(_ completionHandler: () -> Void) throws {
+    
+    func updateItem(_ completionHandler: () -> Void)  {
         do {
             try realm.write {
                 completionHandler()
             }
         } catch {
-            throw TodoErrorCase.updateError
+            print("업데이트 실패!")
         }
     }
     
-    func deleteItem(_ id: ObjectId) throws {
+    func deleteItem(_ id: ObjectId) {
         do {
             try realm.write {
                 guard let item = realm.object(ofType: Todo.self, forPrimaryKey: id) else { return }
                 realm.delete(item)
             }
         } catch {
-            throw TodoErrorCase.deleteError
+            print("삭제 실패!")
         }
     }
 }
