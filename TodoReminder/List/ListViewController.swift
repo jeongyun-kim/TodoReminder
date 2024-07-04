@@ -10,16 +10,33 @@ import RealmSwift
 import SnapKit
 
 class ListViewController: BaseViewControllerLargeTitle {
-    private let realm = try! Realm()
+    init(filterType: ReminderCase) {
+        super.init(nibName: nil, bundle: nil)
+        self.filterType = filterType
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private let repository = TodoRepository()
+    private var list: [Todo] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    var filterType: ReminderCase = .all
+    
     private let tableView = UITableView()
-    var todoList: TodoList = TodoList(filter: .all)
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addObserver()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        list = repository.readFilteredItem(filterType)
     }
     
     override func setupHierarchy() {
@@ -37,7 +54,7 @@ class ListViewController: BaseViewControllerLargeTitle {
     }
     
     override func setupNavigation(_ title: String) {
-        super.setupNavigation(todoList.filter.title)
+        super.setupNavigation(filterType.title)
     }
     
     override func configureRightBarButton(title: String?, image: String?, action: Selector?) {
@@ -53,45 +70,49 @@ class ListViewController: BaseViewControllerLargeTitle {
     }
     
     @objc func checkBtnTapped(_ sender: UIButton) {
-        print(todoList.filter.dbData[sender.tag].isComplete)
-        try! realm.write {
-            todoList.filter.dbData[sender.tag].isComplete.toggle()
-            
+        repository.updateItem {
+            list[sender.tag].isComplete.toggle()
+            tableView.reloadRows(at: [IndexPath(row: sender.tag, section: 0)], with: .none)
         }
-        tableView.reloadRows(at: [IndexPath(row: sender.tag, section: 0)], with: .none)
-        print(todoList.filter.dbData[sender.tag].isComplete)
+    }
+    
+    func addObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(didDismissAddViewController), name: NSNotification.Name(Resource.NotificationCenterName.dismiss), object: nil)
+    }
+    
+    @objc func didDismissAddViewController(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.list = self.repository.readFilteredItem(self.filterType)
+        }
     }
 }
 
 extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todoList.filter.dbData.count
+        return list.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.identifier, for: indexPath) as! ListTableViewCell
-        cell.configureCell(todoList.filter.dbData[indexPath.row])
-        cell.checkBox.tag = indexPath.row
-        cell.checkBox.addTarget(self, action: #selector(checkBtnTapped), for: .touchUpInside)
+        cell.configureCell(list[indexPath.row])
+        cell.completeButton.tag = indexPath.row
+        cell.completeButton.addTarget(self, action: #selector(checkBtnTapped), for: .touchUpInside)
         return cell
     }
     
     // 오른쪽에서 왼쪽으로 밀었을 때 액션 나오게 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .destructive, title: "삭제") { [unowned self] _, _, _ in
-            let data = self.todoList.filter.dbData[indexPath.row]
-            try! self.realm.write {
-                self.realm.delete(data)
-            }
-            tableView.reloadData()
+            let data = self.list[indexPath.row]
+            repository.deleteItem(data.id)
+            list = repository.readFilteredItem(filterType)
         }
-
        return UISwipeActionsConfiguration(actions: [delete])
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let todoData = todoList.filter.dbData[indexPath.row]
-        let vc = AddViewController(todoData: todoData, viewType: .edit)
+        let data = list[indexPath.row]
+        let vc = AddViewController(todoFromListVC: data, viewType: .edit)
         let navi = UINavigationController(rootViewController: vc)
         transition(navi, type: .present)
     }

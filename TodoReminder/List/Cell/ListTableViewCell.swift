@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 class ListTableViewCell: BaseTableViewCell {
-    let checkBox: UIButton = {
+    let completeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: Resource.ImageCase.inProgress.rawValue), for: .normal)
         button.tintColor = .lightGray
@@ -24,7 +24,7 @@ class ListTableViewCell: BaseTableViewCell {
     private let tagLabel = UILabel()
     
     override func setupHierarchy() {
-        contentView.addSubview(checkBox)
+        contentView.addSubview(completeButton)
         contentView.addSubview(titleStackView)
         [priorityLabel, titleLabel].forEach {
             titleStackView.addArrangedSubview($0)
@@ -37,15 +37,15 @@ class ListTableViewCell: BaseTableViewCell {
     }
     
     override func setupConstraints() {
-        checkBox.snp.makeConstraints { make in
+        completeButton.snp.makeConstraints { make in
             make.size.equalTo(25)
             make.top.equalTo(contentView.safeAreaLayoutGuide).offset(8)
             make.leading.equalTo(contentView.safeAreaLayoutGuide).offset(16)
         }
         
         titleStackView.snp.makeConstraints { make in
-            make.centerY.equalTo(checkBox.snp.centerY)
-            make.leading.equalTo(checkBox.snp.trailing).offset(8)
+            make.centerY.equalTo(completeButton.snp.centerY)
+            make.leading.equalTo(completeButton.snp.trailing).offset(8)
             make.height.equalTo(20)
             make.trailing.lessThanOrEqualTo(contentView.safeAreaLayoutGuide).inset(16)
         }
@@ -76,19 +76,36 @@ class ListTableViewCell: BaseTableViewCell {
         }
     }
     
+    // complete 버튼을 눌렀을 때, 태그가 없는 셀인데 태그가 생김
+    // -> 셀을 재사용하기때문 -> 셀 내 필수요소인 제목을 제외하고는 모두 공백으로 재구성해서 재사용하기 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        memoLabel.text = ""
+        priorityLabel.text = ""
+        tagLabel.text = ""
+        deadlineLabel.text = ""
+    }
+    
     func configureCell(_ data: Todo) {
         let checkImageName = data.isComplete ? Resource.ImageCase.complete.rawValue : Resource.ImageCase.inProgress.rawValue
-        checkBox.setImage(UIImage(systemName: checkImageName), for: .normal)
+        completeButton.setImage(UIImage(systemName: checkImageName), for: .normal)
         titleLabel.text = data.title
         memoLabel.text = data.memo
+        
+        // 저장되어있는 우선순위의 인덱스로 중요도 구하고 중요도의 느낌표 가져오기
         if let idx = data.priorityIdx {
-            priorityLabel.text = Resource.PrioritySegmentTitleCase.allCases[idx].cellString
+            priorityLabel.text = Resource.PriorityCase.allCases[idx].bang
         }
         // data내 tag가 있는지, 있으면 공백으로 되어있진 않은지 확인
         if let tag = data.tag, tag.components(separatedBy: " ").joined().count > 0 {
             tagLabel.text = "#\(tag)"
         }
-        if let date = data.deadline { deadlineLabel.text = date.components(separatedBy: " ")[0] }
+        // 리스트셀에 맞는 마감일 String 보여주기
+        if let deadline = data.deadline {
+            deadlineLabel.text = Date.dateFormattedString(deadline, type: .list)
+        }
       
     }
 }
+
+

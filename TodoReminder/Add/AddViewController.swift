@@ -86,7 +86,13 @@ final class AddViewController: BaseViewController {
             tempTodo.savedate = Date(timeIntervalSinceNow: 32400)
             repository.createItem(tempTodo)
         case .edit:
-            break
+            repository.updateItem {
+                todoFromListVC?.title = tempTodo.title
+                todoFromListVC?.memo = tempTodo.memo
+                todoFromListVC?.deadline = tempTodo.deadline
+                todoFromListVC?.priorityIdx = tempTodo.priorityIdx
+                todoFromListVC?.tag = tempTodo.tag
+            }
         }
         dismiss(animated: true)
     }
