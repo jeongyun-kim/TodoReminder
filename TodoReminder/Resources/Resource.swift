@@ -89,6 +89,13 @@ enum Resource {
         formatter.dateFormat = "YYYY.MM.dd"
         return formatter.string(from: newDate)
     }
+    
+    enum DateCompareCase {
+        case none
+        case future
+        case past
+        case today
+    }
 }
 
 enum AddAttributeCase: String, CaseIterable {

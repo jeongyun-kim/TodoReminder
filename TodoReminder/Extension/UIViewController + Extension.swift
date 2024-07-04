@@ -23,19 +23,4 @@ extension UIViewController {
         formatter.locale = Locale(identifier: "ko_KR")
         return formatter.string(from: date)
     }
-    
-    func dateCompare(deadline: Date?) -> Bool {
-        guard let deadline else { return false }
-        var isFuture: Bool = false
-        let result:ComparisonResult = Date(timeIntervalSinceNow: 32400).compare(deadline)
-        switch result {
-            case .orderedAscending:
-                isFuture = true
-            case .orderedSame:
-                isFuture = false
-            default:
-                break
-        }
-        return isFuture
-    }
 }
