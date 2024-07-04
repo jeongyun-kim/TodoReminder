@@ -11,6 +11,10 @@ import RealmSwift
 
 struct TodoList {
     let filter: ReminderCase
+
+    var listCnt: Int {
+        TodoRepository().readFilteredItem(filter).count
+    }
 }
 
 extension TodoList {
