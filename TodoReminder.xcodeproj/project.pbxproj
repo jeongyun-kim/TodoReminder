@@ -37,6 +37,9 @@
 		E0ECED652C357CEB00A67525 /* CustomBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED642C357CEB00A67525 /* CustomBorder.swift */; };
 		E0ECED672C357E2C00A67525 /* PriorityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED662C357E2C00A67525 /* PriorityViewController.swift */; };
 		E0ECED6C2C35866B00A67525 /* CustomHorizontalStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED6B2C35866B00A67525 /* CustomHorizontalStackView.swift */; };
+		E0ECED742C36908500A67525 /* TodoRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED732C36908500A67525 /* TodoRepository.swift */; };
+		E0ECED762C3696B800A67525 /* Date + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED752C3696B800A67525 /* Date + Extension.swift */; };
+		E0ECED792C3697E200A67525 /* TodoErrorCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED782C3697E200A67525 /* TodoErrorCase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -82,6 +85,9 @@
 		E0ECED642C357CEB00A67525 /* CustomBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBorder.swift; sourceTree = "<group>"; };
 		E0ECED662C357E2C00A67525 /* PriorityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityViewController.swift; sourceTree = "<group>"; };
 		E0ECED6B2C35866B00A67525 /* CustomHorizontalStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHorizontalStackView.swift; sourceTree = "<group>"; };
+		E0ECED732C36908500A67525 /* TodoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoRepository.swift; sourceTree = "<group>"; };
+		E0ECED752C3696B800A67525 /* Date + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + Extension.swift"; sourceTree = "<group>"; };
+		E0ECED782C3697E200A67525 /* TodoErrorCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoErrorCase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +124,7 @@
 		E0ECECFC2C33F9B300A67525 /* TodoReminder */ = {
 			isa = PBXGroup;
 			children = (
+				E0ECED772C3697CC00A67525 /* Database */,
 				E0ECED2A2C3402CA00A67525 /* Protocol */,
 				E0ECED3B2C341CC400A67525 /* Extension */,
 				E0ECED132C33FA7000A67525 /* Base */,
@@ -184,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				E0ECED3C2C341CCF00A67525 /* UIViewController + Extension.swift */,
+				E0ECED752C3696B800A67525 /* Date + Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -242,6 +250,15 @@
 				E0ECED1B2C33FBD200A67525 /* MainViewController.swift */,
 			);
 			path = Main;
+			sourceTree = "<group>";
+		};
+		E0ECED772C3697CC00A67525 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				E0ECED732C36908500A67525 /* TodoRepository.swift */,
+				E0ECED782C3697E200A67525 /* TodoErrorCase.swift */,
+			);
+			path = Database;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -331,6 +348,7 @@
 				E0ECED1E2C33FC4F00A67525 /* BaseViewControllerLargeTitle.swift in Sources */,
 				E0ECECFE2C33F9B300A67525 /* AppDelegate.swift in Sources */,
 				E0ECED2E2C34037500A67525 /* Resource.swift in Sources */,
+				E0ECED742C36908500A67525 /* TodoRepository.swift in Sources */,
 				E0ECED4E2C343D8700A67525 /* ListTableViewCell.swift in Sources */,
 				E0ECED252C34018D00A67525 /* ReminderCase.swift in Sources */,
 				E0ECED672C357E2C00A67525 /* PriorityViewController.swift in Sources */,
@@ -339,10 +357,12 @@
 				E0ECED502C34D10900A67525 /* TodoList.swift in Sources */,
 				E0ECED302C34052500A67525 /* MainCollectionViewCell.swift in Sources */,
 				E0ECED172C33FB0300A67525 /* BaseViewController.swift in Sources */,
+				E0ECED792C3697E200A67525 /* TodoErrorCase.swift in Sources */,
 				E0ECED6C2C35866B00A67525 /* CustomHorizontalStackView.swift in Sources */,
 				E0ECED1C2C33FBD200A67525 /* MainViewController.swift in Sources */,
 				E0ECED452C3429C600A67525 /* ContentTableViewCell.swift in Sources */,
 				E0ECED5F2C3558BB00A67525 /* DateViewController.swift in Sources */,
+				E0ECED762C3696B800A67525 /* Date + Extension.swift in Sources */,
 				E0ECED612C35745800A67525 /* TagViewController.swift in Sources */,
 				E0ECED3D2C341CCF00A67525 /* UIViewController + Extension.swift in Sources */,
 				E0ECED472C3429D900A67525 /* BaseTableViewCell.swift in Sources */,
