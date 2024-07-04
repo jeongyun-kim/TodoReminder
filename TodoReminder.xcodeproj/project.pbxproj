@@ -39,7 +39,6 @@
 		E0ECED6C2C35866B00A67525 /* CustomHorizontalStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED6B2C35866B00A67525 /* CustomHorizontalStackView.swift */; };
 		E0ECED742C36908500A67525 /* TodoRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED732C36908500A67525 /* TodoRepository.swift */; };
 		E0ECED762C3696B800A67525 /* Date + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED752C3696B800A67525 /* Date + Extension.swift */; };
-		E0ECED792C3697E200A67525 /* TodoErrorCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED782C3697E200A67525 /* TodoErrorCase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -87,7 +86,6 @@
 		E0ECED6B2C35866B00A67525 /* CustomHorizontalStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHorizontalStackView.swift; sourceTree = "<group>"; };
 		E0ECED732C36908500A67525 /* TodoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoRepository.swift; sourceTree = "<group>"; };
 		E0ECED752C3696B800A67525 /* Date + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + Extension.swift"; sourceTree = "<group>"; };
-		E0ECED782C3697E200A67525 /* TodoErrorCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoErrorCase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -256,7 +254,6 @@
 			isa = PBXGroup;
 			children = (
 				E0ECED732C36908500A67525 /* TodoRepository.swift */,
-				E0ECED782C3697E200A67525 /* TodoErrorCase.swift */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -357,7 +354,6 @@
 				E0ECED502C34D10900A67525 /* TodoList.swift in Sources */,
 				E0ECED302C34052500A67525 /* MainCollectionViewCell.swift in Sources */,
 				E0ECED172C33FB0300A67525 /* BaseViewController.swift in Sources */,
-				E0ECED792C3697E200A67525 /* TodoErrorCase.swift in Sources */,
 				E0ECED6C2C35866B00A67525 /* CustomHorizontalStackView.swift in Sources */,
 				E0ECED1C2C33FBD200A67525 /* MainViewController.swift in Sources */,
 				E0ECED452C3429C600A67525 /* ContentTableViewCell.swift in Sources */,

@@ -9,9 +9,9 @@ import UIKit
 import RealmSwift
 
 final class AddViewController: BaseViewController {
-    init(todoData: Todo?, viewType: Resource.ViewType) {
+    init(todoFromListVC: Todo?, viewType: Resource.ViewType) {
         super.init(nibName: nil, bundle: nil)
-        self.todoData = todoData
+        self.todoFromListVC = todoFromListVC
         self.viewType = viewType
     }
     
@@ -19,44 +19,26 @@ final class AddViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    var todoData: Todo?
-    private let realm = try! Realm()
+    var todoFromListVC: Todo?
+    private var tempTodo: Todo = Todo(title: "", memo: nil, deadline: nil, tag: nil, priorityIdx: nil, imageName: nil, savedate: Date())
+    private let repository = TodoRepository()
     var viewType: Resource.ViewType = .add
     
     private let tableView = UITableView()
-    private var todoTitle: String = ""
-    private var todoMemo: String = ""
-    private var deadline: String?
-    private var cellDeadline: String?
-    private var tag: String?
-    private var priority: String?
-    private var priorityIdx: Int?
-    // 1. 마감일 - 2. 태그 - 3. 우선순위 - 4. 이미지 추가
-    private var attributeList: [String] = ["", "", "", "", ""]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.rightBarButtonItem?.isEnabled = false
         setupTableView()
-        if let todoData {
+        // 만약 ListVC에서 AddVC로 넘어올 때, tempTodo = todoFromListVC를 해주면 결국 tempTodo가 realm내 저장되어있는 데이터를 가리키게 됨
+        // 그럼 속성을 수정한다면 realm.try! 구문외에서 데이터를 업데이트하려는 행위가 되기 때문에 에러가 발생함
+        // 그러므로 ListVC에서 받아온 데이터의 값만 넣어서 tempTodo를 구성해줘야 함
+        if let data = todoFromListVC {
+            tempTodo = Todo(title: data.title, memo: data.memo, deadline: data.deadline, tag: data.tag, priorityIdx: data.priorityIdx, imageName: data.imageName, savedate: data.savedate)
             navigationItem.rightBarButtonItem?.isEnabled = true
-            todoTitle = todoData.title
-            if let memo = todoData.memo {
-                todoMemo = memo
-            }
-            if let tempDeadline = todoData.deadline {
-                deadline = tempDeadline
-                attributeList[1] = tempDeadline
-            }
-            if let tempTag = todoData.tag {
-                tag = tempTag
-                attributeList[2] = tempTag
-            }
-            if let tempPriorityIdx = todoData.priorityIdx {
-                priorityIdx = tempPriorityIdx
-                attributeList[3] = Resource.PrioritySegmentTitleCase.allCases[tempPriorityIdx].rawValue
-            }
+        } else {
+            navigationItem.rightBarButtonItem?.isEnabled = false
         }
+        print(tempTodo)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -98,13 +80,13 @@ final class AddViewController: BaseViewController {
     }
     
     @objc func saveBtnTapped(_ sender: UIButton) {
-        // 현재 저장시기 시차 +9 적용
-        let savedate = Date(timeIntervalSinceNow: 32400)
-        // 저장할 데이터 생성
-        let data = Todo(title: todoTitle, memo: todoMemo, deadline: deadline, tag: tag, priorityIdx: priorityIdx, savedate: savedate)
-        // 데이터 저장
-        try! realm.write {
-            realm.add(data)
+        switch viewType {
+        case .add:
+            // 현재 저장시기 시차 +9 적용
+            tempTodo.savedate = Date(timeIntervalSinceNow: 32400)
+            repository.createItem(tempTodo)
+        case .edit:
+            break
         }
         dismiss(animated: true)
     }
@@ -115,18 +97,17 @@ final class AddViewController: BaseViewController {
     
     @objc func textFieldDidChange(_ sender: UITextField) {
         guard let text = sender.text else { return }
-        todoTitle = text
+        tempTodo.title = text
         if text.isEmpty || text.components(separatedBy: " ").joined().count == 0 {
             navigationItem.rightBarButtonItem?.isEnabled = false
         } else {
             navigationItem.rightBarButtonItem?.isEnabled = true
         }
     }
-
-    private func addAttributeAndReloadRow(_ data: String, indexPath: IndexPath) {
-        attributeList[indexPath.row] = data
+    
+    private func reloadCell(_ indexPath: IndexPath) {
         DispatchQueue.main.async {
-            self.tableView.reloadRows(at: [IndexPath(row: indexPath.row, section: indexPath.section)], with: .none)
+            self.tableView.reloadRows(at: [indexPath], with: .none)
         }
     }
 }
@@ -134,15 +115,11 @@ final class AddViewController: BaseViewController {
 
 extension AddViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0 {
-            return 210
-        } else {
-            return 70
-        }
+        return indexPath.row == 0 ? 210 : 70
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return AddAttributeCase.allCases.count
+        return Resource.AddAttributeCase.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -150,12 +127,11 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: ContentTableViewCell.identifier, for: indexPath) as! ContentTableViewCell
             cell.memoTextView.delegate = self
             cell.titleTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-            guard let todoData else { return cell }
-            cell.configureCell(todoData)
+            cell.configureCell(tempTodo)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: AttributeTableViewCell.identifier, for: indexPath) as! AttributeTableViewCell
-            cell.configureCell(AddAttributeCase.allCases[indexPath.row].rawValue, attribute: attributeList[indexPath.row])
+            cell.configureCell(Resource.AddAttributeCase.allCases[indexPath.row], data: tempTodo)
             return cell
         }
     }
@@ -163,26 +139,25 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 1:
-            let vc = DateViewController(dateString: deadline)
+            let vc = DateViewController(deadline: tempTodo.deadline)
             transition(vc, type: .push)
-            vc.getDate = { deadlineString in
-                self.deadline = deadlineString
-                self.addAttributeAndReloadRow(deadlineString, indexPath: indexPath)
+            vc.getDate = { deadline in
+                self.tempTodo.deadline = deadline
+                self.reloadCell(indexPath)
             }
        case 2:
-            let vc = TagViewController(tag: tag)
+            let vc = TagViewController(tag: tempTodo.tag)
             transition(vc, type: .push)
             vc.getTag = { tag in
-                self.tag = tag
-                self.addAttributeAndReloadRow(tag, indexPath: indexPath)
+                self.tempTodo.tag = tag
+                self.reloadCell(indexPath)
             }
         case 3:
-            let vc = PriorityViewController(selectedIdx: priorityIdx)
+            let vc = PriorityViewController(selectedIdx: tempTodo.priorityIdx)
             transition(vc, type: .push)
-            vc.getPriority = { idx in
-                self.priorityIdx = idx
-                let cellString = Resource.PrioritySegmentTitleCase.allCases[idx].rawValue
-                self.addAttributeAndReloadRow(cellString, indexPath: indexPath)
+            vc.getPriorityIdx = { idx in
+                self.tempTodo.priorityIdx = idx
+                self.reloadCell(indexPath)
             }
 //        case 4:
         default: break
@@ -208,6 +183,6 @@ extension AddViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         guard let text = textView.text else { return }
-        todoMemo = text
+        tempTodo.memo = text
     }
 }

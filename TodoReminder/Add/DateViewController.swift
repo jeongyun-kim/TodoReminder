@@ -9,9 +9,9 @@ import UIKit
 import SnapKit
 
 final class DateViewController: BaseViewController {
-    init(dateString: String?) {
+    init(deadline: Date?) {
         super.init(nibName: nil, bundle: nil)
-        self.dateString = dateString
+        self.deadline = deadline
     }
     
     required init?(coder: NSCoder) {
@@ -20,30 +20,21 @@ final class DateViewController: BaseViewController {
     
     private var navigationTitle: String = ""
     private let datePicker = UIDatePicker()
-    var getDate: ((String) -> Void)?
-    var dateString: String?
+    var getDate: ((Date) -> Void)?
+    var deadline: Date?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // 만약 마감일이 이미 설정되어있으면 해당 날짜로 선택된 상태 보여주기
-        if let dateString = dateString {
-            guard let formattedDate = formattedDate(dateString) else { return }
-            datePicker.date = formattedDate
+        if let deadline {
+            datePicker.date = deadline
         }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard let dateString = dateString else { return }
-        getDate?(dateString)
-    }
-    
-    private func formattedDate(_ date: String) -> Date? {
-        let dateString = date.components(separatedBy: " ")[0]
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "YYYY.MM.dd"
-        guard let result = dateFormatter.date(from: dateString) else { return nil }
-        return result
+        guard let deadline = deadline else { return }
+        getDate?(deadline)
     }
     
     override func setupHierarchy() {
@@ -58,19 +49,20 @@ final class DateViewController: BaseViewController {
     }
     
     override func setupNavigation(_ title: String) {
-        super.setupNavigation(AddAttributeCase.deadline.rawValue)
+        super.setupNavigation(Resource.AddAttributeCase.deadline.rawValue)
     }
     
     override func setupUI() {
         super.setupUI()
         datePicker.preferredDatePickerStyle = .inline
-        datePicker.datePickerMode = .date
+        datePicker.datePickerMode = .dateAndTime
         datePicker.addTarget(self, action: #selector(datePickerDidChanged), for: .valueChanged)
         datePicker.tintColor = .systemPink
+        datePicker.locale = Locale(identifier: "ko_KR")
     }
     
     @objc func datePickerDidChanged(_ sender: UIDatePicker) {
-        dateString = getDeadlineCellDateString(date: sender.date)
+        deadline = sender.date
     }
 }
 

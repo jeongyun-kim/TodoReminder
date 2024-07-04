@@ -50,12 +50,12 @@ enum Resource {
         static let dismiss = "DismissAddVC"
     }
     
-    enum PrioritySegmentTitleCase: String, CaseIterable {
+    enum PriorityCase: String, CaseIterable {
         case low = "낮음"
         case mid = "중간"
         case high = "높음"
         
-        var cellString: String {
+        var bang: String {
             switch self {
             case .low:
                 return "!"
@@ -81,27 +81,24 @@ enum Resource {
         }
     }
     
-    static func getFormattedDateString(date: String) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "YYYY/MM/dd"
-        guard let newDate = formatter.date(from: date) else { return "" }
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "YYYY.MM.dd"
-        return formatter.string(from: newDate)
-    }
-    
     enum DateCompareCase {
         case none
         case future
         case past
         case today
     }
+    
+    enum DateFormatUsage {
+        case list
+        case attribute
+    }
+    
+    enum AddAttributeCase: String, CaseIterable {
+        case content
+        case deadline = "마감일"
+        case tag  = "태그"
+        case priority = "우선순위"
+        case addImage = "이미지 추가"
+    }
 }
 
-enum AddAttributeCase: String, CaseIterable {
-    case content
-    case deadline = "마감일"
-    case tag  = "태그"
-    case priority = "우선순위"
-    case addImage = "이미지 추가"
-}

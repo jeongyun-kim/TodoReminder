@@ -53,8 +53,25 @@ final class AttributeTableViewCell: BaseTableViewCell {
         goImageView.tintColor = .lightGray
     }
     
-    func configureCell(_ title: String, attribute: String) {
-        titleLabel.text = title
-        attributeLabel.text = attribute
+    func configureCell(_ attribute: Resource.AddAttributeCase, data: Todo) {
+        titleLabel.text = attribute.rawValue
+        switch attribute {
+        case .content:
+            return
+        case .deadline:
+            if let deadline = data.deadline {
+                attributeLabel.text =  Date.dateFormattedString(deadline, type: .attribute)
+            }
+        case .tag:
+            if let tag = data.tag {
+                attributeLabel.text = "\(tag)"
+            }
+        case .priority:
+            if let idx = data.priorityIdx {
+                attributeLabel.text = "\(Resource.PriorityCase.allCases[idx].rawValue)"
+            }
+        case .addImage:
+            break
+        }
     }
 }
