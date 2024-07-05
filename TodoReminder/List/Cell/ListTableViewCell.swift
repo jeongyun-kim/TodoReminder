@@ -89,7 +89,7 @@ class ListTableViewCell: BaseTableViewCell {
     func configureCell(_ data: Todo) {
         let checkImageName = data.isComplete ? Resource.ImageCase.complete.rawValue : Resource.ImageCase.inProgress.rawValue
         completeButton.setImage(UIImage(systemName: checkImageName), for: .normal)
-        titleLabel.text = data.title
+        titleLabel.text = data.todoTitle
         memoLabel.text = data.memo
         
         // 저장되어있는 우선순위의 인덱스로 중요도 구하고 중요도의 느낌표 가져오기

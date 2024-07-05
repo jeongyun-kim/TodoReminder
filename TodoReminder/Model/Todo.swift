@@ -10,7 +10,7 @@ import RealmSwift
 
 class Todo: Object {
     @Persisted(primaryKey: true) var id: ObjectId
-    @Persisted var title: String
+    @Persisted var todoTitle: String
     @Persisted var memo: String?
     @Persisted var deadline: Date?
     @Persisted var tag: String?
@@ -23,7 +23,7 @@ class Todo: Object {
     
     convenience init(title: String, memo: String? = nil, deadline: Date? = nil, tag: String? = nil, priorityIdx: Int? = nil, imageName: String? = nil, savedate: Date) {
         self.init()
-        self.title = title
+        self.todoTitle = title
         self.memo = memo
         self.deadline = deadline
         self.tag = tag

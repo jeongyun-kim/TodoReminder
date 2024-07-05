@@ -57,7 +57,7 @@ class ContentTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(_ data: Todo) {
-        titleTextField.text = data.title
+        titleTextField.text = data.todoTitle
         if let memo = data.memo, !memo.isEmpty {
             memoTextView.text = data.memo
             memoTextView.textColor = .white

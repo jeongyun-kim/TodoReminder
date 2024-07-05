@@ -33,7 +33,7 @@ final class AddViewController: BaseViewController {
         // 그럼 속성을 수정한다면 realm.try! 구문외에서 데이터를 업데이트하려는 행위가 되기 때문에 에러가 발생함
         // 그러므로 ListVC에서 받아온 데이터의 값만 넣어서 tempTodo를 구성해줘야 함
         if let data = todoFromListVC {
-            tempTodo = Todo(title: data.title, memo: data.memo, deadline: data.deadline, tag: data.tag, priorityIdx: data.priorityIdx, imageName: data.imageName, savedate: data.savedate)
+            tempTodo = Todo(title: data.todoTitle, memo: data.memo, deadline: data.deadline, tag: data.tag, priorityIdx: data.priorityIdx, imageName: data.imageName, savedate: data.savedate)
             navigationItem.rightBarButtonItem?.isEnabled = true
         } else {
             navigationItem.rightBarButtonItem?.isEnabled = false
@@ -89,7 +89,7 @@ final class AddViewController: BaseViewController {
         case .edit:
             repository.updateItem {
                 guard let todoFromListVC else { return }
-                todoFromListVC.title = tempTodo.title
+                todoFromListVC.todoTitle = tempTodo.todoTitle
                 todoFromListVC.memo = tempTodo.memo
                 todoFromListVC.deadline = tempTodo.deadline
                 todoFromListVC.priorityIdx = tempTodo.priorityIdx
@@ -119,7 +119,7 @@ final class AddViewController: BaseViewController {
     
     @objc func textFieldDidChange(_ sender: UITextField) {
         guard let text = sender.text else { return }
-        tempTodo.title = text
+        tempTodo.todoTitle = text
         if text.isEmpty || text.components(separatedBy: " ").joined().count == 0 {
             navigationItem.rightBarButtonItem?.isEnabled = false
         } else {
