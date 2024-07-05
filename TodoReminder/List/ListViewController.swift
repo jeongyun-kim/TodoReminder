@@ -104,6 +104,9 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .destructive, title: "삭제") { [unowned self] _, _, _ in
             let data = self.list[indexPath.row]
+            if let imageName = data.imageName {
+                view.removeImageFromDocument(imageName: imageName)
+            }
             repository.deleteItem(data.id)
             list = repository.readFilteredItem(filterType)
         }
