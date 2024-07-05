@@ -102,6 +102,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     
     // 오른쪽에서 왼쪽으로 밀었을 때 액션 나오게 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        // 삭제
         let delete = UIContextualAction(style: .destructive, title: "삭제") { [unowned self] _, _, _ in
             let data = self.list[indexPath.row]
             if let imageName = data.imageName {
@@ -111,6 +112,29 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
             list = repository.readFilteredItem(filterType)
         }
        return UISwipeActionsConfiguration(actions: [delete])
+    }
+    
+    // 왼쪽에서 오른쪽으로 밀었을 때 액션 
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        // 깃발 표시
+        let flag = UIContextualAction(style: .normal, title: ReminderCase.flag.title) { [unowned self] _, _, _ in
+            let data = self.list[indexPath.row]
+            repository.updateItem {
+                data.isFlag.toggle()
+                list = repository.readFilteredItem(filterType)
+            }
+        }
+        flag.backgroundColor = ReminderCase.flag.imageColor
+        
+        let bookmark = UIContextualAction(style: .normal, title: ReminderCase.bookmark.title) { [unowned self] _, _, _ in
+            let data = self.list[indexPath.row]
+            repository.updateItem {
+                data.isBookmark.toggle()
+                list = repository.readFilteredItem(filterType)
+            }
+        }
+        bookmark.backgroundColor = ReminderCase.bookmark.imageColor
+        return UISwipeActionsConfiguration(actions: [flag, bookmark])
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
