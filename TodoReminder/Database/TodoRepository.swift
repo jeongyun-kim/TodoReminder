@@ -21,12 +21,14 @@ final class TodoRepository {
         }
     }
     
-    func readAllItem() -> [Todo] {
-        return Array(realm.objects(Todo.self))
+    func readAllItems(_ sortType: Resource.ListSortType = .dateAsc) -> [Todo] {
+        let sortType = sortType == .dateAsc
+        // savedate를 기준으로 오름차순 = true / 내림차순 = false
+        return Array(realm.objects(Todo.self).sorted(byKeyPath: "savedate", ascending: sortType))
     }
     
-    func readFilteredItem(_ filter: ReminderCase) -> [Todo] {
-        let allData = readAllItem()
+    func readFilteredItem(_ filter: ReminderCase, sort: Resource.ListSortType = .dateAsc) -> [Todo] {
+        let allData = readAllItems(sort)
         switch filter {
         case .today:
             return allData.filter { Date.dateCompare(deadline: $0.deadline) == .today }
@@ -42,7 +44,6 @@ final class TodoRepository {
             return allData.filter { $0.isBookmark }
         }
     }
-    
     
     func updateItem(_ completionHandler: () -> Void)  {
         do {

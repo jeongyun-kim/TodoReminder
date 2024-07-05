@@ -39,6 +39,7 @@ enum Resource {
         case complete = "checkmark.circle.fill"
         case add = "plus.circle.fill"
         case more = "ellipsis.circle"
+        case calendar
     }
     
     enum transitionCase {
@@ -91,6 +92,11 @@ enum Resource {
     enum DateFormatUsage {
         case list
         case attribute
+    }
+    
+    enum ListSortType {
+        case dateAsc
+        case dateDesc
     }
     
     enum AddAttributeCase: String, CaseIterable {

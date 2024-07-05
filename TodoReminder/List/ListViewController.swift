@@ -32,6 +32,7 @@ class ListViewController: BaseViewControllerLargeTitle {
     override func viewDidLoad() {
         super.viewDidLoad()
         addObserver()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,8 +58,18 @@ class ListViewController: BaseViewControllerLargeTitle {
         super.setupNavigation(filterType.title)
     }
     
+    //
     override func configureRightBarButton(title: String?, imageName: String?, action: Selector?) {
-        super.configureRightBarButton(title: nil, imageName: Resource.ImageCase.more.rawValue, action: nil)
+        let asc = UIAction(title: "오래된 순", handler: { _ in
+            self.list = self.repository.readFilteredItem(self.filterType)
+        })
+        let desc = UIAction(title: "최신순", handler: { _ in
+            self.list = self.repository.readFilteredItem(self.filterType, sort: .dateDesc)
+        })
+        let menu = UIMenu(children: [asc, desc])
+        let filter = UIBarButtonItem(title: nil, image: UIImage(systemName: Resource.ImageCase.more.rawValue), primaryAction: nil, menu: menu)
+        //filter.changesSelectionAsPrimaryAction = true // more 이미지가 왜 제목으로 바뀌는지..?
+        navigationItem.rightBarButtonItem = filter
     }
     
     override func setupTableView() {
@@ -67,6 +78,11 @@ class ListViewController: BaseViewControllerLargeTitle {
         tableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = UITableView.automaticDimension
+    }
+    
+    @objc func filterBtnTapped(_ sender: UIButton) {
+        print(#function)
+        
     }
     
     @objc func checkBtnTapped(_ sender: UIButton) {
