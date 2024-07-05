@@ -61,6 +61,7 @@ final class AttributeTableViewCell: BaseTableViewCell {
         goImageView.tintColor = .lightGray
         thumbnailImageView.backgroundColor = .lightGray
         thumbnailImageView.layer.cornerRadius = Resource.corner.defaultCornerRadius
+        thumbnailImageView.layer.masksToBounds = true
         thumbnailImageView.isHidden = true
     }
     
