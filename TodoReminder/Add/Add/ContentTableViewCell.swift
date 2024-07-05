@@ -54,11 +54,16 @@ class ContentTableViewCell: BaseTableViewCell {
         memoTextView.text = Resource.placeholder.memo.rawValue
         memoTextView.backgroundColor = .systemGray5
         memoTextView.font = Resource.FontCase.regular15
-        memoTextView.textColor = .systemGray2
     }
     
     func configureCell(_ data: Todo) {
         titleTextField.text = data.title
-        memoTextView.text = data.memo
+        if let memo = data.memo, !memo.isEmpty {
+            memoTextView.text = data.memo
+            memoTextView.textColor = .white
+        } else {
+            memoTextView.text = "메모"
+            memoTextView.textColor = .systemGray2
+        }
     }
 }
