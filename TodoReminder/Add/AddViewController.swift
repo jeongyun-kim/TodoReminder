@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import RealmSwift
+import PhotosUI
 
 final class AddViewController: BaseViewController {
     init(todoFromListVC: Todo?, viewType: Resource.ViewType) {
@@ -38,7 +38,6 @@ final class AddViewController: BaseViewController {
         } else {
             navigationItem.rightBarButtonItem?.isEnabled = false
         }
-        print(tempTodo)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -81,23 +80,40 @@ final class AddViewController: BaseViewController {
     
     @objc func saveBtnTapped(_ sender: UIButton) {
         switch viewType {
+        // Main -> Add : 데이터 추가
         case .add:
             // 현재 저장시기 시차 +9 적용
             tempTodo.savedate = Date(timeIntervalSinceNow: 32400)
             repository.createItem(tempTodo)
+        // List -> Add : 데이터 변경
         case .edit:
             repository.updateItem {
-                todoFromListVC?.title = tempTodo.title
-                todoFromListVC?.memo = tempTodo.memo
-                todoFromListVC?.deadline = tempTodo.deadline
-                todoFromListVC?.priorityIdx = tempTodo.priorityIdx
-                todoFromListVC?.tag = tempTodo.tag
+                guard let todoFromListVC else { return }
+                todoFromListVC.title = tempTodo.title
+                todoFromListVC.memo = tempTodo.memo
+                todoFromListVC.deadline = tempTodo.deadline
+                todoFromListVC.priorityIdx = tempTodo.priorityIdx
+                todoFromListVC.tag = tempTodo.tag
+                guard let postImageName = tempTodo.imageName else { return } // 변경된 상태의 이미지명 (아무런 이미지 선택도 안했으면 return)
+                if let preImageName = todoFromListVC.imageName, preImageName != postImageName { // 이전에 이미지가 있었고 변경된 이미지 내역이 있다면
+                    view.removeImageFromDocument(imageName: preImageName) // 이전의 이미지는 fileManager에서 제거
+                }
+                todoFromListVC.imageName = tempTodo.imageName // 그리고 변경된 이미지명 넣어주기
             }
         }
         dismiss(animated: true)
     }
     
     @objc func cancelBtnTapped(_ sender: UIButton) {
+        // 변경된 이미지가 없다면 dismiss
+        guard let tempImageName = tempTodo.imageName else { return dismiss(animated: true) }
+        // 이전의 이미지명 (없을수도 있고 있을수도 있음)
+        let originalImageName = todoFromListVC?.imageName
+        // 이전의 이미지명과 현재의 이미지명이 다른 상태(= 이미지 변경이 일어난 상태)
+            if originalImageName != tempImageName {
+            // 원본이미지를 보존하고 변경되면서 저장된 이후의 이미지 삭제
+            view.removeImageFromDocument(imageName: tempImageName)
+        }
         dismiss(animated: true)
     }
     
@@ -118,7 +134,7 @@ final class AddViewController: BaseViewController {
     }
 }
 
-
+// MARK: TableViewDelegate
 extension AddViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return indexPath.row == 0 ? 210 : 70
@@ -165,12 +181,18 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
                 self.tempTodo.priorityIdx = idx
                 self.reloadCell(indexPath)
             }
-//        case 4:
+        case 4:
+            var config = PHPickerConfiguration()
+            config.filter = .images
+            let picker = PHPickerViewController(configuration: config)
+            picker.delegate = self
+            transition(picker, type: .push)
         default: break
         }
     }
 }
 
+// MARK: TextViewDelegate
 extension AddViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor != .white {
@@ -190,5 +212,31 @@ extension AddViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         guard let text = textView.text else { return }
         tempTodo.memo = text
+    }
+}
+
+// MARK: PHPickerDelegate
+extension AddViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        // itemProvider : 선택한 이미지와 관련된 데이터 정보들
+        if let itemProvider = results.first?.itemProvider, itemProvider.canLoadObject(ofClass: UIImage.self) {
+            // 여기는 mainThread
+            itemProvider.loadObject(ofClass: UIImage.self) { [unowned self] image, error in
+                // 이 코드 구문은 애플에서 global에서 처리하도록 해둬서 이미지를 대입해주는건 main으로 넘겨줘야함
+                DispatchQueue.main.async {
+                    // 이미지 변경시마다 이전에 있던 이미지 지우기
+                    self.view.removeImageFromDocument(imageName: "\(self.tempTodo.id)")
+                    // image가 NSItemProviderReading이라는 데이터 타입이기 때문에 UIImage로 변환할 수 있는지 확인
+                    guard let convertedImage = image as? UIImage else { return }
+                    // 셀에 이미지 보여주기 위해 Document에 이미지 저장
+                    self.view.saveImageToDocument(image: convertedImage, imageName: "\(self.tempTodo.id)")
+                    // 셀에 이미지 정보가 있음을 알려주기 위해 imageName에 이미지명 넣어주기
+                    self.tempTodo.imageName = "\(self.tempTodo.id)"
+                    // 이미지 속성셀 reload
+                    self.reloadCell(IndexPath(row: 4, section: 0))
+                }
+            }
+        }
+        navigationController?.popViewController(animated: true)
     }
 }

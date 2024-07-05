@@ -13,11 +13,13 @@ final class AttributeTableViewCell: BaseTableViewCell {
     private let titleLabel = UILabel()
     private let attributeLabel = UILabel()
     private let goImageView = UIImageView()
+    private let thumbnailImageView = UIImageView()
     
     override func setupHierarchy() {
         contentView.addSubview(bgView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(attributeLabel)
+        contentView.addSubview(thumbnailImageView)
         contentView.addSubview(goImageView)
     }
     
@@ -37,6 +39,12 @@ final class AttributeTableViewCell: BaseTableViewCell {
             make.trailing.greaterThanOrEqualTo(goImageView.snp.leading).offset(-8)
         }
         
+        thumbnailImageView.snp.makeConstraints { make in
+            make.centerY.equalTo(bgView.snp.centerY)
+            make.trailing.greaterThanOrEqualTo(goImageView.snp.leading).offset(-8)
+            make.size.equalTo(40)
+        }
+        
         goImageView.snp.makeConstraints { make in
             make.centerY.equalTo(bgView.snp.centerY)
             make.trailing.equalTo(bgView.snp.trailing).inset(12)
@@ -51,6 +59,14 @@ final class AttributeTableViewCell: BaseTableViewCell {
         attributeLabel.font = Resource.FontCase.regular14
         goImageView.image = UIImage(systemName: Resource.ImageCase.go.rawValue)
         goImageView.tintColor = .lightGray
+        thumbnailImageView.backgroundColor = .lightGray
+        thumbnailImageView.layer.cornerRadius = Resource.corner.defaultCornerRadius
+        thumbnailImageView.isHidden = true
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        thumbnailImageView.isHidden = true
     }
     
     func configureCell(_ attribute: Resource.AddAttributeCase, data: Todo) {
@@ -71,7 +87,10 @@ final class AttributeTableViewCell: BaseTableViewCell {
                 attributeLabel.text = "\(Resource.PriorityCase.allCases[idx].rawValue)"
             }
         case .addImage:
-            break
+            if let imageName = data.imageName {
+                thumbnailImageView.isHidden = false
+                thumbnailImageView.image = loadImageFromDocument(imageName: imageName)
+            }
         }
     }
 }
