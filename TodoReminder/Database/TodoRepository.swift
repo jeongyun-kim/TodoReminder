@@ -31,7 +31,7 @@ final class TodoRepository {
         let allData = readAllItems(sort)
         switch filter {
         case .today:
-            return allData.filter { Date.dateCompare(deadline: $0.deadline) == .today }
+            return allData.filter { Date.dateCompare(deadline: $0.deadline) == .today}
         case .schedule:
             return allData.filter { Date.dateCompare(deadline: $0.deadline) == .future }
         case .all:
@@ -44,6 +44,18 @@ final class TodoRepository {
             return allData.filter { $0.isBookmark }
         }
     }
+    
+    func readSearchedItem(list: [Todo], keyword: String) -> [Todo]{
+        // 받아온 리스트
+        let originalListSet = Set(list)
+        // 전체 리스트에서 제목, 메모에 키워드가 포함된 검색결과 받아오기
+        let searchedListSet = Set(realm.objects(Todo.self)
+            .where { $0.todoTitle.contains(keyword, options: .caseInsensitive) || $0.memo.contains(keyword, options: .caseInsensitive) })
+        // 받아온 리스트랑 전체 내 검색결과의 교집합으로 구성해주기 (= 리스트 내 검색 결과를 구할 수 있음)
+        let result = originalListSet.intersection(searchedListSet)
+        return Array(result)
+    }
+    
     
     func updateItem(_ completionHandler: () -> Void)  {
         do {

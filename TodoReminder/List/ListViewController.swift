@@ -25,19 +25,22 @@ class ListViewController: BaseViewControllerLargeTitle {
             tableView.reloadData()
         }
     }
+    private var originalList: [Todo] = []
     var filterType: ReminderCase = .all
     
     private let tableView = UITableView()
+    private let searchController = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         addObserver()
-        
+        setupSearchController()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         list = repository.readFilteredItem(filterType)
+        originalList = list
     }
     
     override func setupHierarchy() {
@@ -62,9 +65,11 @@ class ListViewController: BaseViewControllerLargeTitle {
     override func configureRightBarButton(title: String?, imageName: String?, action: Selector?) {
         let asc = UIAction(title: "오래된 순", handler: { _ in
             self.list = self.repository.readFilteredItem(self.filterType)
+            self.originalList = self.list
         })
         let desc = UIAction(title: "최신순", handler: { _ in
             self.list = self.repository.readFilteredItem(self.filterType, sort: .dateDesc)
+            self.originalList = self.list
         })
         let menu = UIMenu(children: [asc, desc])
         let filter = UIBarButtonItem(title: nil, image: UIImage(systemName: Resource.ImageCase.more.rawValue), primaryAction: nil, menu: menu)
@@ -78,6 +83,16 @@ class ListViewController: BaseViewControllerLargeTitle {
         tableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = UITableView.automaticDimension
+    }
+    
+    private func setupSearchController() {
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.placeholder = "검색어를 입력해주세요" // 검색어 입력칸에 안내 문구
+        searchController.searchBar.autocapitalizationType = .none // 영어 첫글자 대문자 X
+        searchController.hidesNavigationBarDuringPresentation = true // 검색하는동안 네비게이션 숨길지
+        self.navigationItem.hidesSearchBarWhenScrolling = false // 스크롤 하는동안 서치바 숨길지(기본적으로 vc에 들어왔을 때, 서치바가 보이게하려면 false)
+        self.navigationItem.searchController = searchController // navigationItem에 searchController 등록
+        searchController.searchResultsUpdater = self // 실시간 검색을 위한 delegate 연결
     }
     
     @objc func filterBtnTapped(_ sender: UIButton) {
@@ -98,7 +113,7 @@ class ListViewController: BaseViewControllerLargeTitle {
     
     @objc func didDismissAddViewController(_ notification: Notification) {
         DispatchQueue.main.async {
-            self.list = self.repository.readFilteredItem(self.filterType)
+            self.list = self.originalList
         }
     }
 }
@@ -158,5 +173,25 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         let vc = AddViewController(todoFromListVC: data, viewType: .edit)
         let navi = UINavigationController(rootViewController: vc)
         transition(navi, type: .present)
+    }
+}
+
+extension ListViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        // 검색한 결과에서 어떤 아이템을 편집하고 돌아오면 NotificationCenter의 Observer때문에 모든 리스트가 나오게 됨
+        // 그러므로 검색하는 동안에는 옵저버 제거하기
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(Resource.NotificationCenterName.dismiss), object: nil)
+        
+        // 서치바가 Active 상태라면
+        if searchController.isActive {
+            // 서치바에 키워드가 있는지
+            // - 키워드가 있다면 현재 리스트에 찐리스트에서 키워드로 검색한 결과 넣어주기
+            // - 키워드가 비어있다면 아무런 결과 보여주지않게 현재 리스트에 빈 배열 넣어주기
+            guard let keyword = searchController.searchBar.text, !keyword.isEmpty else { return list = [] }
+            list = repository.readSearchedItem(list: originalList, keyword: keyword)
+        } else { // 서치바가 InActive 상태라면 (= cancel 눌러서 서치바 비활성화 상태로 만들었을 때)
+            list = originalList // 원래 보여주고 있던 데이터 보여주기
+            addObserver() // 옵저버 다시 등록하기
+        }
     }
 }
