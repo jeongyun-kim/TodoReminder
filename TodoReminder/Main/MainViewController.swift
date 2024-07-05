@@ -14,7 +14,7 @@ final class MainViewController: BaseViewControllerLargeTitle {
             collectionView.reloadData()
         }
     }
-    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
+    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: .mainLayout())
     private let addButton: UIButton = {
         let button = UIButton()
         var configuration = UIButton.Configuration.plain()
@@ -56,19 +56,11 @@ final class MainViewController: BaseViewControllerLargeTitle {
     }
     
     override func setupNavigation(_ title: String) {
-        super.setupNavigation("전체")
+        super.setupNavigation(ReminderCase.all.title)
     }
     
-    private func layout() -> UICollectionViewLayout {
-        let layout = UICollectionViewFlowLayout()
-        let spacing: CGFloat = 8
-        let inset: CGFloat = 16
-        let width = (UIScreen.main.bounds.width - spacing - inset*2) / 2
-        layout.minimumLineSpacing = spacing
-        layout.minimumInteritemSpacing = spacing
-        layout.sectionInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
-        layout.itemSize = CGSize(width: width, height: width*0.45)
-        return layout
+    override func configureRightBarButton(title: String?, imageName: String?, action: Selector?) {
+        super.configureRightBarButton(title: nil, imageName: Resource.ImageCase.calendar.rawValue, action: #selector(calendarBtnTapped))
     }
     
     override func setupCollectionView() {
@@ -77,12 +69,16 @@ final class MainViewController: BaseViewControllerLargeTitle {
         collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: MainCollectionViewCell.identifier)
     }
     
+    @objc func calendarBtnTapped(_ sender: UIButton) {
+        let vc = CalendarViewController()
+        transition(vc, type: .push)
+    }
+    
     @objc func addBtnTapped(_ sender: UIButton) {
         let vc = AddViewController(todoFromListVC: nil, viewType: .add)
         let navi = UINavigationController(rootViewController: vc)
         transition(navi, type: .present)
     }
-    
     
     func addObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(didDismissAddViewController), name: NSNotification.Name(Resource.NotificationCenterName.dismiss), object: nil)

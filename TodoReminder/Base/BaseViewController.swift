@@ -15,7 +15,7 @@ class BaseViewController: UIViewController {
         setupConstraints()
         setupUI()
         setupNavigation("")
-        configureRightBarButton(title: "", image: "", action: nil)
+        configureRightBarButton(title: "", imageName: "", action: nil)
     }
     
     func setupHierarchy() {
@@ -37,12 +37,12 @@ class BaseViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
     
-    func configureRightBarButton(title: String?, image: String?, action: Selector?) {
+    func configureRightBarButton(title: String?, imageName: String?, action: Selector?) {
         var rightItem: UIBarButtonItem
         if let title = title {
             rightItem = UIBarButtonItem(title: title, style: .plain, target: self, action: action)
         } else {
-            guard let image = image else { return }
+            guard let image = imageName else { return }
             rightItem = UIBarButtonItem(image: UIImage(systemName: image), style: .plain, target: self, action: action)
         }
         navigationItem.rightBarButtonItem = rightItem

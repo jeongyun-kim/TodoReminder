@@ -67,8 +67,8 @@ final class AddViewController: BaseViewController {
         navigationItem.leftBarButtonItem = leftBarItem
     }
     
-    override func configureRightBarButton(title: String?, image: String?, action: Selector?) {
-        super.configureRightBarButton(title: viewType.rightBarTitle, image: nil, action: #selector(saveBtnTapped))
+    override func configureRightBarButton(title: String?, imageName: String?, action: Selector?) {
+        super.configureRightBarButton(title: viewType.rightBarTitle, imageName: nil, action: #selector(saveBtnTapped))
     }
     
     private func setupTableView() {

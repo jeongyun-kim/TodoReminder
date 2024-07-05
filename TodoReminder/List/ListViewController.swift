@@ -57,8 +57,8 @@ class ListViewController: BaseViewControllerLargeTitle {
         super.setupNavigation(filterType.title)
     }
     
-    override func configureRightBarButton(title: String?, image: String?, action: Selector?) {
-        super.configureRightBarButton(title: nil, image: Resource.ImageCase.more.rawValue, action: nil)
+    override func configureRightBarButton(title: String?, imageName: String?, action: Selector?) {
+        super.configureRightBarButton(title: nil, imageName: Resource.ImageCase.more.rawValue, action: nil)
     }
     
     override func setupTableView() {
