@@ -24,7 +24,8 @@ extension TodoList {
             TodoList(filter: .schedule),
             TodoList(filter: .all),
             TodoList(filter: .flag),
-            TodoList(filter: .complete)
+            TodoList(filter: .complete),
+            TodoList(filter: .bookmark)
         ]
     }
 }

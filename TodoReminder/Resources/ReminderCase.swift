@@ -14,6 +14,7 @@ enum ReminderCase: String, CaseIterable {
     case all 
     case flag
     case complete
+    case bookmark
     
     var title: String {
         switch self {
@@ -27,6 +28,8 @@ enum ReminderCase: String, CaseIterable {
             "깃발표시"
         case .complete:
             "완료됨"
+        case .bookmark:
+            "즐겨찾기"
         }
     }
     
@@ -42,6 +45,8 @@ enum ReminderCase: String, CaseIterable {
             return "flag.circle.fill"
         case .complete:
             return "checkmark.circle.fill"
+        case .bookmark:
+            return "bookmark.circle.fill"
         }
     }
     
@@ -57,6 +62,8 @@ enum ReminderCase: String, CaseIterable {
             return .systemYellow
         case .complete:
             return .systemGreen
+        case .bookmark:
+            return .systemOrange
         }
     }
 }

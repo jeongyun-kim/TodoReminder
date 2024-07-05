@@ -17,6 +17,7 @@ class Todo: Object {
     @Persisted var priorityIdx: Int?
     @Persisted var imageName: String?
     @Persisted var isFlag: Bool
+    @Persisted var isBookmark: Bool
     @Persisted var isComplete: Bool
     @Persisted var savedate: Date
     
@@ -29,6 +30,7 @@ class Todo: Object {
         self.priorityIdx = priorityIdx
         self.imageName = imageName
         self.isFlag = false
+        self.isBookmark = false
         self.isComplete = false
         self.savedate = savedate
     }

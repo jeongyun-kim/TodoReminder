@@ -38,6 +38,8 @@ final class TodoRepository {
             return allData.filter { $0.isFlag }
         case .complete:
             return allData.filter { $0.isComplete }
+        case .bookmark:
+            return allData.filter { $0.isBookmark }
         }
     }
     
