@@ -11,20 +11,10 @@ class BaseViewControllerLargeTitle: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTableView()
-        setupCollectionView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.prefersLargeTitles = true
-    }
-    
-    func setupTableView() {
-        
-    }
-    
-    func setupCollectionView() {
-        
     }
 }

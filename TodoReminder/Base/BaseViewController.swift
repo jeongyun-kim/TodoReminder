@@ -16,6 +16,8 @@ class BaseViewController: UIViewController {
         setupUI()
         setupNavigation("")
         configureRightBarButton(title: "", imageName: "", action: nil)
+        setupTableView()
+        setupCollectionView()
     }
     
     func setupHierarchy() {
@@ -47,6 +49,10 @@ class BaseViewController: UIViewController {
         }
         navigationItem.rightBarButtonItem = rightItem
     }
+    
+    func setupTableView() { }
+    
+    func setupCollectionView() { }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)

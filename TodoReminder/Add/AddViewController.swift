@@ -71,7 +71,7 @@ final class AddViewController: BaseViewController {
         super.configureRightBarButton(title: viewType.rightBarTitle, imageName: nil, action: #selector(saveBtnTapped))
     }
     
-    private func setupTableView() {
+    override func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(ContentTableViewCell.self, forCellReuseIdentifier: ContentTableViewCell.identifier)

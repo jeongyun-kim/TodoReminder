@@ -12,7 +12,6 @@ extension Date {
     static func getRemovedTimeDate(preDate: Date, preDeadline: Date) -> [Date] {
         let formatter = DateFormatter()
         formatter.dateFormat = "YYYY-MM-dd"
-        
         let todayDateString = formatter.string(from: preDate)
         let deadlineString = formatter.string(from: preDeadline)
         
@@ -46,7 +45,7 @@ extension Date {
     }
     
     // AddVC 내 테이블뷰셀에 들어가는지 / ListVC 내 테이블뷰 셀에 들어가는지에 따라 dateFormat 다르게해서 String으로 변환한 결과 보내기 
-    static func dateFormattedString(_ date: Date, type: Resource.DateFormatUsage) -> String {
+    static func dateFormattedString(_ date: Date, type: Resource.DateFormatUsage = .list) -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
         formatter.dateFormat = type == .list ? "YYYY.M.d." : "YYYY.MM.dd (EEEEE)"

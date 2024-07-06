@@ -61,7 +61,6 @@ class ListViewController: BaseViewControllerLargeTitle {
         super.setupNavigation(filterType.title)
     }
     
-    //
     override func configureRightBarButton(title: String?, imageName: String?, action: Selector?) {
         let asc = UIAction(title: "오래된 순", handler: { _ in
             self.list = self.repository.readFilteredItem(self.filterType)
@@ -95,12 +94,7 @@ class ListViewController: BaseViewControllerLargeTitle {
         searchController.searchResultsUpdater = self // 실시간 검색을 위한 delegate 연결
     }
     
-    @objc func filterBtnTapped(_ sender: UIButton) {
-        print(#function)
-        
-    }
-    
-    @objc func checkBtnTapped(_ sender: UIButton) {
+    @objc public func completeBtnTapped(_ sender: UIButton) {
         repository.updateItem {
             list[sender.tag].isComplete.toggle()
             tableView.reloadRows(at: [IndexPath(row: sender.tag, section: 0)], with: .none)
@@ -127,7 +121,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.identifier, for: indexPath) as! ListTableViewCell
         cell.configureCell(list[indexPath.row])
         cell.completeButton.tag = indexPath.row
-        cell.completeButton.addTarget(self, action: #selector(checkBtnTapped), for: .touchUpInside)
+        cell.completeButton.addTarget(self, action: #selector(completeBtnTapped), for: .touchUpInside)
         return cell
     }
     
