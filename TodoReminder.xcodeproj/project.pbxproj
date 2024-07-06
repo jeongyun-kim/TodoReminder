@@ -42,6 +42,7 @@
 		E0ECED7F2C37C1DB00A67525 /* UIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED7E2C37C1DB00A67525 /* UIView + Extension.swift */; };
 		E0ECED812C37DFF000A67525 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED802C37DFF000A67525 /* CalendarViewController.swift */; };
 		E0ECED832C37E06000A67525 /* UICollectionViewLayout + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED822C37E06000A67525 /* UICollectionViewLayout + Extension.swift */; };
+		E0ECED882C390D4B00A67525 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = E0ECED872C390D4B00A67525 /* FSCalendar */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -100,6 +101,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0ECED4A2C34367000A67525 /* Toast in Frameworks */,
+				E0ECED882C390D4B00A67525 /* FSCalendar in Frameworks */,
 				E0ECED362C3405E000A67525 /* RealmSwift in Frameworks */,
 				E0ECED212C33FCFE00A67525 /* SnapKit in Frameworks */,
 			);
@@ -288,6 +290,7 @@
 				E0ECED202C33FCFE00A67525 /* SnapKit */,
 				E0ECED352C3405E000A67525 /* RealmSwift */,
 				E0ECED492C34367000A67525 /* Toast */,
+				E0ECED872C390D4B00A67525 /* FSCalendar */,
 			);
 			productName = TodoReminder;
 			productReference = E0ECECFA2C33F9B300A67525 /* TodoReminder.app */;
@@ -321,6 +324,7 @@
 				E0ECED1F2C33FCFE00A67525 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				E0ECED342C3405E000A67525 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				E0ECED482C34367000A67525 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
+				E0ECED862C390D4B00A67525 /* XCRemoteSwiftPackageReference "FSCalendar" */,
 			);
 			productRefGroup = E0ECECFB2C33F9B300A67525 /* Products */;
 			projectDirPath = "";
@@ -625,6 +629,14 @@
 				minimumVersion = 5.1.1;
 			};
 		};
+		E0ECED862C390D4B00A67525 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/WenchaoD/FSCalendar.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.4;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -642,6 +654,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E0ECED482C34367000A67525 /* XCRemoteSwiftPackageReference "Toast-Swift" */;
 			productName = Toast;
+		};
+		E0ECED872C390D4B00A67525 /* FSCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E0ECED862C390D4B00A67525 /* XCRemoteSwiftPackageReference "FSCalendar" */;
+			productName = FSCalendar;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
