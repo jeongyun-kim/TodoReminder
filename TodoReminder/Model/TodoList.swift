@@ -8,24 +8,30 @@
 import Foundation
 import RealmSwift
 
-
-struct TodoList {
-    let filter: ReminderCase
-
-    var listCnt: Int {
-        TodoRepository().readFilteredItem(filter).count
+class TodoList: Object {
+    @Persisted (primaryKey: true) var id: ObjectId
+    @Persisted var listName: String
+    @Persisted var imageName: String
+    @Persisted var tintColor: String
+    @Persisted var filteredList: List<Todo>
+    
+    convenience init(listName: String, imageName: String, tintColor: String) {
+        self.init()
+        self.listName = listName
+        self.imageName = imageName
+        self.tintColor = tintColor
     }
 }
 
 extension TodoList {
-   static var list: [TodoList] {
+   var defaultTodoList: [TodoList] {
        return [
-            TodoList(filter: .today),
-            TodoList(filter: .schedule),
-            TodoList(filter: .all),
-            TodoList(filter: .flag),
-            TodoList(filter: .complete),
-            TodoList(filter: .bookmark)
+        TodoList(listName: ReminderCase.today.title, imageName: ReminderCase.today.imageName, tintColor: ReminderCase.today.imageColor),
+        TodoList(listName: ReminderCase.schedule.title, imageName: ReminderCase.schedule.imageName, tintColor: ReminderCase.schedule.imageColor),
+        TodoList(listName: ReminderCase.all.title, imageName: ReminderCase.all.imageName, tintColor: ReminderCase.all.imageColor),
+        TodoList(listName: ReminderCase.flag.title, imageName: ReminderCase.flag.imageName, tintColor: ReminderCase.flag.imageColor),
+        TodoList(listName: ReminderCase.complete.title, imageName: ReminderCase.complete.imageName, tintColor:ReminderCase.complete.imageColor),
+        TodoList(listName: ReminderCase.bookmark.title, imageName: ReminderCase.bookmark.imageName, tintColor: ReminderCase.bookmark.imageColor)
         ]
     }
 }
