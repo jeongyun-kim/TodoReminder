@@ -18,7 +18,9 @@ final class TagViewController: BaseViewController {
     }
     
     private var tag: String?
-    var getTag: ((String) -> Void)?
+    // 현재 적힌 태그명 보내주는 클로저
+    var sendTag: ((String) -> Void)?
+    
     private let tagTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = Resource.placeholder.tag.rawValue
@@ -37,7 +39,7 @@ final class TagViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         guard let tag = tagTextField.text else { return }
-        getTag?(tag)
+        sendTag?(tag)
     }
     
     override func setupHierarchy() {
@@ -63,6 +65,6 @@ final class TagViewController: BaseViewController {
     }
     
     override func setupNavigation(_ title: String) {
-        super.setupNavigation("태그")
+        super.setupNavigation(Resource.AddAttributeCase.tag.rawValue)
     }
 }

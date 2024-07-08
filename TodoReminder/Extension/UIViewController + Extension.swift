@@ -16,4 +16,8 @@ extension UIViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
     }
+    
+    func removeWhiteSpaceStringCnt(_ text: String) -> Int {
+        return text.components(separatedBy: " ").joined().count
+    }
 }

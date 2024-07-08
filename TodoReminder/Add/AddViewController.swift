@@ -63,7 +63,7 @@ final class AddViewController: BaseViewController {
     
     override func setupNavigation(_ title: String) {
         super.setupNavigation(viewType.rawValue)
-        let leftBarItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(cancelBtnTapped))
+        let leftBarItem = UIBarButtonItem(title: Resource.ButtonTitle.cancel.rawValue, style: .plain, target: self, action: #selector(cancelBtnTapped))
         navigationItem.leftBarButtonItem = leftBarItem
     }
     
@@ -119,14 +119,17 @@ final class AddViewController: BaseViewController {
     
     @objc func textFieldDidChange(_ sender: UITextField) {
         guard let text = sender.text else { return }
+        // 텍스트가 변할 때마다 temp값 변경
         tempTodo.todoTitle = text
-        if text.isEmpty || text.components(separatedBy: " ").joined().count == 0 {
+        // 제목이 없거나 제목이 공백으로만 되어있는 경우
+        if text.isEmpty || removeWhiteSpaceStringCnt(text) == 0 {
             navigationItem.rightBarButtonItem?.isEnabled = false
         } else {
             navigationItem.rightBarButtonItem?.isEnabled = true
         }
     }
     
+    // 해당하는 row만 reload
     private func reloadCell(_ indexPath: IndexPath) {
         DispatchQueue.main.async {
             self.tableView.reloadRows(at: [indexPath], with: .none)
@@ -137,6 +140,7 @@ final class AddViewController: BaseViewController {
 // MARK: TableViewDelegate
 extension AddViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        // contentCell이면 높이 210 / attributeCell이면 높이 70
         return indexPath.row == 0 ? 210 : 70
     }
     
@@ -159,29 +163,31 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch indexPath.row {
-        case 1:
+        // 각 어떤 속성의 셀인지냐에 따라 다른 처리
+        let attribute = Resource.AddAttributeCase.allCases[indexPath.row]
+        switch attribute {
+        case .deadline:
             let vc = DateViewController(deadline: tempTodo.deadline)
             transition(vc, type: .push)
-            vc.getDate = { deadline in
+            vc.sendDeadline = { deadline in
                 self.tempTodo.deadline = deadline
                 self.reloadCell(indexPath)
             }
-       case 2:
+        case .tag:
             let vc = TagViewController(tag: tempTodo.tag)
             transition(vc, type: .push)
-            vc.getTag = { tag in
+            vc.sendTag = { tag in
                 self.tempTodo.tag = tag
                 self.reloadCell(indexPath)
             }
-        case 3:
+        case .priority:
             let vc = PriorityViewController(selectedIdx: tempTodo.priorityIdx)
             transition(vc, type: .push)
-            vc.getPriorityIdx = { idx in
+            vc.sendPriorityIdx = { idx in
                 self.tempTodo.priorityIdx = idx
                 self.reloadCell(indexPath)
             }
-        case 4:
+        case .addImage:
             var config = PHPickerConfiguration()
             config.filter = .images
             let picker = PHPickerViewController(configuration: config)
@@ -194,22 +200,30 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: TextViewDelegate
 extension AddViewController: UITextViewDelegate {
+    // 텍스트뷰(메모)에 입력 시작했을 때
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor != .white {
+        if textView.textColor != .white { //텍스트가 아닌 placeholder 상태라면
+            // placeholder 지우고
             textView.text = ""
+            // 텍스트 컬러 변경
             textView.textColor = .white
         }
     }
     
+    // 텍스트뷰(메모)에 입력끝났을 때
     func textViewDidEndEditing(_ textView: UITextView) {
         guard let text = textView.text else { return }
+        // 만약 입력된 텍스트가 없다면
         if text.isEmpty {
+            // placeholder 설정 및 텍스트 컬러 변경
             textView.text = "메모"
             textView.textColor = .systemGray2
         }
     }
     
+    // 텍스트뷰(메모) 내용이 바뀔 때
     func textViewDidChange(_ textView: UITextView) {
+        // 내용 바뀔 때마다 temp값에 저장
         guard let text = textView.text else { return }
         tempTodo.memo = text
     }

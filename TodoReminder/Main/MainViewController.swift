@@ -19,7 +19,7 @@ final class MainViewController: BaseViewControllerLargeTitle {
         let button = UIButton()
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage(systemName: Resource.ImageCase.add.rawValue)
-        configuration.title = "새로운 할 일"
+        configuration.title = Resource.ButtonTitle.addTodo.rawValue
         configuration.imagePadding = 4
         button.configuration = configuration
         return button

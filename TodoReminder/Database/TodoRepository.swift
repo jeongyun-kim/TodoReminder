@@ -57,13 +57,14 @@ final class TodoRepository {
         return Array(result)
     }
     
-    func readFilteredDateItem(_ date: Date) -> [Todo] {
+    func readFilteredDateItem(_ calendarDate: Date) -> [Todo] {
+        // 전체 데이터 가져와서
         let allData = Array(readAllItems())
+        // 마감일이 nil이 아닌 Todo목록만 가져오기
         let nonNilDeadline = allData.filter { $0.deadline != nil }
-        let result = nonNilDeadline.filter {
-            Date.dateFormattedString($0.deadline!)
-            == Date.dateFormattedString(date)
-        }
+        // 그 중에서 FSCalendar에서 선택한 날짜랑 마감일이 같은 경우의 Todo목록만 가져와 반환하기 
+        let result = nonNilDeadline
+            .filter { Date.dateFormattedString($0.deadline!) == Date.dateFormattedString(calendarDate) }
         return result
     }
     

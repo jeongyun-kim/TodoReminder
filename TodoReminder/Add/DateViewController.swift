@@ -18,9 +18,11 @@ final class DateViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private var navigationTitle: String = ""
     private let datePicker = UIDatePicker()
-    var getDate: ((Date) -> Void)?
+    
+    // 현재 선택한 마감일 보내주는 클로저
+    var sendDeadline: ((Date) -> Void)?
+    // 선택되어있는 마감일
     var deadline: Date?
     
     override func viewDidLoad() {
@@ -34,7 +36,7 @@ final class DateViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         guard let deadline = deadline else { return }
-        getDate?(deadline)
+        sendDeadline?(deadline)
     }
     
     override func setupHierarchy() {
@@ -55,13 +57,14 @@ final class DateViewController: BaseViewController {
     override func setupUI() {
         super.setupUI()
         datePicker.preferredDatePickerStyle = .inline
-        datePicker.datePickerMode = .dateAndTime
+        datePicker.datePickerMode = .date
         datePicker.addTarget(self, action: #selector(datePickerDidChanged), for: .valueChanged)
         datePicker.tintColor = .systemPink
         datePicker.locale = Locale(identifier: "ko_KR")
     }
     
     @objc func datePickerDidChanged(_ sender: UIDatePicker) {
+        // 달력 내 날짜 누를때마다 마감일 데이터 변경 
         deadline = sender.date
     }
 }

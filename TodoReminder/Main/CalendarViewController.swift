@@ -21,6 +21,7 @@ final class CalendarViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureCalendar()
     }
     
     override func setupNavigation(_ title: String) {
@@ -54,6 +55,9 @@ final class CalendarViewController: BaseViewController {
     
     override func setupUI() {
         super.setupUI()
+    }
+    
+    private func configureCalendar() {
         calendar.delegate = self
         calendar.dataSource = self
         calendar.appearance.titleDefaultColor = .white

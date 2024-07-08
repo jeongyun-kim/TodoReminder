@@ -106,5 +106,10 @@ enum Resource {
         case priority = "우선순위"
         case addImage = "이미지 추가"
     }
+    
+    enum ButtonTitle: String {
+        case addTodo = "새로운 할 일 추가"
+        case cancel = "취소"
+    }
 }
 

@@ -19,11 +19,13 @@ final class PriorityViewController: BaseViewController {
     }
     
     private let prioritySegment = UISegmentedControl()
-    var getPriorityIdx: ((Int) -> Void)?
+    // 세그먼트의 선택된 세그먼트 index 보내는 클로저
+    var sendPriorityIdx: ((Int) -> Void)?
     var selectedIdx: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // 이미 선택된 세그먼트의 인덱스가 있다면 선택된 세그먼트로 설정
         if let selectedIdx = selectedIdx {
             prioritySegment.selectedSegmentIndex = selectedIdx
         }
@@ -31,8 +33,9 @@ final class PriorityViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        let idx = prioritySegment.selectedSegmentIndex 
-        getPriorityIdx?(idx)
+        // 현재 선택중인 세그먼트 index값 보내기
+        let idx = prioritySegment.selectedSegmentIndex
+        sendPriorityIdx?(idx)
     }
     
     override func setupHierarchy() {

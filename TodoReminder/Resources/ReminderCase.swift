@@ -11,7 +11,7 @@ import RealmSwift
 enum ReminderCase: String, CaseIterable {
     case today
     case schedule
-    case all 
+    case all
     case flag
     case complete
     case bookmark
@@ -67,4 +67,3 @@ enum ReminderCase: String, CaseIterable {
         }
     }
 }
-
