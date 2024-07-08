@@ -10,9 +10,9 @@ import RealmSwift
 import SnapKit
 
 class ListViewController: BaseViewControllerLargeTitle {
-    init(listData: TodoList) {
+    init(todoList: TodoList) {
         super.init(nibName: nil, bundle: nil)
-        self.listData = listData
+        self.todoList = todoList
     }
     
     required init?(coder: NSCoder) {
@@ -26,10 +26,10 @@ class ListViewController: BaseViewControllerLargeTitle {
             tableView.reloadData()
         }
     }
-    // MainVC로부터 받아올 현재의 리스트 총 데이터
-    private var listData: TodoList = TodoList(listName: "", imageName: "", tintColor: "")
-    // 리스트 정보중에서 포함된 데이터만 가져오는 배열
-    private lazy var originalList: [Todo] = Array(listData.filteredList)
+    // MainVC로부터 받아올 현재의 목록 총 데이터
+    private var todoList: TodoList = TodoList(listName: "", imageName: "", tintColor: "")
+    // 리스트 정보중에서 투두리스트 데이터만 가져오는 배열
+    private lazy var originalList: [Todo] = Array(todoList.filteredList)
     
     private let tableView = UITableView()
     private let searchController = UISearchController(searchResultsController: nil)
@@ -60,16 +60,16 @@ class ListViewController: BaseViewControllerLargeTitle {
     }
     
     override func setupNavigation(_ title: String) {
-        super.setupNavigation(listData.listName)
+        super.setupNavigation(todoList.listName)
     }
     
     override func configureRightBarButton(title: String?, imageName: String?, action: Selector?) {
         let asc = UIAction(title: "오래된 순", handler: { _ in
-            self.list = self.repository.readSortedTodo(self.listData.filteredList, ascending: true)
+            self.list = self.repository.readSortedTodo(self.todoList.filteredList, ascending: true)
             self.originalList = self.list
         })
         let desc = UIAction(title: "최신순", handler: { _ in
-            self.list = self.repository.readSortedTodo(self.listData.filteredList, ascending: false)
+            self.list = self.repository.readSortedTodo(self.todoList.filteredList, ascending: false)
             self.originalList = self.list
         })
         let menu = UIMenu(children: [asc, desc])
@@ -103,15 +103,24 @@ class ListViewController: BaseViewControllerLargeTitle {
         }
     }
     
-    func addObserver() {
+    private func addObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(didDismissAddViewController), name: NSNotification.Name(Resource.NotificationCenterName.dismiss), object: nil)
     }
     
     @objc func didDismissAddViewController(_ notification: Notification) {
         self.list = self.originalList
     }
+    
+    private func fetchSearchResult() {
+        // 서치바에 키워드가 있는지
+        // - 키워드가 있다면 현재 목록 내 투두리스트의 제목/메모에 키워드가 포함된 결과 가져와 list에 반영해주기
+        // - 키워드가 비어있다면 아무런 결과 보여주지않게 현재 리스트에 빈 배열 넣어주기
+        guard let keyword = searchController.searchBar.text, !keyword.isEmpty else { return list = [] }
+        list = repository.readSearcedTodo(list: todoList.filteredList, keyword: keyword)
+    }
 }
 
+// MARK: TableViewExtension
 extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return list.count
@@ -130,11 +139,18 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         // 삭제
         let delete = UIContextualAction(style: .destructive, title: "삭제") { [unowned self] _, _, _ in
             let data = self.list[indexPath.row]
+            // 이미지 도큐먼트에서 삭제
             if let imageName = data.imageName {
                 view.removeImageFromDocument(imageName: imageName)
             }
+            // Realm에서 할 일 삭제
             repository.deleteTodo(data.id)
-            list = Array(repository.readFilteredTodo(listData.listName))
+            
+            // 만약 todo를 하나 삭제했는데 현재 검색 중인 상태였다면
+            if searchController.isActive {
+                // 검색결과 다시 가져와 보여주기
+                fetchSearchResult()
+            }
         }
        return UISwipeActionsConfiguration(actions: [delete])
     }
@@ -146,7 +162,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
             let data = self.list[indexPath.row]
             repository.updateTodo {
                 data.isFlag.toggle()
-                list = Array(repository.readFilteredTodo(listData.listName))
+                list = Array(repository.readFilteredTodo(todoList.listName))
             }
         }
         flag.backgroundColor = UIColor(hexCode: ReminderCase.flag.imageColor)
@@ -155,7 +171,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
             let data = self.list[indexPath.row]
             repository.updateTodo {
                 data.isBookmark.toggle()
-                list = Array(repository.readFilteredTodo(listData.listName))
+                list = Array(repository.readFilteredTodo(todoList.listName))
             }
         }
         bookmark.backgroundColor = UIColor(hexCode: ReminderCase.bookmark.imageColor)
@@ -170,6 +186,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+// MARK: SearchResultsUpdating
 extension ListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         // 검색한 결과에서 어떤 아이템을 편집하고 돌아오면 NotificationCenter의 Observer때문에 모든 리스트가 나오게 됨
@@ -178,12 +195,9 @@ extension ListViewController: UISearchResultsUpdating {
         
         // 서치바가 Active 상태라면
         if searchController.isActive {
-            // 서치바에 키워드가 있는지
-            // - 키워드가 있다면 현재 리스트에 찐리스트에서 키워드로 검색한 결과 넣어주기
-            // - 키워드가 비어있다면 아무런 결과 보여주지않게 현재 리스트에 빈 배열 넣어주기
-            guard let keyword = searchController.searchBar.text, !keyword.isEmpty else { return list = [] }
-            list = repository.readSearchedTodo(list: originalList, keyword: keyword)
+            fetchSearchResult()
         } else { // 서치바가 InActive 상태라면 (= cancel 눌러서 서치바 비활성화 상태로 만들었을 때)
+            originalList = Array(todoList.filteredList)
             list = originalList // 원래 보여주고 있던 데이터 보여주기
             addObserver() // 옵저버 다시 등록하기
         }

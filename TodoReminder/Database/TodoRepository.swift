@@ -76,15 +76,8 @@ final class TodoRepository {
         return listFilteredTodo
     }
     
-    func readSearchedTodo(list: [Todo], keyword: String) -> [Todo]{
-        // 받아온 리스트
-        let originalListSet = Set(list)
-        // 전체 리스트에서 제목, 메모에 키워드가 포함된 검색결과 받아오기
-        let searchedListSet = Set(readAllItems()
-            .where { $0.todoTitle.contains(keyword, options: .caseInsensitive)
-                || $0.memo.contains(keyword, options: .caseInsensitive) })
-        // 받아온 리스트랑 전체 내 검색결과의 교집합으로 구성해주기 (= 리스트 내 검색 결과를 구할 수 있음)
-        let result = originalListSet.intersection(searchedListSet)
+    func readSearcedTodo(list: List<Todo>, keyword: String) -> [Todo] {
+        let result = list.where { $0.todoTitle.contains(keyword, options: .caseInsensitive) || $0.memo.contains(keyword, options: .caseInsensitive)}
         return Array(result)
     }
     

@@ -96,6 +96,7 @@ final class MainViewController: BaseViewControllerLargeTitle {
     }
 }
 
+// MARK: CollectionViewExtension
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return todoList.count
@@ -108,7 +109,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vc = ListViewController(listData: todoList[indexPath.row])
+        let vc = ListViewController(todoList: todoList[indexPath.row])
         transition(vc, type: .push)
     }
 }
