@@ -49,21 +49,23 @@ enum ReminderCase: String, CaseIterable {
             return "bookmark.circle.fill"
         }
     }
-    
-    var imageColor: UIColor {
+
+    var imageColor: String {
         switch self {
         case .today:
-            return .systemBlue
+            return UIColor.systemBlue.toHexStr()
         case .schedule:
-            return .systemRed
+            return UIColor.systemRed.toHexStr()
         case .all:
-            return .lightGray
+            return UIColor.lightGray.toHexStr()
         case .flag:
-            return .systemYellow
+            return UIColor.systemYellow.toHexStr()
         case .complete:
-            return .systemGreen
+            return UIColor.systemGreen.toHexStr()
         case .bookmark:
-            return .systemOrange
+            return UIColor.systemOrange.toHexStr()
         }
     }
+        
 }
+
