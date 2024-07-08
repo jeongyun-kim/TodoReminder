@@ -87,7 +87,7 @@ final class AddViewController: BaseViewController {
             repository.createItem(tempTodo)
         // List -> Add : 데이터 변경
         case .edit:
-            repository.updateItem {
+            repository.updateTodo {
                 guard let todoFromListVC else { return }
                 todoFromListVC.todoTitle = tempTodo.todoTitle
                 todoFromListVC.memo = tempTodo.memo

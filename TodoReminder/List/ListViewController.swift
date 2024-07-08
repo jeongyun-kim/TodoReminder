@@ -10,9 +10,9 @@ import RealmSwift
 import SnapKit
 
 class ListViewController: BaseViewControllerLargeTitle {
-    init(filterType: ReminderCase) {
+    init(listData: TodoList) {
         super.init(nibName: nil, bundle: nil)
-        self.filterType = filterType
+        self.listData = listData
     }
     
     required init?(coder: NSCoder) {
@@ -20,13 +20,16 @@ class ListViewController: BaseViewControllerLargeTitle {
     }
     
     private let repository = TodoRepository()
+    // 테이블뷰에 사용할 투두리스트 배열
     private var list: [Todo] = [] {
         didSet {
             tableView.reloadData()
         }
     }
-    private var originalList: [Todo] = []
-    var filterType: ReminderCase = .all
+    // MainVC로부터 받아올 현재의 리스트 총 데이터
+    private var listData: TodoList = TodoList(listName: "", imageName: "", tintColor: "")
+    // 리스트 정보중에서 포함된 데이터만 가져오는 배열
+    private lazy var originalList: [Todo] = Array(listData.filteredList)
     
     private let tableView = UITableView()
     private let searchController = UISearchController(searchResultsController: nil)
@@ -39,8 +42,7 @@ class ListViewController: BaseViewControllerLargeTitle {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        list = repository.readFilteredItem(filterType)
-        originalList = list
+        list = originalList
     }
     
     override func setupHierarchy() {
@@ -58,16 +60,16 @@ class ListViewController: BaseViewControllerLargeTitle {
     }
     
     override func setupNavigation(_ title: String) {
-        super.setupNavigation(filterType.title)
+        super.setupNavigation(listData.listName)
     }
     
     override func configureRightBarButton(title: String?, imageName: String?, action: Selector?) {
         let asc = UIAction(title: "오래된 순", handler: { _ in
-            self.list = self.repository.readFilteredItem(self.filterType)
+            self.list = self.repository.readSortedTodo(self.listData.filteredList, ascending: true)
             self.originalList = self.list
         })
         let desc = UIAction(title: "최신순", handler: { _ in
-            self.list = self.repository.readFilteredItem(self.filterType, sort: .dateDesc)
+            self.list = self.repository.readSortedTodo(self.listData.filteredList, ascending: false)
             self.originalList = self.list
         })
         let menu = UIMenu(children: [asc, desc])
@@ -95,7 +97,7 @@ class ListViewController: BaseViewControllerLargeTitle {
     }
     
     @objc public func completeBtnTapped(_ sender: UIButton) {
-        repository.updateItem {
+        repository.updateTodo {
             list[sender.tag].isComplete.toggle()
             tableView.reloadRows(at: [IndexPath(row: sender.tag, section: 0)], with: .none)
         }
@@ -106,9 +108,7 @@ class ListViewController: BaseViewControllerLargeTitle {
     }
     
     @objc func didDismissAddViewController(_ notification: Notification) {
-        DispatchQueue.main.async {
-            self.list = self.originalList
-        }
+        self.list = self.originalList
     }
 }
 
@@ -133,8 +133,8 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
             if let imageName = data.imageName {
                 view.removeImageFromDocument(imageName: imageName)
             }
-            repository.deleteItem(data.id)
-            list = repository.readFilteredItem(filterType)
+            repository.deleteTodo(data.id)
+            list = Array(repository.readFilteredTodo(listData.listName))
         }
        return UISwipeActionsConfiguration(actions: [delete])
     }
@@ -144,21 +144,21 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         // 깃발 표시
         let flag = UIContextualAction(style: .normal, title: ReminderCase.flag.title) { [unowned self] _, _, _ in
             let data = self.list[indexPath.row]
-            repository.updateItem {
+            repository.updateTodo {
                 data.isFlag.toggle()
-                list = repository.readFilteredItem(filterType)
+                list = Array(repository.readFilteredTodo(listData.listName))
             }
         }
-        flag.backgroundColor = ReminderCase.flag.imageColor
+        flag.backgroundColor = UIColor(hexCode: ReminderCase.flag.imageColor)
         
         let bookmark = UIContextualAction(style: .normal, title: ReminderCase.bookmark.title) { [unowned self] _, _, _ in
             let data = self.list[indexPath.row]
-            repository.updateItem {
+            repository.updateTodo {
                 data.isBookmark.toggle()
-                list = repository.readFilteredItem(filterType)
+                list = Array(repository.readFilteredTodo(listData.listName))
             }
         }
-        bookmark.backgroundColor = ReminderCase.bookmark.imageColor
+        bookmark.backgroundColor = UIColor(hexCode: ReminderCase.bookmark.imageColor)
         return UISwipeActionsConfiguration(actions: [flag, bookmark])
     }
     
@@ -182,7 +182,7 @@ extension ListViewController: UISearchResultsUpdating {
             // - 키워드가 있다면 현재 리스트에 찐리스트에서 키워드로 검색한 결과 넣어주기
             // - 키워드가 비어있다면 아무런 결과 보여주지않게 현재 리스트에 빈 배열 넣어주기
             guard let keyword = searchController.searchBar.text, !keyword.isEmpty else { return list = [] }
-            list = repository.readSearchedItem(list: originalList, keyword: keyword)
+            list = repository.readSearchedTodo(list: originalList, keyword: keyword)
         } else { // 서치바가 InActive 상태라면 (= cancel 눌러서 서치바 비활성화 상태로 만들었을 때)
             list = originalList // 원래 보여주고 있던 데이터 보여주기
             addObserver() // 옵저버 다시 등록하기

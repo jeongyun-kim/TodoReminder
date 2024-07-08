@@ -69,11 +69,11 @@ final class CalendarViewController: BaseViewController {
         calendar.scrollDirection = .vertical
         calendar.locale = Locale(identifier: "ko_KR")
         calendar.appearance.todayColor = .systemGray5
-        calendar.appearance.selectionColor = ReminderCase.schedule.imageColor
+        calendar.appearance.selectionColor = .systemMint
     }
     
     @objc public func completeBtnTapped(_ sender: UIButton) {
-        repository.updateItem {
+        repository.updateTodo {
             list[sender.tag].isComplete.toggle()
             tableView.reloadRows(at: [IndexPath(row: sender.tag, section: 0)], with: .none)
         }
@@ -90,7 +90,7 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        list = repository.readFilteredDateItem(date)
+        list = repository.readSelectedDateTodo(date)
     }
 }
 

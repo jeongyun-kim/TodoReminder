@@ -51,11 +51,11 @@ final class MainCollectionViewCell: UICollectionViewCell {
     }
     
     func configureCell(_ data: TodoList) {
-        titleLabel.text = data.filter.title
-        iconImageView.image = UIImage(systemName: data.filter.imageName)
-        iconImageView.tintColor = data.filter.imageColor
-        countLabel.text = "\(data.listCnt)"
-        if data.filter == .complete {
+        titleLabel.text = data.listName
+        iconImageView.image = UIImage(systemName: data.imageName)
+        iconImageView.tintColor = UIColor(hexCode: data.tintColor)
+        countLabel.text = "\(data.filteredList.count)"
+        if data.listName == ReminderCase.complete.title {
             countLabel.isHidden = true
         } else {
             countLabel.isHidden = false

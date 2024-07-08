@@ -10,42 +10,73 @@ import RealmSwift
 
 final class TodoRepository {
     private let realm = try! Realm()
+    private let listRepo = TodoListRepository()
     
     func createItem(_ data: Todo)  {
+        var list: TodoList?
+        let todoList = listRepo.readAll()
+        
+        switch Date.dateCompare(deadline: data.deadline) {
+        case .future:
+            list = todoList.filter({ $0.listName == ReminderCase.schedule.title }).first
+        case .today:
+            list = todoList.filter({ $0.listName == ReminderCase.today.title }).first
+        default:
+            list = todoList.filter({ $0.listName == ReminderCase.all.title }).first
+        }
+        
         do {
             try realm.write {
-                realm.add(data)
+                if let list {
+                    list.filteredList.append(data)
+                }
             }
         } catch {
             print("저장 실패!")
         }
     }
     
-    func readAllItems(_ sortType: Resource.ListSortType = .dateAsc) -> Results<Todo> {
-        let sortType = sortType == .dateAsc
-        // savedate를 기준으로 오름차순 = true / 내림차순 = false
-        return realm.objects(Todo.self).sorted(byKeyPath: "savedate", ascending: sortType)
+    func readAllItems() -> Results<Todo> {
+        return realm.objects(Todo.self)
     }
-    
-    func readFilteredItem(_ filter: ReminderCase, sort: Resource.ListSortType = .dateAsc) -> [Todo] {
-        let allData = Array(readAllItems(sort))
-        switch filter {
-        case .today:
-            return allData.filter { Date.dateCompare(deadline: $0.deadline) == .today}
-        case .schedule:
-            return allData.filter { Date.dateCompare(deadline: $0.deadline) == .future }
-        case .all:
-            return allData
-        case .flag:
-            return allData.filter { $0.isFlag }
-        case .complete:
-            return allData.filter { $0.isComplete }
-        case .bookmark:
-            return allData.filter { $0.isBookmark }
+
+    func readFilteredTodo(_ listName: String) -> List<Todo> {
+        let allData = Array(readAllItems())
+        var arrayFilteredTodo: [Todo] = []
+        let listFilteredTodo: List<Todo> = List()
+   
+        // 각 투두리스트 목록의 이름에 따라 다른 필터링 데이터 던져주기
+        switch listName {
+            // 목록명이 "오늘"이라면
+        case ReminderCase.today.title:
+            arrayFilteredTodo = allData.filter { Date.dateCompare(deadline: $0.deadline) == .today}
+            // 목록명이 "예정"이라면
+        case ReminderCase.schedule.title:
+            arrayFilteredTodo = allData.filter { Date.dateCompare(deadline: $0.deadline) == .future }
+            // 목록명이 "전체"라면
+        case ReminderCase.all.title:
+            arrayFilteredTodo = allData
+            // 목록명이 "깃발표시"라면
+        case ReminderCase.flag.title:
+            arrayFilteredTodo = allData.filter { $0.isFlag }
+            // 목록명이 "완료됨"이라면
+        case ReminderCase.complete.title:
+            arrayFilteredTodo = allData.filter { $0.isComplete }
+            // 목록명이 "즐겨찾기"라면
+        case ReminderCase.bookmark.title:
+            arrayFilteredTodo = allData.filter { $0.isBookmark }
+        default :
+            break
         }
+        
+        // 배열로 가져온 데이터 List로
+        for todo in arrayFilteredTodo {
+            listFilteredTodo.append(todo)
+        }
+        return listFilteredTodo
     }
     
-    func readSearchedItem(list: [Todo], keyword: String) -> [Todo]{
+    func readSearchedTodo(list: [Todo], keyword: String) -> [Todo]{
         // 받아온 리스트
         let originalListSet = Set(list)
         // 전체 리스트에서 제목, 메모에 키워드가 포함된 검색결과 받아오기
@@ -57,7 +88,7 @@ final class TodoRepository {
         return Array(result)
     }
     
-    func readFilteredDateItem(_ calendarDate: Date) -> [Todo] {
+    func readSelectedDateTodo(_ calendarDate: Date) -> [Todo] {
         // 전체 데이터 가져와서
         let allData = Array(readAllItems())
         // 마감일이 nil이 아닌 Todo목록만 가져오기
@@ -68,7 +99,11 @@ final class TodoRepository {
         return result
     }
     
-    func updateItem(_ completionHandler: () -> Void)  {
+    func readSortedTodo(_ list: List<Todo>, ascending: Bool) -> [Todo]{
+        return Array(list.sorted(byKeyPath: "savedate", ascending: ascending))
+    }
+    
+    func updateTodo(_ completionHandler: () -> Void)  {
         do {
             try realm.write {
                 completionHandler()
@@ -78,7 +113,7 @@ final class TodoRepository {
         }
     }
     
-    func deleteItem(_ id: ObjectId) {
+    func deleteTodo(_ id: ObjectId) {
         do {
             try realm.write {
                 guard let item = realm.object(ofType: Todo.self, forPrimaryKey: id) else { return }

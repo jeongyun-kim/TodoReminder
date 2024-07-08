@@ -9,11 +9,9 @@ import UIKit
 import SnapKit
 
 final class MainViewController: BaseViewControllerLargeTitle {
-    private lazy var list = TodoList.list {
-        didSet {
-            collectionView.reloadData()
-        }
-    }
+    private let repository = TodoListRepository()
+    private lazy var todoList = repository.readAll()
+    
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: .mainLayout())
     private let addButton: UIButton = {
         let button = UIButton()
@@ -33,7 +31,7 @@ final class MainViewController: BaseViewControllerLargeTitle {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        list = TodoList.list
+        updateList()
     }
     
     override func setupHierarchy() {
@@ -84,26 +82,33 @@ final class MainViewController: BaseViewControllerLargeTitle {
         NotificationCenter.default.addObserver(self, selector: #selector(didDismissAddViewController), name: NSNotification.Name(Resource.NotificationCenterName.dismiss), object: nil)
     }
     
+    private func updateList() {
+        for list in self.todoList {
+            self.repository.updateList(list, list: TodoRepository().readFilteredTodo(list.listName))
+        }
+        collectionView.reloadData()
+    }
+    
     @objc func didDismissAddViewController(_ notification: Notification) {
         DispatchQueue.main.async {
-            self.list = TodoList.list
+            self.updateList()
         }
     }
 }
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return ReminderCase.allCases.count
+        return todoList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCollectionViewCell.identifier, for: indexPath) as! MainCollectionViewCell
-        cell.configureCell(list[indexPath.row])
+        cell.configureCell(todoList[indexPath.row])
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vc = ListViewController(filterType: list[indexPath.row].filter)
+        let vc = ListViewController(listData: todoList[indexPath.row])
         transition(vc, type: .push)
     }
 }
