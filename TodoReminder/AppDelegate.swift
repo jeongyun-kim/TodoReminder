@@ -14,6 +14,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // 첫실행 시 기본으로 제공되는 목록 생성
+        let repository = TodoListRepository()
+        if repository.readAll().isEmpty {
+            for listData in TodoList().defaultTodoList {
+                repository.createList(listData)
+            }
+        }
+        
         return true
     }
 
