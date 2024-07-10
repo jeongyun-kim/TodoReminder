@@ -9,8 +9,7 @@ import UIKit
 import SnapKit
 
 final class MainViewController: BaseViewControllerLargeTitle {
-    private let repository = TodoListRepository()
-    private lazy var todoList = repository.readAll()
+    private let vm = MainViewModel()
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: .mainLayout())
     private let addButton: UIButton = {
@@ -27,6 +26,7 @@ final class MainViewController: BaseViewControllerLargeTitle {
         super.viewDidLoad()
         setupCollectionView()
         addObserver()
+        bind()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -43,6 +43,7 @@ final class MainViewController: BaseViewControllerLargeTitle {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
+        
         addButton.snp.makeConstraints { make in
             make.leading.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
         }
@@ -82,34 +83,40 @@ final class MainViewController: BaseViewControllerLargeTitle {
         NotificationCenter.default.addObserver(self, selector: #selector(didDismissAddViewController), name: NSNotification.Name(Resource.NotificationCenterName.dismiss), object: nil)
     }
     
+    // 뷰 업데이트 해야할 때 신호 보내기
     private func updateList() {
-        for list in self.todoList {
-            self.repository.updateList(list, list: TodoRepository().readFilteredTodo(list.listName))
+        vm.updateMainViewTrigger.value = ()
+    }
+    
+    private func bind() {
+        // TodoList 모델로 저장된 데이터 Realm으로부터 받아오기
+        vm.outputTodoList.bind { todoList in
+            self.collectionView.reloadData()
         }
-        collectionView.reloadData()
     }
     
     @objc func didDismissAddViewController(_ notification: Notification) {
-        DispatchQueue.main.async {
-            self.updateList()
-        }
+        // AddVC 내려가면 MainVC 업데이트
+        updateList()
     }
 }
 
 // MARK: CollectionViewExtension
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return todoList.count
+        return vm.outputTodoList.value.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCollectionViewCell.identifier, for: indexPath) as! MainCollectionViewCell
-        cell.configureCell(todoList[indexPath.row])
+        let todoList = vm.outputTodoList.value[indexPath.row]
+        cell.configureCell(todoList)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vc = ListViewController(todoList: todoList[indexPath.row])
+        let todoList = vm.outputTodoList.value[indexPath.row]
+        let vc = ListViewController(todoList: todoList)
         transition(vc, type: .push)
     }
 }

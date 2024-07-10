@@ -45,6 +45,8 @@
 		E0ECED882C390D4B00A67525 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = E0ECED872C390D4B00A67525 /* FSCalendar */; };
 		E0F85A272C3BD4F90075E7A9 /* UIColor + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F85A262C3BD4F90075E7A9 /* UIColor + Extension.swift */; };
 		E0F85A292C3BEA650075E7A9 /* TodoListRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F85A282C3BEA650075E7A9 /* TodoListRepository.swift */; };
+		E0F85A662C3E39970075E7A9 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F85A652C3E39970075E7A9 /* MainViewModel.swift */; };
+		E0F85A682C3E39A30075E7A9 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F85A672C3E39A30075E7A9 /* Observable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -97,6 +99,8 @@
 		E0ECED822C37E06000A67525 /* UICollectionViewLayout + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewLayout + Extension.swift"; sourceTree = "<group>"; };
 		E0F85A262C3BD4F90075E7A9 /* UIColor + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + Extension.swift"; sourceTree = "<group>"; };
 		E0F85A282C3BEA650075E7A9 /* TodoListRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListRepository.swift; sourceTree = "<group>"; };
+		E0F85A652C3E39970075E7A9 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		E0F85A672C3E39A30075E7A9 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +138,7 @@
 		E0ECECFC2C33F9B300A67525 /* TodoReminder */ = {
 			isa = PBXGroup;
 			children = (
+				E0F85A642C3E39880075E7A9 /* ViewModel */,
 				E0ECED772C3697CC00A67525 /* Database */,
 				E0ECED2A2C3402CA00A67525 /* Protocol */,
 				E0ECED3B2C341CC400A67525 /* Extension */,
@@ -275,6 +280,15 @@
 			path = Database;
 			sourceTree = "<group>";
 		};
+		E0F85A642C3E39880075E7A9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				E0F85A652C3E39970075E7A9 /* MainViewModel.swift */,
+				E0F85A672C3E39A30075E7A9 /* Observable.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -375,6 +389,7 @@
 				E0ECED1A2C33FB6400A67525 /* AddViewController.swift in Sources */,
 				E0ECED502C34D10900A67525 /* TodoList.swift in Sources */,
 				E0ECED302C34052500A67525 /* MainCollectionViewCell.swift in Sources */,
+				E0F85A682C3E39A30075E7A9 /* Observable.swift in Sources */,
 				E0ECED172C33FB0300A67525 /* BaseViewController.swift in Sources */,
 				E0ECED6C2C35866B00A67525 /* CustomHorizontalStackView.swift in Sources */,
 				E0ECED1C2C33FBD200A67525 /* MainViewController.swift in Sources */,
@@ -389,6 +404,7 @@
 				E0ECED812C37DFF000A67525 /* CalendarViewController.swift in Sources */,
 				E0ECED652C357CEB00A67525 /* CustomBorder.swift in Sources */,
 				E0ECED2C2C3402D300A67525 /* ReusableIdentifier.swift in Sources */,
+				E0F85A662C3E39970075E7A9 /* MainViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
