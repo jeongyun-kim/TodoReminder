@@ -1,13 +1,16 @@
 //
-//  UIView + Extension.swift
+//  DocumentManager.swift
 //  TodoReminder
 //
-//  Created by 김정윤 on 7/5/24.
+//  Created by 김정윤 on 7/10/24.
 //
 
 import UIKit
 
-extension UIView {
+final class DocumentManager {
+    static let shared = DocumentManager()
+    private init() { }
+    
     // 이미지를 Document에 저장
     func saveImageToDocument(image: UIImage, imageName: String) {
         // Document 폴더 위치 찾기

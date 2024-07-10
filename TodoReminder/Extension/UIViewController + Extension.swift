@@ -8,16 +8,12 @@
 import UIKit
 
 extension UIViewController {
-    func transition(_ vc: UIViewController, type: Resource.transitionCase) {
+    func transition(_ vc: UIViewController, type: Resource.transitionCase = .push) {
         switch type {
         case .present:
             present(vc, animated: true)
         case .push:
             navigationController?.pushViewController(vc, animated: true)
         }
-    }
-    
-    func removeWhiteSpaceStringCnt(_ text: String) -> Int {
-        return text.components(separatedBy: " ").joined().count
     }
 }
