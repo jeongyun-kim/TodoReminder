@@ -67,6 +67,7 @@ final class AttributeTableViewCell: BaseTableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        attributeLabel.text = ""
         thumbnailImageView.isHidden = true
     }
     

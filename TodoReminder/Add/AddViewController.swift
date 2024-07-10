@@ -9,18 +9,18 @@ import UIKit
 import PhotosUI
 
 final class AddViewController: BaseViewController {
+    private let vm = AddViewModel()
+    
     init(todoFromListVC: Todo?, viewType: Resource.ViewType) {
         super.init(nibName: nil, bundle: nil)
-        self.todoFromListVC = todoFromListVC
+        self.vm.inputOriginalTodo.value = todoFromListVC
         self.viewType = viewType
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    var todoFromListVC: Todo?
-    private var tempTodo: Todo = Todo(title: "", memo: nil, deadline: nil, tag: nil, priorityIdx: nil, imageName: nil, savedate: Date())
+
     private let repository = TodoRepository()
     var viewType: Resource.ViewType = .add
     
@@ -29,15 +29,7 @@ final class AddViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        // 만약 ListVC에서 AddVC로 넘어올 때, tempTodo = todoFromListVC를 해주면 결국 tempTodo가 realm내 저장되어있는 데이터를 가리키게 됨
-        // 그럼 속성을 수정한다면 realm.try! 구문외에서 데이터를 업데이트하려는 행위가 되기 때문에 에러가 발생함
-        // 그러므로 ListVC에서 받아온 데이터의 값만 넣어서 tempTodo를 구성해줘야 함
-        if let data = todoFromListVC {
-            tempTodo = Todo(title: data.todoTitle, memo: data.memo, deadline: data.deadline, tag: data.tag, priorityIdx: data.priorityIdx, imageName: data.imageName, savedate: data.savedate)
-            navigationItem.rightBarButtonItem?.isEnabled = true
-        } else {
-            navigationItem.rightBarButtonItem?.isEnabled = false
-        }
+        bind()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -58,7 +50,7 @@ final class AddViewController: BaseViewController {
     
     override func setupUI() {
         super.setupUI()
-        tableView.separatorStyle = .none
+        navigationItem.rightBarButtonItem?.isEnabled = viewType == .edit
     }
     
     override func setupNavigation(_ title: String) {
@@ -76,63 +68,43 @@ final class AddViewController: BaseViewController {
         tableView.dataSource = self
         tableView.register(ContentTableViewCell.self, forCellReuseIdentifier: ContentTableViewCell.identifier)
         tableView.register(AttributeTableViewCell.self, forCellReuseIdentifier: AttributeTableViewCell.identifier)
+        tableView.separatorStyle = .none
     }
     
     @objc func saveBtnTapped(_ sender: UIButton) {
-        switch viewType {
-        // Main -> Add : 데이터 추가
-        case .add:
-            // 현재 저장시기 시차 +9 적용
-            tempTodo.savedate = Date(timeIntervalSinceNow: 32400)
-            repository.createItem(tempTodo)
-        // List -> Add : 데이터 변경
-        case .edit:
-            repository.updateTodo {
-                guard let todoFromListVC else { return }
-                todoFromListVC.todoTitle = tempTodo.todoTitle
-                todoFromListVC.memo = tempTodo.memo
-                todoFromListVC.deadline = tempTodo.deadline
-                todoFromListVC.priorityIdx = tempTodo.priorityIdx
-                todoFromListVC.tag = tempTodo.tag
-                guard let postImageName = tempTodo.imageName else { return } // 변경된 상태의 이미지명 (아무런 이미지 선택도 안했으면 return)
-                if let preImageName = todoFromListVC.imageName, preImageName != postImageName { // 이전에 이미지가 있었고 변경된 이미지 내역이 있다면
-                    view.removeImageFromDocument(imageName: preImageName) // 이전의 이미지는 fileManager에서 제거
-                }
-                todoFromListVC.imageName = tempTodo.imageName // 그리고 변경된 이미지명 넣어주기
-            }
-        }
+        vm.saveBtnTrigger.value = viewType
         dismiss(animated: true)
     }
     
     @objc func cancelBtnTapped(_ sender: UIButton) {
-        // 변경된 이미지가 없다면 dismiss
-        guard let tempImageName = tempTodo.imageName else { return dismiss(animated: true) }
-        // 이전의 이미지명 (없을수도 있고 있을수도 있음)
-        let originalImageName = todoFromListVC?.imageName
-        // 이전의 이미지명과 현재의 이미지명이 다른 상태(= 이미지 변경이 일어난 상태)
-            if originalImageName != tempImageName {
-            // 원본이미지를 보존하고 변경되면서 저장된 이후의 이미지 삭제
-            view.removeImageFromDocument(imageName: tempImageName)
-        }
+        vm.cancelBtnTrigger.value = ()
         dismiss(animated: true)
     }
     
     @objc func textFieldDidChange(_ sender: UITextField) {
         guard let text = sender.text else { return }
-        // 텍스트가 변할 때마다 temp값 변경
-        tempTodo.todoTitle = text
+        let textCnt = text.trimmingCharacters(in: .whitespacesAndNewlines).count
         // 제목이 없거나 제목이 공백으로만 되어있는 경우
-        if text.isEmpty || removeWhiteSpaceStringCnt(text) == 0 {
+        if text.isEmpty || textCnt == 0 {
             navigationItem.rightBarButtonItem?.isEnabled = false
-        } else {
+        } else { // 텍스트가 변할 때마다 temp값 변경
+            vm.updateTitle.value = text
             navigationItem.rightBarButtonItem?.isEnabled = true
         }
     }
     
-    // 해당하는 row만 reload
-    private func reloadCell(_ indexPath: IndexPath) {
-        DispatchQueue.main.async {
-            self.tableView.reloadRows(at: [indexPath], with: .none)
+    private func configurePHPicker() {
+        var config = PHPickerConfiguration()
+        config.filter = .images
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = self
+        transition(picker, type: .push)
+    }
+    
+    private func bind() {
+        // 저장 전 임시 데이터인 vm 내 tempTodo 데이터가 변경될 때마다 tableView 새로 그리기
+        vm.outputTempTodo.bind { todo in
+            self.tableView.reloadData()
         }
     }
 }
@@ -149,15 +121,22 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
+        let attribute = Resource.AddAttributeCase.allCases[indexPath.row]
+        
+        switch attribute {
+        case .content:
             let cell = tableView.dequeueReusableCell(withIdentifier: ContentTableViewCell.identifier, for: indexPath) as! ContentTableViewCell
             cell.memoTextView.delegate = self
             cell.titleTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+            let tempTodo = vm.outputTempTodo.value
             cell.configureCell(tempTodo)
             return cell
-        } else {
+            
+        default:
             let cell = tableView.dequeueReusableCell(withIdentifier: AttributeTableViewCell.identifier, for: indexPath) as! AttributeTableViewCell
-            cell.configureCell(Resource.AddAttributeCase.allCases[indexPath.row], data: tempTodo)
+            let tempTodo = vm.outputTempTodo.value
+            let attribute = Resource.AddAttributeCase.allCases[indexPath.row]
+            cell.configureCell(attribute, data: tempTodo)
             return cell
         }
     }
@@ -165,34 +144,29 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // 각 어떤 속성의 셀인지냐에 따라 다른 처리
         let attribute = Resource.AddAttributeCase.allCases[indexPath.row]
+        let tempTodo = vm.outputTempTodo.value
+        
         switch attribute {
         case .deadline:
             let vc = DateViewController(deadline: tempTodo.deadline)
-            transition(vc, type: .push)
+            transition(vc)
             vc.sendDeadline = { deadline in
-                self.tempTodo.deadline = deadline
-                self.reloadCell(indexPath)
+                self.vm.updateDeadline.value = deadline
             }
         case .tag:
             let vc = TagViewController(tag: tempTodo.tag)
-            transition(vc, type: .push)
+            transition(vc)
             vc.sendTag = { tag in
-                self.tempTodo.tag = tag
-                self.reloadCell(indexPath)
+                self.vm.updateTag.value = tag
             }
         case .priority:
             let vc = PriorityViewController(selectedIdx: tempTodo.priorityIdx)
-            transition(vc, type: .push)
+            transition(vc)
             vc.sendPriorityIdx = { idx in
-                self.tempTodo.priorityIdx = idx
-                self.reloadCell(indexPath)
+                self.vm.updatePriorityIdx.value = idx
             }
         case .addImage:
-            var config = PHPickerConfiguration()
-            config.filter = .images
-            let picker = PHPickerViewController(configuration: config)
-            picker.delegate = self
-            transition(picker, type: .push)
+            configurePHPicker()
         default: break
         }
     }
@@ -225,7 +199,7 @@ extension AddViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         // 내용 바뀔 때마다 temp값에 저장
         guard let text = textView.text else { return }
-        tempTodo.memo = text
+        vm.updateMemo.value = text
     }
 }
 
@@ -238,16 +212,9 @@ extension AddViewController: PHPickerViewControllerDelegate {
             itemProvider.loadObject(ofClass: UIImage.self) { [unowned self] image, error in
                 // 이 코드 구문은 애플에서 global에서 처리하도록 해둬서 이미지를 대입해주는건 main으로 넘겨줘야함
                 DispatchQueue.main.async {
-                    // 이미지 변경시마다 이전에 있던 이미지 지우기
-                    self.view.removeImageFromDocument(imageName: "\(self.tempTodo.id)")
                     // image가 NSItemProviderReading이라는 데이터 타입이기 때문에 UIImage로 변환할 수 있는지 확인
                     guard let convertedImage = image as? UIImage else { return }
-                    // 셀에 이미지 보여주기 위해 Document에 이미지 저장
-                    self.view.saveImageToDocument(image: convertedImage, imageName: "\(self.tempTodo.id)")
-                    // 셀에 이미지 정보가 있음을 알려주기 위해 imageName에 이미지명 넣어주기
-                    self.tempTodo.imageName = "\(self.tempTodo.id)"
-                    // 이미지 속성셀 reload
-                    self.reloadCell(IndexPath(row: 4, section: 0))
+                    self.vm.updateImage.value = convertedImage
                 }
             }
         }
