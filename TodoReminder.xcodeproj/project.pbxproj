@@ -140,14 +140,12 @@
 		E0ECECFC2C33F9B300A67525 /* TodoReminder */ = {
 			isa = PBXGroup;
 			children = (
-				E0F85A642C3E39880075E7A9 /* ViewModel */,
-				E0ECED772C3697CC00A67525 /* Database */,
-				E0ECED2A2C3402CA00A67525 /* Protocol */,
+				E0F85A702C3EB0DC0075E7A9 /* Components */,
 				E0ECED3B2C341CC400A67525 /* Extension */,
-				E0ECED132C33FA7000A67525 /* Base */,
-				E0ECED632C357CE500A67525 /* Custom */,
-				E0ECED312C3405B700A67525 /* Model */,
-				E0ECED232C34018200A67525 /* Resources */,
+				E0F85A6F2C3EB09E0075E7A9 /* Manager */,
+				E0ECED772C3697CC00A67525 /* Database */,
+				E0F85A642C3E39880075E7A9 /* ViewModel */,
+				E0ECED2A2C3402CA00A67525 /* Protocol */,
 				E0ECED6A2C35838100A67525 /* Main */,
 				E0ECED5D2C35589500A67525 /* Add */,
 				E0ECED682C35837200A67525 /* List */,
@@ -156,8 +154,6 @@
 				E0ECED062C33F9B400A67525 /* Assets.xcassets */,
 				E0ECED082C33F9B400A67525 /* LaunchScreen.storyboard */,
 				E0ECED0B2C33F9B400A67525 /* Info.plist */,
-				E0F85A6B2C3E71FE0075E7A9 /* DateFormatterManager.swift */,
-				E0F85A6D2C3E73D60075E7A9 /* DocumentManager.swift */,
 			);
 			path = TodoReminder;
 			sourceTree = "<group>";
@@ -233,7 +229,6 @@
 				E0ECED602C35745800A67525 /* TagViewController.swift */,
 				E0ECED662C357E2C00A67525 /* PriorityViewController.swift */,
 				E0ECED5E2C3558BB00A67525 /* DateViewController.swift */,
-				E0F85A692C3E58A00075E7A9 /* AddViewModel.swift */,
 			);
 			path = Add;
 			sourceTree = "<group>";
@@ -277,6 +272,7 @@
 		E0ECED772C3697CC00A67525 /* Database */ = {
 			isa = PBXGroup;
 			children = (
+				E0ECED312C3405B700A67525 /* Model */,
 				E0ECED732C36908500A67525 /* TodoRepository.swift */,
 				E0F85A282C3BEA650075E7A9 /* TodoListRepository.swift */,
 			);
@@ -287,9 +283,29 @@
 			isa = PBXGroup;
 			children = (
 				E0F85A652C3E39970075E7A9 /* MainViewModel.swift */,
+				E0F85A692C3E58A00075E7A9 /* AddViewModel.swift */,
 				E0F85A672C3E39A30075E7A9 /* Observable.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		E0F85A6F2C3EB09E0075E7A9 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				E0F85A6D2C3E73D60075E7A9 /* DocumentManager.swift */,
+				E0F85A6B2C3E71FE0075E7A9 /* DateFormatterManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		E0F85A702C3EB0DC0075E7A9 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				E0ECED632C357CE500A67525 /* Custom */,
+				E0ECED132C33FA7000A67525 /* Base */,
+				E0ECED232C34018200A67525 /* Resources */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

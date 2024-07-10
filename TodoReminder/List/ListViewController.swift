@@ -74,7 +74,6 @@ class ListViewController: BaseViewControllerLargeTitle {
         })
         let menu = UIMenu(children: [asc, desc])
         let filter = UIBarButtonItem(title: nil, image: UIImage(systemName: Resource.ImageCase.more.rawValue), primaryAction: nil, menu: menu)
-        //filter.changesSelectionAsPrimaryAction = true // more 이미지가 왜 제목으로 바뀌는지..?
         navigationItem.rightBarButtonItem = filter
     }
     
@@ -141,7 +140,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
             let data = self.list[indexPath.row]
             // 이미지 도큐먼트에서 삭제
             if let imageName = data.imageName {
-                view.removeImageFromDocument(imageName: imageName)
+                //view.removeImageFromDocument(imageName: imageName)
             }
             // Realm에서 할 일 삭제
             repository.deleteTodo(data.id)
@@ -150,6 +149,9 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
             if searchController.isActive {
                 // 검색결과 다시 가져와 보여주기
                 fetchSearchResult()
+            } else {
+                originalList = Array(todoList.filteredList)
+                list = originalList // 원래 보여주고 있던 데이터 보여주기
             }
         }
        return UISwipeActionsConfiguration(actions: [delete])
