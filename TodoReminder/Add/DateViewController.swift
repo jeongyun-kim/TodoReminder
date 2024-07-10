@@ -7,35 +7,32 @@
 
 import UIKit
 import SnapKit
+import Toast
 
 final class DateViewController: BaseViewController {
     init(deadline: Date?) {
         super.init(nibName: nil, bundle: nil)
-        self.deadline = deadline
+        self.vm.inputDeadline.value = deadline
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private let vm = DateViewModel()
     private let datePicker = UIDatePicker()
-    
+
     // 현재 선택한 마감일 보내주는 클로저
     var sendDeadline: ((Date) -> Void)?
-    // 선택되어있는 마감일
-    var deadline: Date?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // 만약 마감일이 이미 설정되어있으면 해당 날짜로 선택된 상태 보여주기
-        if let deadline {
-            datePicker.date = deadline
-        }
+        bind()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard let deadline = deadline else { return }
+        guard let deadline = vm.outputDeadline.value.1 else { return }
         sendDeadline?(deadline)
     }
     
@@ -64,8 +61,24 @@ final class DateViewController: BaseViewController {
     }
     
     @objc func datePickerDidChanged(_ sender: UIDatePicker) {
-        // 달력 내 날짜 누를때마다 마감일 데이터 변경 
-        deadline = sender.date
+        // 달력 내 날짜 누를때마다 마감일 데이터 변경
+        vm.inputDeadline.value = sender.date
+    }
+    
+    private func bind() {
+        vm.outputDeadline.bind({ (message, deadline) in
+            if let message {
+                // 만약 과거를 선택했다면 과거는 선택할 수 없다는 메시지 출력 및 네비게이션 컨트롤러 인터랙션 막아 뒤로갈 수 없게 하기
+                self.view.makeToast(message)
+                self.navigationController?.navigationBar.isUserInteractionEnabled = false
+            } else {
+                // 이미 세팅되어있던 날짜가 있다면 그 날짜로 변경해주기
+                // 현재 또는 미래 날짜이기때문에 
+                guard let deadline else { return }
+                self.datePicker.date = deadline
+                self.navigationController?.navigationBar.isUserInteractionEnabled = true
+            }
+        }, initRun: true)
     }
 }
 

@@ -48,6 +48,7 @@
 		E0F85A6A2C3E58A00075E7A9 /* AddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F85A692C3E58A00075E7A9 /* AddViewModel.swift */; };
 		E0F85A6C2C3E71FE0075E7A9 /* DateFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F85A6B2C3E71FE0075E7A9 /* DateFormatterManager.swift */; };
 		E0F85A6E2C3E73D60075E7A9 /* DocumentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F85A6D2C3E73D60075E7A9 /* DocumentManager.swift */; };
+		E0F85A752C3EB5CA0075E7A9 /* DateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F85A742C3EB5CA0075E7A9 /* DateViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -103,6 +104,7 @@
 		E0F85A692C3E58A00075E7A9 /* AddViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewModel.swift; sourceTree = "<group>"; };
 		E0F85A6B2C3E71FE0075E7A9 /* DateFormatterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterManager.swift; sourceTree = "<group>"; };
 		E0F85A6D2C3E73D60075E7A9 /* DocumentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentManager.swift; sourceTree = "<group>"; };
+		E0F85A742C3EB5CA0075E7A9 /* DateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -282,9 +284,10 @@
 		E0F85A642C3E39880075E7A9 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				E0F85A672C3E39A30075E7A9 /* Observable.swift */,
 				E0F85A652C3E39970075E7A9 /* MainViewModel.swift */,
 				E0F85A692C3E58A00075E7A9 /* AddViewModel.swift */,
-				E0F85A672C3E39A30075E7A9 /* Observable.swift */,
+				E0F85A742C3EB5CA0075E7A9 /* DateViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -424,6 +427,7 @@
 				E0ECED812C37DFF000A67525 /* CalendarViewController.swift in Sources */,
 				E0ECED652C357CEB00A67525 /* CustomBorder.swift in Sources */,
 				E0ECED2C2C3402D300A67525 /* ReusableIdentifier.swift in Sources */,
+				E0F85A752C3EB5CA0075E7A9 /* DateViewModel.swift in Sources */,
 				E0F85A662C3E39970075E7A9 /* MainViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

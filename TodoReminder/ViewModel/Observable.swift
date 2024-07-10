@@ -20,8 +20,10 @@ final class Observable<T> {
         self.value = value
     }
     
-    func bind(_ closure: @escaping (T) -> Void) {
-        //closure(value)
+    func bind(_ closure: @escaping (T) -> Void, initRun: Bool = false) {
+        if initRun {
+            closure(value)
+        }
         self.closure = closure
     }
 }
