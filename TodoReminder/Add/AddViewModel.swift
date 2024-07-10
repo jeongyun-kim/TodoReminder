@@ -8,7 +8,7 @@
 import UIKit
 
 final class AddViewModel {
-    private let dateManager = DateManager.shared
+    private let dateManager = DateFormatterManager.shared
     private let document = DocumentManager.shared
     private let repository = TodoRepository()
     

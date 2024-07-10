@@ -102,7 +102,7 @@ class ListTableViewCell: BaseTableViewCell {
         }
         // 리스트셀에 맞는 마감일 String 보여주기
         if let deadline = data.deadline {
-            deadlineLabel.text = Date.dateFormattedString(deadline)
+            deadlineLabel.text = DateFormatterManager.shared.dateToStringForCell(deadline)
         }
       
     }

@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 
 final class AttributeTableViewCell: BaseTableViewCell {
+    private let dateFormatter = DateFormatterManager.shared
     private let bgView = UIView()
     private let titleLabel = UILabel()
     private let attributeLabel = UILabel()
@@ -78,7 +79,7 @@ final class AttributeTableViewCell: BaseTableViewCell {
             return
         case .deadline:
             if let deadline = data.deadline {
-                attributeLabel.text =  Date.dateFormattedString(deadline, type: .attribute)
+                attributeLabel.text =  dateFormatter.dateToStringForCell(deadline, type: .attribute)
             }
         case .tag:
             if let tag = data.tag {
@@ -91,7 +92,7 @@ final class AttributeTableViewCell: BaseTableViewCell {
         case .addImage:
             if let imageName = data.imageName {
                 thumbnailImageView.isHidden = false
-                thumbnailImageView.image = loadImageFromDocument(imageName: imageName)
+                thumbnailImageView.image = DocumentManager.shared.loadImageFromDocument(imageName: imageName)
             }
         }
     }

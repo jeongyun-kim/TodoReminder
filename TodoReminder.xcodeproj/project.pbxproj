@@ -38,7 +38,6 @@
 		E0ECED672C357E2C00A67525 /* PriorityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED662C357E2C00A67525 /* PriorityViewController.swift */; };
 		E0ECED6C2C35866B00A67525 /* CustomHorizontalStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED6B2C35866B00A67525 /* CustomHorizontalStackView.swift */; };
 		E0ECED742C36908500A67525 /* TodoRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED732C36908500A67525 /* TodoRepository.swift */; };
-		E0ECED762C3696B800A67525 /* Date + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED752C3696B800A67525 /* Date + Extension.swift */; };
 		E0ECED812C37DFF000A67525 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED802C37DFF000A67525 /* CalendarViewController.swift */; };
 		E0ECED832C37E06000A67525 /* UICollectionViewLayout + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ECED822C37E06000A67525 /* UICollectionViewLayout + Extension.swift */; };
 		E0ECED882C390D4B00A67525 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = E0ECED872C390D4B00A67525 /* FSCalendar */; };
@@ -47,7 +46,7 @@
 		E0F85A662C3E39970075E7A9 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F85A652C3E39970075E7A9 /* MainViewModel.swift */; };
 		E0F85A682C3E39A30075E7A9 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F85A672C3E39A30075E7A9 /* Observable.swift */; };
 		E0F85A6A2C3E58A00075E7A9 /* AddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F85A692C3E58A00075E7A9 /* AddViewModel.swift */; };
-		E0F85A6C2C3E71FE0075E7A9 /* DateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F85A6B2C3E71FE0075E7A9 /* DateManager.swift */; };
+		E0F85A6C2C3E71FE0075E7A9 /* DateFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F85A6B2C3E71FE0075E7A9 /* DateFormatterManager.swift */; };
 		E0F85A6E2C3E73D60075E7A9 /* DocumentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F85A6D2C3E73D60075E7A9 /* DocumentManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -95,7 +94,6 @@
 		E0ECED662C357E2C00A67525 /* PriorityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityViewController.swift; sourceTree = "<group>"; };
 		E0ECED6B2C35866B00A67525 /* CustomHorizontalStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHorizontalStackView.swift; sourceTree = "<group>"; };
 		E0ECED732C36908500A67525 /* TodoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoRepository.swift; sourceTree = "<group>"; };
-		E0ECED752C3696B800A67525 /* Date + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + Extension.swift"; sourceTree = "<group>"; };
 		E0ECED802C37DFF000A67525 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		E0ECED822C37E06000A67525 /* UICollectionViewLayout + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewLayout + Extension.swift"; sourceTree = "<group>"; };
 		E0F85A262C3BD4F90075E7A9 /* UIColor + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + Extension.swift"; sourceTree = "<group>"; };
@@ -103,7 +101,7 @@
 		E0F85A652C3E39970075E7A9 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		E0F85A672C3E39A30075E7A9 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		E0F85A692C3E58A00075E7A9 /* AddViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewModel.swift; sourceTree = "<group>"; };
-		E0F85A6B2C3E71FE0075E7A9 /* DateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateManager.swift; sourceTree = "<group>"; };
+		E0F85A6B2C3E71FE0075E7A9 /* DateFormatterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterManager.swift; sourceTree = "<group>"; };
 		E0F85A6D2C3E73D60075E7A9 /* DocumentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -158,7 +156,7 @@
 				E0ECED062C33F9B400A67525 /* Assets.xcassets */,
 				E0ECED082C33F9B400A67525 /* LaunchScreen.storyboard */,
 				E0ECED0B2C33F9B400A67525 /* Info.plist */,
-				E0F85A6B2C3E71FE0075E7A9 /* DateManager.swift */,
+				E0F85A6B2C3E71FE0075E7A9 /* DateFormatterManager.swift */,
 				E0F85A6D2C3E73D60075E7A9 /* DocumentManager.swift */,
 			);
 			path = TodoReminder;
@@ -212,7 +210,6 @@
 			isa = PBXGroup;
 			children = (
 				E0ECED3C2C341CCF00A67525 /* UIViewController + Extension.swift */,
-				E0ECED752C3696B800A67525 /* Date + Extension.swift */,
 				E0ECED822C37E06000A67525 /* UICollectionViewLayout + Extension.swift */,
 				E0F85A262C3BD4F90075E7A9 /* UIColor + Extension.swift */,
 			);
@@ -403,9 +400,8 @@
 				E0ECED1C2C33FBD200A67525 /* MainViewController.swift in Sources */,
 				E0ECED452C3429C600A67525 /* ContentTableViewCell.swift in Sources */,
 				E0ECED5F2C3558BB00A67525 /* DateViewController.swift in Sources */,
-				E0ECED762C3696B800A67525 /* Date + Extension.swift in Sources */,
 				E0ECED612C35745800A67525 /* TagViewController.swift in Sources */,
-				E0F85A6C2C3E71FE0075E7A9 /* DateManager.swift in Sources */,
+				E0F85A6C2C3E71FE0075E7A9 /* DateFormatterManager.swift in Sources */,
 				E0ECED3D2C341CCF00A67525 /* UIViewController + Extension.swift in Sources */,
 				E0ECED472C3429D900A67525 /* BaseTableViewCell.swift in Sources */,
 				E0ECED4C2C343B2D00A67525 /* ListViewController.swift in Sources */,

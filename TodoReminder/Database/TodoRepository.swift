@@ -11,12 +11,13 @@ import RealmSwift
 final class TodoRepository {
     private let realm = try! Realm()
     private let listRepo = TodoListRepository()
-    
+    private let dateFormatter = DateFormatterManager.shared
+
     func createItem(_ data: Todo)  {
         var list: TodoList?
         let todoList = listRepo.readAll()
         
-        switch Date.dateCompare(deadline: data.deadline) {
+        switch dateFormatter.dateCompare(deadline: data.deadline) {
         case .future:
             list = todoList.filter({ $0.listName == ReminderCase.schedule.title }).first
         case .today:
@@ -49,10 +50,10 @@ final class TodoRepository {
         switch listName {
             // 목록명이 "오늘"이라면
         case ReminderCase.today.title:
-            arrayFilteredTodo = allData.filter { Date.dateCompare(deadline: $0.deadline) == .today}
+            arrayFilteredTodo = allData.filter { dateFormatter.dateCompare(deadline: $0.deadline) == .today}
             // 목록명이 "예정"이라면
         case ReminderCase.schedule.title:
-            arrayFilteredTodo = allData.filter { Date.dateCompare(deadline: $0.deadline) == .future }
+            arrayFilteredTodo = allData.filter { dateFormatter.dateCompare(deadline: $0.deadline) == .future }
             // 목록명이 "전체"라면
         case ReminderCase.all.title:
             arrayFilteredTodo = allData
@@ -87,8 +88,9 @@ final class TodoRepository {
         // 마감일이 nil이 아닌 Todo목록만 가져오기
         let nonNilDeadline = allData.filter { $0.deadline != nil }
         // 그 중에서 FSCalendar에서 선택한 날짜랑 마감일이 같은 경우의 Todo목록만 가져와 반환하기 
-        let result = nonNilDeadline
-            .filter { Date.dateFormattedString($0.deadline!) == Date.dateFormattedString(calendarDate) }
+        
+        let result = nonNilDeadline.filter { dateFormatter.dateToStringForCell($0.deadline!)
+                == dateFormatter.dateToStringForCell(calendarDate) }
         return result
     }
     
