@@ -89,6 +89,8 @@ final class MainViewController: BaseViewControllerLargeTitle {
     }
     
     private func bind() {
+        vm.inputLoadTodoList.value = ()
+        
         // TodoList 모델로 저장된 데이터 Realm으로부터 받아오기
         vm.outputTodoList.bind { todoList in
             self.collectionView.reloadData()
