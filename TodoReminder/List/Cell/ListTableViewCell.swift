@@ -38,7 +38,6 @@ class ListTableViewCell: BaseTableViewCell {
     
     override func setupConstraints() {
         completeButton.snp.makeConstraints { make in
-            make.size.equalTo(25)
             make.top.equalTo(contentView.safeAreaLayoutGuide).offset(8)
             make.leading.equalTo(contentView.safeAreaLayoutGuide).offset(16)
         }
