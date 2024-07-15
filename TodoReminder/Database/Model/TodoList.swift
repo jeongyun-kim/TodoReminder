@@ -10,14 +10,14 @@ import RealmSwift
 
 class TodoList: Object {
     @Persisted (primaryKey: true) var id: ObjectId
-    @Persisted var listName: String
+    @Persisted var title: String
     @Persisted var imageName: String
     @Persisted var tintColor: String
-    @Persisted var filteredList: List<Todo>
+    @Persisted var todos: List<Todo>
     
     convenience init(listName: String, imageName: String, tintColor: String) {
         self.init()
-        self.listName = listName
+        self.title = listName
         self.imageName = imageName
         self.tintColor = tintColor
     }

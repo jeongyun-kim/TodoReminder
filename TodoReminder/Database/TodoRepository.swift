@@ -19,17 +19,17 @@ final class TodoRepository {
         
         switch dateFormatter.dateCompare(deadline: data.deadline) {
         case .future:
-            list = todoList.filter({ $0.listName == ReminderCase.schedule.title }).first
+            list = todoList.filter({ $0.title == ReminderCase.schedule.title }).first
         case .today:
-            list = todoList.filter({ $0.listName == ReminderCase.today.title }).first
+            list = todoList.filter({ $0.title == ReminderCase.today.title }).first
         default:
-            list = todoList.filter({ $0.listName == ReminderCase.all.title }).first
+            list = todoList.filter({ $0.title == ReminderCase.all.title }).first
         }
         
         do {
             try realm.write {
                 if let list {
-                    list.filteredList.append(data)
+                    list.todos.append(data)
                 }
             }
         } catch {

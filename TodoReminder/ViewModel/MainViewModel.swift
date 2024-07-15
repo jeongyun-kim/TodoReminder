@@ -33,7 +33,7 @@ final class MainViewModel {
         // 할 일이 새로 생겼거나 지워졌을 때 업데이트
         updateMainViewTrigger.bind { _ in
             for todoList in self.outputTodoList.value {
-                let newToDoList = TodoRepository().readFilteredTodo(todoList.listName)
+                let newToDoList = TodoRepository().readFilteredTodo(todoList.title)
                 self.repository.updateList(todoList, list: newToDoList)
                 // 업데이트 이후 '새로운 데이터 받아와줘'하고 신호 보내기 
                 self.inputLoadTodoList.value = ()
