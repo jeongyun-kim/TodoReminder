@@ -19,7 +19,7 @@ class ListViewController: BaseViewControllerLargeTitle {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private let vm = ListViewModel()
+    let vm = ListViewModel()
     
     private let tableView = UITableView()
     private let searchController = UISearchController(searchResultsController: nil)
@@ -52,16 +52,16 @@ class ListViewController: BaseViewControllerLargeTitle {
     
     override func setupNavigation(_ title: String) {
         guard let originalTodoList = vm.originalTodoList.value else { return }
-        let listName = originalTodoList.listName
+        let listName = originalTodoList.title
         super.setupNavigation(listName)
     }
     
     override func configureRightBarButton(title: String?, imageName: String?, action: Selector?) {
         let asc = UIAction(title: "오래된 순", handler: { _ in
-            self.vm.sortTrigger.value = true
+            self.vm.sortTodosTrigger.value = true
         })
         let desc = UIAction(title: "최신순", handler: { _ in
-            self.vm.sortTrigger.value = false
+            self.vm.sortTodosTrigger.value = false
         })
         let menu = UIMenu(children: [asc, desc])
         let filter = UIBarButtonItem(title: nil, image: UIImage(systemName: Resource.ImageCase.more.rawValue), primaryAction: nil, menu: menu)
@@ -80,7 +80,7 @@ class ListViewController: BaseViewControllerLargeTitle {
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.searchBar.placeholder = "검색어를 입력해주세요" // 검색어 입력칸에 안내 문구
         searchController.searchBar.autocapitalizationType = .none // 영어 첫글자 대문자 X
-        searchController.hidesNavigationBarDuringPresentation = true // 검색하는동안 네비게이션 숨길지
+        searchController.hidesNavigationBarDuringPresentation = false // 검색하는동안 네비게이션 숨길지
         self.navigationItem.hidesSearchBarWhenScrolling = false // 스크롤 하는동안 서치바 숨길지(기본적으로 vc에 들어왔을 때, 서치바가 보이게하려면 false)
         self.navigationItem.searchController = searchController // navigationItem에 searchController 등록
         searchController.searchResultsUpdater = self // 실시간 검색을 위한 delegate 연결
@@ -96,35 +96,31 @@ class ListViewController: BaseViewControllerLargeTitle {
     }
     
     @objc private func didDismissAddViewController(_ notification: Notification) {
-        if searchController.isActive {
-            guard let keyword = searchController.searchBar.text else { return }
-            self.vm.searchTrigger.value = keyword
-        } else {
-            self.vm.inActivedSeachController.value = ()
-        }
+        // 검색 상태에서 편집 시 현재 검색 중이던 키워드로 다시 테이블뷰 그리기
+        // 아니면 그냥 테이블뷰 업데이트
+        fetchSearchResult()
     }
     
     private func fetchSearchResult() {
-        // 서치바가 활성화 상태라면 서치바에 키워드가 있는지
+        // 서치바가 활성화 상태라면
         // - 키워드가 있다면 현재 목록 내 투두리스트의 제목/메모에 키워드가 포함된 결과 가져와 list에 반영해주기
         // - 키워드가 비어있다면 아무런 결과 보여주지않게 현재 리스트에 빈 배열 넣어주기
         if searchController.isActive {
-            // 서치바가 활성화 상태라면 검색
-            guard let keyword = searchController.searchBar.text, !keyword.isEmpty
-            else { return vm.searchTrigger.value = nil }
-            vm.searchTrigger.value = keyword
-        } else { // 서치바가 비활성화 상태라면 이전까지 정렬된 상태의 데이터로 테이블뷰 reload
-            vm.inActivedSeachController.value = ()
+            vm.searchTrigger.value = searchController.searchBar.text
+        } else { // 비활성화 상태라면 테이블뷰 다시 그리기
+            vm.inActivatedSearchController.value = ()
         }
     }
     
     private func bind() {
-        vm.filteredTodos.bind { todos in
+        // 데이터 자체에 변동사항이 생겼을 때 ex) 정렬, 삭제 
+        vm.outputTodos.bind { _ in
             self.tableView.reloadData()
         }
         
-        vm.reloadCell.bind { idx in
-            self.tableView.reloadRows(at: [IndexPath(row: idx, section: 0)], with: .none)
+        // 할 일 즐겨찾기 / 깃발표시 / 완료했을 때
+        vm.updatedTodoStatus.bind { _ in
+            self.tableView.reloadData()
         }
     }
 }
@@ -132,12 +128,12 @@ class ListViewController: BaseViewControllerLargeTitle {
 // MARK: TableViewExtension
 extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return vm.filteredTodos.value.count
+        return vm.outputTodos.value.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.identifier, for: indexPath) as! ListTableViewCell
-        let todo = vm.filteredTodos.value[indexPath.row]
+        let todo = vm.outputTodos.value[indexPath.row]
         cell.configureCell(todo)
         cell.completeButton.tag = indexPath.row
         cell.completeButton.addTarget(self, action: #selector(completeBtnTapped), for: .touchUpInside)
@@ -171,7 +167,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let data = vm.filteredTodos.value[indexPath.row]
+        let data = vm.outputTodos.value[indexPath.row]
         let vc = AddViewController(todoFromListVC: data, viewType: .edit)
         let navi = UINavigationController(rootViewController: vc)
         transition(navi, type: .present)
