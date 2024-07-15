@@ -62,6 +62,7 @@ final class TagViewController: BaseViewController {
     
     override func setupUI() {
         super.setupUI()
+        tagTextField.becomeFirstResponder()
     }
     
     override func setupNavigation(_ title: String) {

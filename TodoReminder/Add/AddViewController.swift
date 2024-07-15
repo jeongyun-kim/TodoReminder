@@ -69,6 +69,7 @@ final class AddViewController: BaseViewController {
         tableView.register(ContentTableViewCell.self, forCellReuseIdentifier: ContentTableViewCell.identifier)
         tableView.register(AttributeTableViewCell.self, forCellReuseIdentifier: AttributeTableViewCell.identifier)
         tableView.separatorStyle = .none
+        tableView.keyboardDismissMode = .onDrag
     }
     
     @objc func saveBtnTapped(_ sender: UIButton) {
