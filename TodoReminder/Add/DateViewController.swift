@@ -12,11 +12,16 @@ import Toast
 final class DateViewController: BaseViewController {
     init(deadline: Date?) {
         super.init(nibName: nil, bundle: nil)
+        print("DateVC init")
         self.vm.inputDeadline.value = deadline
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print("DateVC deinit")
     }
     
     private let vm = DateViewModel()
@@ -66,17 +71,17 @@ final class DateViewController: BaseViewController {
     }
     
     private func bind() {
-        vm.outputDeadline.bind({ (message, deadline) in
+        vm.outputDeadline.bind({ [weak self] (message, deadline) in
             if let message {
                 // 만약 과거를 선택했다면 과거는 선택할 수 없다는 메시지 출력 및 네비게이션 컨트롤러 인터랙션 막아 뒤로갈 수 없게 하기
-                self.view.makeToast(message)
-                self.navigationController?.navigationBar.isUserInteractionEnabled = false
+                self?.view.makeToast(message)
+                self?.navigationController?.navigationBar.isUserInteractionEnabled = false
             } else {
                 // 이미 세팅되어있던 날짜가 있다면 그 날짜로 변경해주기
                 // 현재 또는 미래 날짜이기때문에 
                 guard let deadline else { return }
-                self.datePicker.date = deadline
-                self.navigationController?.navigationBar.isUserInteractionEnabled = true
+                self?.datePicker.date = deadline
+                self?.navigationController?.navigationBar.isUserInteractionEnabled = true
             }
         }, initRun: true)
     }

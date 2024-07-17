@@ -31,52 +31,57 @@ final class AddViewModel {
     var outputTempTodo: Observable<Todo> = Observable(Todo())
 
     init() {
+        print("AddVM init")
         configureOutputTempTodo()
         updateOutputTempTodo()
         outputTrigger()
     }
     
+    deinit {
+        print("AddVM deinit")
+    }
+    
     private func configureOutputTempTodo() {
-        inputOriginalTodo.bind { todo in
+        inputOriginalTodo.bind { [weak self] todo in
             if let todo { // 받아온 Todo 데이터가 있다면 해당 데이터로 임시 Todo 데이터 생성
-                self.configureNewTodo(title: todo.todoTitle, memo: todo.memo, deadline: todo.deadline, tag: todo.tag, priorityIdx: todo.priorityIdx, imageName: todo.imageName)
+                self?.configureNewTodo(title: todo.todoTitle, memo: todo.memo, deadline: todo.deadline, tag: todo.tag, priorityIdx: todo.priorityIdx, imageName: todo.imageName)
             } else { // 없다면 빈 임시 Todo 데이터 생성
-                self.outputTempTodo.value = Todo(title: "", savedate: Date())
+                self?.outputTempTodo.value = Todo(title: "", savedate: Date())
             }
         }
     }
     
     private func updateOutputTempTodo() {
         // 테이블뷰를 reload 할 필요 없으므로 내부의 값 변경만
-        updateTitle.bind { title in
-            self.outputTempTodo.value.todoTitle = title
+        updateTitle.bind { [weak self] title in
+            self?.outputTempTodo.value.todoTitle = title
         }
         
-        updateMemo.bind { memo in
-            self.outputTempTodo.value.memo = memo
+        updateMemo.bind { [weak self] memo in
+            self?.outputTempTodo.value.memo = memo
         }
         
         // 테이블뷰 reload위해 tempTodo 변경해주기
-        updateDeadline.bind { deadline in
+        updateDeadline.bind { [weak self] deadline in
             guard let deadline else { return }
-            self.configureNewTodo(deadline: deadline)
+            self?.configureNewTodo(deadline: deadline)
         }
         
-        updateTag.bind { tag in
+        updateTag.bind { [weak self] tag in
             guard let tag else { return }
-            self.configureNewTodo(tag: tag)
+            self?.configureNewTodo(tag: tag)
         }
         
-        updatePriorityIdx.bind { idx in
+        updatePriorityIdx.bind { [weak self] idx in
             guard let idx else { return }
-            self.configureNewTodo(priorityIdx: idx)
+            self?.configureNewTodo(priorityIdx: idx)
         }
         
         // - configureNewTodo로 이미지 처리 시 새로운 id의 Todo 데이터가 생겨남
         //  - 그럼 이전 이미지의 이름과 새로 생겨난 이미지의 이름이 다르기 때문에 이전 이미지를 제거할 수 없음
         // 그래서 tempTodo의 이미지만 변경 -> tempTodo에 현재 tempTodo 넣어줘서 변경이 있었던 것처럼 처리 -> tableView.reload()
-        updateImage.bind { image in
-            guard let image else { return }
+        updateImage.bind { [weak self] image in
+            guard let image, let self else { return }
             let tempTodoId = self.outputTempTodo.value.id
             // 이미지 변경시마다 이전에 있던 이미지 지우기
             self.document.removeImageFromDocument(imageName: "\(tempTodoId)")
@@ -89,12 +94,12 @@ final class AddViewModel {
     }
     
     private func outputTrigger() {
-        saveBtnTrigger.bind { viewType in
-            self.saveTodo()
+        saveBtnTrigger.bind { [weak self] viewType in
+            self?.saveTodo()
         }
         
-        cancelBtnTrigger.bind { _ in
-            self.cancel()
+        cancelBtnTrigger.bind { [weak self] _ in
+            self?.cancel()
         }
     }
     

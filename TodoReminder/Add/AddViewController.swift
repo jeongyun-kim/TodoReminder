@@ -13,12 +13,17 @@ final class AddViewController: BaseViewController {
     
     init(todoFromListVC: Todo?, viewType: Resource.ViewType) {
         super.init(nibName: nil, bundle: nil)
+        print("AddVC Init")
         self.vm.inputOriginalTodo.value = todoFromListVC
         self.viewType = viewType
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print("AddVC deinit")
     }
 
     private let repository = TodoRepository()
@@ -104,8 +109,8 @@ final class AddViewController: BaseViewController {
     
     private func bind() {
         // 저장 전 임시 데이터인 vm 내 tempTodo 데이터가 변경될 때마다 tableView 새로 그리기
-        vm.outputTempTodo.bind { todo in
-            self.tableView.reloadData()
+        vm.outputTempTodo.bind { [weak self] todo in
+            self?.tableView.reloadData()
         }
     }
 }
@@ -151,20 +156,20 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
         case .deadline:
             let vc = DateViewController(deadline: tempTodo.deadline)
             transition(vc)
-            vc.sendDeadline = { deadline in
-                self.vm.updateDeadline.value = deadline
+            vc.sendDeadline = { [weak self] deadline in
+                self?.vm.updateDeadline.value = deadline
             }
         case .tag:
             let vc = TagViewController(tag: tempTodo.tag)
             transition(vc)
-            vc.sendTag = { tag in
-                self.vm.updateTag.value = tag
+            vc.sendTag = { [weak self] tag in
+                self?.vm.updateTag.value = tag
             }
         case .priority:
             let vc = PriorityViewController(selectedIdx: tempTodo.priorityIdx)
             transition(vc)
-            vc.sendPriorityIdx = { idx in
-                self.vm.updatePriorityIdx.value = idx
+            vc.sendPriorityIdx = { [weak self] idx in
+                self?.vm.updatePriorityIdx.value = idx
             }
         case .addImage:
             configurePHPicker()

@@ -10,6 +10,18 @@ import FSCalendar
 import SnapKit
 
 final class CalendarViewController: BaseViewController {
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        print("CalendarVC init")
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print("CalendarVC deinit")
+    }
     private let repository = TodoRepository()
     private var list: [Todo] = [] {
         didSet {

@@ -21,21 +21,29 @@ final class MainViewModel {
     var outputTodoList: Observable<[TodoList]> = Observable([])
     
     init() {
+        print("MainVM init")
         transform()
+    }
+    
+    deinit {
+        print("MainVM deinit")
     }
     
     private func transform() {
         // 뷰가 불러와졌을 때 또는 업데이트 이후에 새로 리스트를 받아오게
-        inputLoadTodoList.bind { _ in
+        inputLoadTodoList.bind { [weak self] _ in
+            guard let self else { return }
             self.outputTodoList.value = self.repository.readAll()
         }
         
         // 할 일이 새로 생겼거나 지워졌을 때 업데이트
-        updateMainViewTrigger.bind { _ in
+        updateMainViewTrigger.bind { [weak self] _ in
+            guard let self else { return }
+            
             for todoList in self.outputTodoList.value {
                 let newToDoList = TodoRepository().readFilteredTodo(todoList.title)
                 self.repository.updateList(todoList, list: newToDoList)
-                // 업데이트 이후 '새로운 데이터 받아와줘'하고 신호 보내기 
+                // 업데이트 이후 '새로운 데이터 받아와줘'하고 신호 보내기
                 self.inputLoadTodoList.value = ()
             }
         }

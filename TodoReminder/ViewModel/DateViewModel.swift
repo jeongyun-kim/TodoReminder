@@ -17,9 +17,14 @@ final class DateViewModel {
     var outputDeadline: Observable<(String?, Date?)> = Observable((nil, nil))
     
     init() {
-        inputDeadline.bind { date in
-            self.validateDeadline(date)
+        print("DateVM init")
+        inputDeadline.bind { [weak self] date in
+            self?.validateDeadline(date)
         }
+    }
+    
+    deinit {
+        print("DateVM deinit")
     }
     
     private func validateDeadline(_ date: Date?) {

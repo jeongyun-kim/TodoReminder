@@ -12,11 +12,16 @@ import SnapKit
 class ListViewController: BaseViewControllerLargeTitle {
     init(todoList: TodoList) {
         super.init(nibName: nil, bundle: nil)
+        print("ListVC init")
         self.vm.originalTodoList.value = todoList
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print("ListVC deinit")
     }
     
     let vm = ListViewModel()
@@ -57,11 +62,11 @@ class ListViewController: BaseViewControllerLargeTitle {
     }
     
     override func configureRightBarButton(title: String?, imageName: String?, action: Selector?) {
-        let asc = UIAction(title: "오래된 순", handler: { _ in
-            self.vm.sortTodosTrigger.value = true
+        let asc = UIAction(title: "오래된 순", handler: { [weak self] _ in
+            self?.vm.sortTodosTrigger.value = true
         })
-        let desc = UIAction(title: "최신순", handler: { _ in
-            self.vm.sortTodosTrigger.value = false
+        let desc = UIAction(title: "최신순", handler: { [weak self] _ in
+            self?.vm.sortTodosTrigger.value = false
         })
         let menu = UIMenu(children: [asc, desc])
         let filter = UIBarButtonItem(title: nil, image: UIImage(systemName: Resource.ImageCase.more.rawValue), primaryAction: nil, menu: menu)
@@ -114,13 +119,13 @@ class ListViewController: BaseViewControllerLargeTitle {
     
     private func bind() {
         // 데이터 자체에 변동사항이 생겼을 때 ex) 정렬, 삭제 
-        vm.outputTodos.bind { _ in
-            self.tableView.reloadData()
+        vm.outputTodos.bind { [weak self] _ in
+            self?.tableView.reloadData()
         }
         
         // 할 일 즐겨찾기 / 깃발표시 / 완료했을 때
-        vm.updatedTodoStatus.bind { _ in
-            self.tableView.reloadData()
+        vm.updatedTodoStatus.bind { [weak self] _ in
+            self?.tableView.reloadData()
         }
     }
 }

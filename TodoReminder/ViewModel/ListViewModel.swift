@@ -39,14 +39,22 @@ final class ListViewModel {
     // idx: reload할 cell의 순번 -> VC에서 cell reload
     var updatedTodoStatus: Observable<Int> = Observable(0)
     
-    init() { transform() }
-        
+    init() { 
+        print("ListVM init")
+        transform()
+    }
+    
+    deinit {
+        print("ListVM deinit")
+    }
+    
     private func transform() {
         inputOriginalTodoLists()
         updateTodoData()
         searchTriggers()
         
-        sortTodosTrigger.bind { ascType in
+        sortTodosTrigger.bind { [weak self] ascType in
+            guard let self else { return }
             guard let originalTodoList = self.originalTodoList.value else { return }
             let originalTodos = originalTodoList.todos
             let sortedTodos = self.repository.readSortedTodo(originalTodos, ascending: ascType)
@@ -54,7 +62,8 @@ final class ListViewModel {
             self.outputTodos.value = sortedTodos
         }
         
-        deleteTodoTrigger.bind { idx in
+        deleteTodoTrigger.bind { [weak self] idx in
+            guard let self else { return }
             let todoToDelete = self.outputTodos.value[idx]
             var sortedTodos = self.sortedOriginalTodos.value
             sortedTodos.removeAll { $0.id == todoToDelete.id }
@@ -69,13 +78,13 @@ final class ListViewModel {
     
     // 원본 할 일 목록이 업데이트 될 때
     private func inputOriginalTodoLists() {
-        originalTodoList.bind { todoList in
+        originalTodoList.bind { [weak self] todoList in
             guard let originalTodoList = todoList else { return }
             let originalTodos = originalTodoList.todos
             // 원본 데이터로 ListVC에서 그려주기
-            self.outputTodos.value = Array(originalTodos)
+            self?.outputTodos.value = Array(originalTodos)
             // 현재 정렬 상태로 원본 데이터 저장
-            self.sortedOriginalTodos.value = Array(originalTodos)
+            self?.sortedOriginalTodos.value = Array(originalTodos)
         }
     }
 
@@ -83,7 +92,9 @@ final class ListViewModel {
     private func updateTodoData() {
         // 할 일 완료 처리 -> VC에서는 해당 idx의 셀만 reload
         // 만약 완료됨 리스트뷰인데, 완료됨을 해제했다면? -> 테이블뷰 그려주는 리스트에서 해당 데이터 제거
-        completeTrigger.bind { idx in
+        completeTrigger.bind { [weak self] idx in
+            guard let self else { return }
+            
             let data = self.outputTodos.value[idx]
             
             self.repository.updateTodo {
@@ -96,7 +107,9 @@ final class ListViewModel {
             self.updatedTodoStatus.value = idx
         }
         
-        bookmarkTrigger.bind { idx in
+        bookmarkTrigger.bind { [weak self] idx in
+            guard let self else { return }
+            
             let data = self.outputTodos.value[idx]
        
             self.repository.updateTodo {
@@ -109,7 +122,9 @@ final class ListViewModel {
             self.updatedTodoStatus.value = idx
         }
         
-        flagTrigger.bind { idx in
+        flagTrigger.bind { [weak self] idx in
+            guard let self else { return }
+            
             let data = self.outputTodos.value[idx]
             
             self.repository.updateTodo {
@@ -126,24 +141,26 @@ final class ListViewModel {
     // 검색 / 검색 안 할 때
     private func searchTriggers() {
         // 검색 취소 버튼 눌렀을 때, 이전의 테이블뷰 다시 그려주기 위해
-        inActivatedSearchController.bind { _ in
+        inActivatedSearchController.bind { [weak self] _ in
+            guard let self else { return }
+            
             let sortedTodos = self.sortedOriginalTodos.value
             // 정렬되어있던 찐리스트 넣어주기
             self.outputTodos.value = sortedTodos
         }
         
         // 검색 처리
-        searchTrigger.bind { keyword in
-            guard let originalTodoList = self.originalTodoList.value else { return }
+        searchTrigger.bind { [weak self] keyword in
+            guard let originalTodoList = self?.originalTodoList.value else { return }
             let originalTodos = originalTodoList.todos
             
             // 서치바에 키워드가 있다면
             if let keyword, !keyword.isEmpty {
                 // 검색해서 결과 보여주기
-                let searchedTodos = self.repository.readSearcedTodo(list: originalTodos, keyword: keyword)
-                self.outputTodos.value = Array(searchedTodos)
+                guard let searchedTodos = self?.repository.readSearcedTodo(list: originalTodos, keyword: keyword) else { return }
+                self?.outputTodos.value = Array(searchedTodos)
             } else { // 없다면 빈 데이터 보여주기
-                self.outputTodos.value = []
+                self?.outputTodos.value = []
             }
         }
     }
